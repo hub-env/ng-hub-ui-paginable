@@ -25,6 +25,15 @@ import { HubResizableDirective } from './resizable.directive';
 class TestResizableComponent {}
 
 /**
+ * Lets the drag stream react before the next step. Every step is awaited, so the
+ * assertions run inside their test. They used to sit in nested `setTimeout` callbacks the
+ * test never waited for: the test finished, the next one tore the fixture down, and a late
+ * assertion on a destroyed directive failed as an unhandled error that broke the whole run
+ * at random (it stopped the deploy of 2026-09-11 while CI on the same commit passed).
+ */
+const wait = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
+
+/**
  * Test suite for HubResizableDirective
  * Tests column resizing functionality via mouse drag interactions
  */
@@ -34,6 +43,17 @@ describe('HubResizableDirective', () => {
 	let resizableElement: DebugElement;
 	let directive: HubResizableDirective;
 	let documentRef: Document;
+
+	/** Presses the mouse on the handle at the given horizontal position. */
+	const mouseDown = (clientX: number) =>
+		resizableElement.nativeElement.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true, clientX }));
+
+	/** Moves the mouse over the document to the given horizontal position. */
+	const mouseMove = (clientX: number) =>
+		documentRef.dispatchEvent(new MouseEvent('mousemove', { bubbles: true, cancelable: true, clientX }));
+
+	/** Releases the mouse, which ends the drag. */
+	const mouseUp = () => documentRef.dispatchEvent(new MouseEvent('mouseup', { bubbles: true, cancelable: true }));
 
 	beforeEach(() => {
 		TestBed.configureTestingModule({
@@ -60,191 +80,82 @@ describe('HubResizableDirective', () => {
 	describe('mousedown interaction', () => {
 		it('should emit on mousedown and mousemove', async () => {
 			let emittedValue: number | null = null;
-
 			directive.resizable.subscribe((width) => {
 				emittedValue = width;
 			});
 
-			// Simulate mousedown
-			const mouseDownEvent = new MouseEvent('mousedown', {
-				bubbles: true,
-				cancelable: true,
-				clientX: 100
-			});
+			mouseDown(100);
+			await wait(50);
+			mouseMove(150);
+			await wait(50);
 
-			resizableElement.nativeElement.dispatchEvent(mouseDownEvent);
-
-			setTimeout(() => {
-				// Simulate mousemove
-				const mouseMoveEvent = new MouseEvent('mousemove', {
-					bubbles: true,
-					cancelable: true,
-					clientX: 150
-				});
-
-				documentRef.dispatchEvent(mouseMoveEvent);
-
-				setTimeout(() => {
-					expect(emittedValue).toBeDefined();
-					// Simulate mouseup to end resizing
-					const mouseUpEvent = new MouseEvent('mouseup', {
-						bubbles: true,
-						cancelable: true
-					});
-					documentRef.dispatchEvent(mouseUpEvent);
-				}, 50);
-			}, 50);
+			expect(emittedValue).not.toBeNull();
+			mouseUp();
 		});
 
 		it('should prevent default on mousedown', async () => {
-			let preventDefaultCalled = false;
-
 			directive.resizable.subscribe(() => {});
 
-			const mouseDownEvent = new MouseEvent('mousedown', {
-				bubbles: true,
-				cancelable: true,
-				clientX: 100
-			});
-
-			// The directive uses tap(e => e.preventDefault()) internally
+			const mouseDownEvent = new MouseEvent('mousedown', { bubbles: true, cancelable: true, clientX: 100 });
 			resizableElement.nativeElement.dispatchEvent(mouseDownEvent);
+			await wait(10);
 
-			setTimeout(() => {
-				// The preventDefault is called internally by the directive's observable
-				expect(true).toBe(true); // Directive handles preventDefault internally
-			}, 10);
+			// The directive calls preventDefault on the mousedown it starts a drag from.
+			expect(mouseDownEvent.defaultPrevented).toBe(true);
+			mouseUp();
 		});
 
 		it('should stop emitting after mouseup', async () => {
 			let emissionCount = 0;
-
 			directive.resizable.subscribe(() => {
 				emissionCount++;
 			});
 
-			// Start resizing
-			const mouseDownEvent = new MouseEvent('mousedown', {
-				bubbles: true,
-				cancelable: true,
-				clientX: 100
-			});
-			resizableElement.nativeElement.dispatchEvent(mouseDownEvent);
+			mouseDown(100);
+			await wait(50);
+			mouseMove(120);
+			await wait(50);
 
-			setTimeout(() => {
-				// Move once
-				const mouseMoveEvent1 = new MouseEvent('mousemove', {
-					bubbles: true,
-					cancelable: true,
-					clientX: 120
-				});
-				documentRef.dispatchEvent(mouseMoveEvent1);
+			const beforeUpCount = emissionCount;
+			mouseUp();
+			await wait(50);
+			mouseMove(150);
+			await wait(50);
 
-				setTimeout(() => {
-					const beforeUpCount = emissionCount;
-
-					// End resizing
-					const mouseUpEvent = new MouseEvent('mouseup', {
-						bubbles: true,
-						cancelable: true
-					});
-					documentRef.dispatchEvent(mouseUpEvent);
-
-					setTimeout(() => {
-						// Move again after mouseup
-						const mouseMoveEvent2 = new MouseEvent('mousemove', {
-							bubbles: true,
-							cancelable: true,
-							clientX: 150
-						});
-						documentRef.dispatchEvent(mouseMoveEvent2);
-
-						setTimeout(() => {
-							// Should not have emitted after mouseup
-							expect(emissionCount).toBe(beforeUpCount);
-						}, 50);
-					}, 50);
-				}, 50);
-			}, 50);
+			expect(emissionCount).toBe(beforeUpCount);
 		});
 
 		it('should calculate width based on mouse movement', async () => {
 			let calculatedWidth: number | null = null;
-
 			directive.resizable.subscribe((width) => {
 				calculatedWidth = width;
 			});
 
-			const mouseDownEvent = new MouseEvent('mousedown', {
-				bubbles: true,
-				cancelable: true,
-				clientX: 100
-			});
+			mouseDown(100);
+			await wait(50);
+			mouseMove(200);
+			await wait(50);
 
-			resizableElement.nativeElement.dispatchEvent(mouseDownEvent);
-
-			setTimeout(() => {
-				const mouseMoveEvent = new MouseEvent('mousemove', {
-					bubbles: true,
-					cancelable: true,
-					clientX: 200
-				});
-
-				documentRef.dispatchEvent(mouseMoveEvent);
-
-				setTimeout(() => {
-					expect(calculatedWidth).toBeDefined();
-					expect(typeof calculatedWidth).toBe('number');
-
-					// Cleanup
-					const mouseUpEvent = new MouseEvent('mouseup', {
-						bubbles: true,
-						cancelable: true
-					});
-					documentRef.dispatchEvent(mouseUpEvent);
-				}, 50);
-			}, 50);
+			expect(typeof calculatedWidth).toBe('number');
+			mouseUp();
 		});
 
 		it('should only emit distinct width values', async () => {
 			const emittedValues: number[] = [];
-
 			directive.resizable.subscribe((width) => {
 				emittedValues.push(width);
 			});
 
-			const mouseDownEvent = new MouseEvent('mousedown', {
-				bubbles: true,
-				cancelable: true,
-				clientX: 100
-			});
+			mouseDown(100);
+			await wait(50);
+			// The same position three times: one width, emitted once.
+			mouseMove(150);
+			mouseMove(150);
+			mouseMove(150);
+			await wait(100);
 
-			resizableElement.nativeElement.dispatchEvent(mouseDownEvent);
-
-			setTimeout(() => {
-				// Move to same position multiple times
-				for (let i = 0; i < 3; i++) {
-					const mouseMoveEvent = new MouseEvent('mousemove', {
-						bubbles: true,
-						cancelable: true,
-						clientX: 150
-					});
-					documentRef.dispatchEvent(mouseMoveEvent);
-				}
-
-				setTimeout(() => {
-					// Should have filtered out duplicate values
-					const uniqueValues = [...new Set(emittedValues)];
-					expect(emittedValues.length).toBeGreaterThanOrEqual(uniqueValues.length);
-
-					// Cleanup
-					const mouseUpEvent = new MouseEvent('mouseup', {
-						bubbles: true,
-						cancelable: true
-					});
-					documentRef.dispatchEvent(mouseUpEvent);
-				}, 100);
-			}, 50);
+			expect(emittedValues.length).toBe(new Set(emittedValues).size);
+			mouseUp();
 		});
 	});
 
@@ -252,27 +163,14 @@ describe('HubResizableDirective', () => {
 		it('should handle rapid mousedown events', async () => {
 			directive.resizable.subscribe(() => {});
 
-			// Trigger multiple mousedown events rapidly
-			for (let i = 0; i < 3; i++) {
-				const mouseDownEvent = new MouseEvent('mousedown', {
-					bubbles: true,
-					cancelable: true,
-					clientX: 100 + i * 10
-				});
-				resizableElement.nativeElement.dispatchEvent(mouseDownEvent);
-			}
+			expect(() => {
+				mouseDown(100);
+				mouseDown(110);
+				mouseDown(120);
+			}).not.toThrow();
 
-			setTimeout(() => {
-				// Should not throw error
-				expect(true).toBe(true);
-
-				// Cleanup
-				const mouseUpEvent = new MouseEvent('mouseup', {
-					bubbles: true,
-					cancelable: true
-				});
-				documentRef.dispatchEvent(mouseUpEvent);
-			}, 100);
+			await wait(100);
+			mouseUp();
 		});
 	});
 });
