@@ -9,6 +9,7 @@ Este paquete forma parte de [Hub UI](https://hubui.dev/en/), una colección de b
 - Documentación: https://hubui.dev/en/paginable/overview/
 - Ejemplos en vivo: https://hubui.dev/en/paginable/examples/
 - Hub UI: https://hubui.dev/en/
+- Hub UI en GitHub (incidencias, roadmap y cómo contribuir): https://github.com/hub-env/hub-ui
 
 ## 🧩 Familia de bibliotecas `ng-hub-ui`
 
@@ -1819,7 +1820,7 @@ Consulta [CHANGELOG.md](./CHANGELOG.md) para el historial completo de versiones,
 
 ```bash
 # Clona el repositorio
-git clone https://github.com/carlos-morcillo/ng-hub-ui-paginable.git
+git clone https://github.com/hub-env/ng-hub-ui-paginable.git
 cd ng-hub-ui-paginable
 
 # Instala dependencias

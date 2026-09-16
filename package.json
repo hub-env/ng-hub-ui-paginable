@@ -81,10 +81,10 @@
 	"homepage": "https://hubui.dev/en/paginable/overview/",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/carlos-morcillo/ng-hub-ui-paginable.git"
+		"url": "git+https://github.com/hub-env/ng-hub-ui-paginable.git"
 	},
 	"bugs": {
-		"url": "https://github.com/carlos-morcillo/ng-hub-ui-paginable/issues",
+		"url": "https://github.com/hub-env/hub-ui/issues",
 		"email": "carlos.morcillo@me.com"
 	},
 	"funding": {

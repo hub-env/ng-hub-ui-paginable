@@ -9,6 +9,7 @@ This package is part of [Hub UI](https://hubui.dev/en/), a collection of Angular
 - Docs: https://hubui.dev/en/paginable/overview/
 - Live examples: https://hubui.dev/en/paginable/examples/
 - Hub UI: https://hubui.dev/en/
+- Hub UI on GitHub (issues, roadmap and contributing): https://github.com/hub-env/hub-ui
 
 ## 🧩 Library Family `ng-hub-ui`
 
@@ -2499,7 +2500,7 @@ We welcome all contributions! Here's how you can help:
 
 ```bash
 # Clone the repository
-git clone https://github.com/carlos-morcillo/ng-hub-ui-paginable.git
+git clone https://github.com/hub-env/ng-hub-ui-paginable.git
 cd ng-hub-ui-paginable
 
 # Install dependencies
