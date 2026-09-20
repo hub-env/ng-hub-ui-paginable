@@ -1,5 +1,31 @@
 # Breaking Changes: ng-hub-ui-paginable
 
+## [22.24.0] - 2026-09-20
+
+### The empty-state notice no longer follows your Bootstrap alerts
+
+- **Change**: `.hub-table__no-data` was rendered with `alert alert-info d-flex
+align-items-center m-4` and now carries only its own class. Its appearance comes from the
+  library's tokens instead of Bootstrap's alert rules.
+
+- **Impact — an application that restyled `.alert-info` loses that hold on this notice.** The
+  panel keeps the same shape and the same informative tint, so most consumers will not notice;
+  one that had branded its alerts will see the table's notice stop following them, silently.
+
+- **Why**: the classes came from a framework this family does not ship. Without Bootstrap the
+  notice had no panel at all and its icon sat above the sentence; with Bootstrap it stayed light
+  blue in a dark theme, which is the half of the bug nobody could fix from outside.
+
+- **Migration**: restyle it through its own tokens.
+
+    ```scss
+    .my-table {
+    	--hub-table-no-data-bg: #{$my-info-bg};
+    	--hub-table-no-data-color: #{$my-info-text};
+    	--hub-table-no-data-border-color: #{$my-info-border};
+    }
+    ```
+
 ## [22.22.0] - 2026-09-08
 
 ### `<hub-icon>` no longer matches this package's icon component

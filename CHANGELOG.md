@@ -1,5 +1,27 @@
 # Changelog
 
+## [22.24.0] - 2026-09-20
+
+### Fixed
+
+- **The empty-state notice paints itself, and follows the theme.** It was an `alert alert-info`
+  borrowed from Bootstrap, which this family does not ship: without Bootstrap the notice
+  rendered as bare text against the page, its icon stacked above the sentence, and with
+  Bootstrap it stayed a pale blue panel with dark blue text in a dark theme. It carries its own
+  rules now, built from the design system's informative roles — `--hub-sys-color-info-subtle`
+  for the fill and `--hub-sys-color-info-border-subtle` for the edge, both of which mix against
+  the page surface and so follow the theme. The text is `--hub-sys-text-primary` rather than the
+  matching emphasis role, which the design system calibrates for text on white and which lands
+  near 2:1 on the panel a dark theme produces; measured after the change, the sentence sits at
+  14.3:1 in light and 14.6:1 in dark.
+
+### Added
+
+- **Eight tokens for that notice**, so it can be themed like everything else the table draws:
+  `--hub-table-no-data-bg`, `--hub-table-no-data-color`, `--hub-table-no-data-border-color`,
+  `--hub-table-no-data-border-width`, `--hub-table-no-data-border-radius`,
+  `--hub-table-no-data-padding`, `--hub-table-no-data-margin` and `--hub-table-no-data-gap`.
+
 ## [22.23.0] - 2026-09-20
 
 ### Added
@@ -27,9 +49,9 @@
   in a dark one the table finally reads. A `--hub-table-bg` set by the application still wins,
   exactly as before.
 
-  Two literal whites stay: the count on a filter chip and the label of the active page, which
-  sit on the accent rather than on a surface. Those belong to the accent's own contrast colour
-  and are a separate fix.
+    Two literal whites stay: the count on a filter chip and the label of the active page, which
+    sit on the accent rather than on a surface. Those belong to the accent's own contrast colour
+    and are a separate fix.
 
 - **A header cell keeps its title, its sort control and its filter on one line.** The row was
   laid out by Bootstrap utility classes written in the template, and this family ships no

@@ -51,6 +51,22 @@
 	--hub-table-header-cell-actions-gap: var(--hub-ref-space-2, 0.5rem);
 	--hub-table-cell-buttons-gap: var(--hub-ref-space-2, 0.5rem);
 	--hub-table-cell-btn-content-gap: var(--hub-ref-space-1, 0.25rem);
+	// The empty state used to be an `alert alert-info` from Bootstrap, which this family does
+	// not ship: without it the notice rendered as bare text against the page, and with it the
+	// panel stayed light blue in a dark theme. The design system already has the recipe for a
+	// quiet informative panel, and all three of its parts follow the theme.
+	// The tint is the background's job and the text stays the theme's own. The emphasis role
+	// is calibrated for text on white — the design system says so where it is declared — and on
+	// the dark surface this panel takes in a dark theme it lands around 2:1. `text-primary` is
+	// guaranteed against the page surface, and a 12% tint of it barely moves.
+	--hub-table-no-data-bg: var(--hub-sys-color-info-subtle, #cff4fc);
+	--hub-table-no-data-color: var(--hub-sys-text-primary, #212529);
+	--hub-table-no-data-border-color: var(--hub-sys-color-info-border-subtle, #b6effb);
+	--hub-table-no-data-border-width: var(--hub-ref-border-width, 1px);
+	--hub-table-no-data-border-radius: var(--hub-ref-radius-md, 0.375rem);
+	--hub-table-no-data-padding: var(--hub-ref-space-3, 1rem);
+	--hub-table-no-data-margin: var(--hub-ref-space-4, 1.5rem);
+	--hub-table-no-data-gap: var(--hub-ref-space-4, 1.5rem);
 	--hub-table-batch-actions-margin-inline-end: auto;
 	--hub-table-bottom-bar-gap: var(--hub-ref-space-3, 1rem);
 	// Air around the bar, so it can read as a band rather than a line stuck to the last row.
@@ -809,9 +825,16 @@
 		}
 	}
 
-	// No data icon spacing
-	.hub-table__no-data-icon {
-		margin-right: var(--hub-ref-space-4, 1.5rem);
+	.hub-table__no-data {
+		display: flex;
+		align-items: center;
+		gap: var(--hub-table-no-data-gap);
+		margin: var(--hub-table-no-data-margin);
+		padding: var(--hub-table-no-data-padding);
+		border: var(--hub-table-no-data-border-width) solid var(--hub-table-no-data-border-color);
+		border-radius: var(--hub-table-no-data-border-radius);
+		background-color: var(--hub-table-no-data-bg);
+		color: var(--hub-table-no-data-color);
 	}
 
 	// Header icon spacing
@@ -1263,11 +1286,6 @@ $hub-table-variants: primary, secondary, success, danger, warning, info, neutral
 			border-inline-start: var(--hub-table-search-border-width) solid var(--hub-table-search-input-border-color);
 			border-inline-end: 0;
 		}
-	}
-
-	.hub-table__no-data-icon {
-		margin-right: 0;
-		margin-left: var(--hub-ref-space-4, 1.5rem);
 	}
 
 	.hub-table__header-icon {
