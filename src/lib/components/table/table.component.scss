@@ -44,8 +44,21 @@
 	--hub-table-top-bar-align-items: center;
 	--hub-table-top-bar-wrap: wrap;
 	--hub-table-batch-actions-gap: var(--hub-ref-space-2, 0.5rem);
+	// The header cell lays its own row out. The template asks Bootstrap for it with utility
+	// classes, and this family does not ship Bootstrap: without these the title, the sort
+	// arrows and the filter stack one under another in every sortable column.
+	--hub-table-header-cell-gap: var(--hub-ref-space-2, 0.5rem);
+	--hub-table-header-cell-actions-gap: var(--hub-ref-space-2, 0.5rem);
+	--hub-table-cell-buttons-gap: var(--hub-ref-space-2, 0.5rem);
+	--hub-table-cell-btn-content-gap: var(--hub-ref-space-1, 0.25rem);
 	--hub-table-batch-actions-margin-inline-end: auto;
 	--hub-table-bottom-bar-gap: var(--hub-ref-space-3, 1rem);
+	// The bar is a band of its own, not a line stuck to the last row: it needs air above
+	// and a gutter at the sides, or the paginator and the row count sit against the table's
+	// edges with nothing between them and the page.
+	--hub-table-bottom-bar-padding-block: var(--hub-ref-space-2, 0.5rem);
+	--hub-table-bottom-bar-padding-inline: var(--hub-ref-space-3, 1rem);
+	--hub-table-bottom-bar-spacing: var(--hub-ref-space-3, 1rem);
 	--hub-table-bottom-bar-justify-content: space-around;
 	--hub-table-bottom-bar-align-items: center;
 	--hub-table-bottom-bar-wrap: wrap;
@@ -328,6 +341,34 @@
 	// The glyph is the whole affordance, so the button around it has to be nothing at all:
 	// no box, no background, no padding, and the header cell's own colour rather than the
 	// browser's button colour.
+	// Declared rather than left to the `d-flex` classes in the template: those come from the
+	// consumer's sheet, and an application without Bootstrap got a header cell that stacked —
+	// the title on one line, the sort arrows under it, the filter under those.
+	.hub-table__header-cell-content {
+		display: flex;
+		flex-wrap: nowrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--hub-table-header-cell-gap);
+	}
+
+	.hub-table__header-cell-actions {
+		display: flex;
+		flex-wrap: nowrap;
+		align-items: center;
+		gap: var(--hub-table-header-cell-actions-gap);
+		margin-inline-start: auto;
+	}
+
+	// The same seam one row down: the action buttons of a cell.
+	.hub-table__cell-buttons {
+		display: flex;
+		flex-wrap: nowrap;
+		align-items: center;
+		justify-content: flex-end;
+		gap: var(--hub-table-cell-buttons-gap);
+	}
+
 	.hub-table__sort-btn {
 		padding: 0;
 		border: 0;
@@ -453,7 +494,9 @@
 		// Declared rather than left to the `d-flex` in the template: the geometry below depends
 		// on this box being a flex row, and the utility classes come from the consumer's sheet.
 		display: flex;
+		flex-wrap: nowrap;
 		align-items: center;
+		gap: var(--hub-table-cell-btn-content-gap);
 		min-height: 1.5rem;
 
 		hub-paginable-icon,
@@ -570,6 +613,18 @@
 		align-items: var(--hub-table-bottom-bar-align-items);
 		flex-wrap: var(--hub-table-bottom-bar-wrap);
 		gap: var(--hub-table-bottom-bar-gap);
+		padding-block: var(--hub-table-bottom-bar-padding-block);
+		padding-inline: var(--hub-table-bottom-bar-padding-inline);
+	}
+
+	// The separation goes on the side facing the grid, so a bar drawn above and a bar
+	// drawn below are each pushed away from it rather than both downwards.
+	.hub-table__bottom-bar--bottom {
+		margin-block-start: var(--hub-table-bottom-bar-spacing);
+	}
+
+	.hub-table__bottom-bar--top {
+		margin-block-end: var(--hub-table-bottom-bar-spacing);
 	}
 
 	.hub-table__bottom-bar-paginator {

@@ -52,7 +52,13 @@
 	// justify-content of the footer row
 	$footer-align: null,
 	// align-items of the footer row
-	$footer-wrap: null // flex-wrap of the footer row
+	$footer-wrap: null,
+	// flex-wrap of the footer row
+	$footer-padding-block: null,
+	// air above and below the footer row
+	$footer-padding-inline: null,
+	// gutter at its sides, which `space-around` cannot give
+	$footer-spacing: null // separation between the footer row and the grid
 ) {
 	// Colour
 	@if $accent != null {
@@ -116,6 +122,15 @@
 	}
 	@if $footer-wrap != null {
 		--hub-table-bottom-bar-wrap: #{$footer-wrap};
+	}
+	@if $footer-padding-block != null {
+		--hub-table-bottom-bar-padding-block: #{$footer-padding-block};
+	}
+	@if $footer-padding-inline != null {
+		--hub-table-bottom-bar-padding-inline: #{$footer-padding-inline};
+	}
+	@if $footer-spacing != null {
+		--hub-table-bottom-bar-spacing: #{$footer-spacing};
 	}
 }
 // scss-docs-end hub-table-theme
