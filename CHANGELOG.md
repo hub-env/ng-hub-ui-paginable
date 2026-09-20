@@ -2,6 +2,19 @@
 
 ## [22.23.0] - 2026-09-20
 
+### Added
+
+- **Three tokens to give the paging bar air, off by default.** The bar sits flush against the
+  grid and against its own edges, and `justify-content` cannot change that: `space-around`
+  shares the free space out between the items and leaves none outside them, so the paginator
+  ends up against one edge and the row count against the other however it is set. The gutter
+  has to be padding. `--hub-table-bottom-bar-padding-block`,
+  `--hub-table-bottom-bar-padding-inline` and `--hub-table-bottom-bar-spacing` hold it — the
+  last one separating the bar from the grid on whichever side it is drawn — and
+  `hub-table-theme()` takes them as `$footer-padding-block`, `$footer-padding-inline` and
+  `$footer-spacing`. All three are `0`, so no existing table moves; a table that wants the band
+  asks for it.
+
 ### Fixed
 
 - **The table follows the dark theme.** Every surface it paints — the cells, the header, the
@@ -26,18 +39,6 @@
   The same seam is closed one row down, on a row's action buttons and their icon and label —
   `--hub-table-cell-buttons-gap` and `--hub-table-cell-btn-content-gap`. An application that
   does load Bootstrap sees no change: the declared values are the ones the utilities applied.
-
-### Changed
-
-- **The paging bar is a band with air around it, not a line stuck to the last row.** It sat flush
-  against the grid, and `space-around` distributes free space _between_ its items and none outside
-  them, so the paginator touched the left edge and the row count the right one. The bar now carries
-  padding of its own and separates itself from the grid, on whichever side it is drawn: a bar above
-  pushes down, a bar below pushes up. Three new tokens —
-  `--hub-table-bottom-bar-padding-block`, `--hub-table-bottom-bar-padding-inline` and
-  `--hub-table-bottom-bar-spacing` — hold the values, and `hub-table-theme()` takes them as
-  `$footer-padding-block`, `$footer-padding-inline` and `$footer-spacing`. A table that wants the
-  old flush bar sets the three to `0`.
 
 ## [22.22.1] - 2026-09-16
 

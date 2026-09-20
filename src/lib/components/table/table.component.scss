@@ -53,12 +53,18 @@
 	--hub-table-cell-btn-content-gap: var(--hub-ref-space-1, 0.25rem);
 	--hub-table-batch-actions-margin-inline-end: auto;
 	--hub-table-bottom-bar-gap: var(--hub-ref-space-3, 1rem);
-	// The bar is a band of its own, not a line stuck to the last row: it needs air above
-	// and a gutter at the sides, or the paginator and the row count sit against the table's
-	// edges with nothing between them and the page.
-	--hub-table-bottom-bar-padding-block: var(--hub-ref-space-2, 0.5rem);
-	--hub-table-bottom-bar-padding-inline: var(--hub-ref-space-3, 1rem);
-	--hub-table-bottom-bar-spacing: var(--hub-ref-space-3, 1rem);
+	// Air around the bar, so it can read as a band rather than a line stuck to the last row.
+	// `justify-content` cannot give it: `space-around` shares the free space out between the
+	// items and leaves none outside them, so the paginator ends up against one edge and the
+	// row count against the other however it is set.
+	//
+	// Zero by default, because every table that exists was laid out against the flush bar and
+	// none of them asked for this. A table that wants the air asks for it — the three
+	// `$footer-padding-block` / `$footer-padding-inline` / `$footer-spacing` arguments of
+	// `hub-table-theme()`, or these variables directly.
+	--hub-table-bottom-bar-padding-block: 0;
+	--hub-table-bottom-bar-padding-inline: 0;
+	--hub-table-bottom-bar-spacing: 0;
 	--hub-table-bottom-bar-justify-content: space-around;
 	--hub-table-bottom-bar-align-items: center;
 	--hub-table-bottom-bar-wrap: wrap;

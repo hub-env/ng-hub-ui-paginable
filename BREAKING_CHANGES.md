@@ -1,29 +1,5 @@
 # Breaking Changes: ng-hub-ui-paginable
 
-## [22.23.0] - 2026-09-20
-
-### The paging bar takes up more room
-
-- **Change**: `.hub-table__bottom-bar` gains padding and a margin on the side facing the grid.
-  With the defaults that is half a unit of air above and below, one unit at each side, and one
-  unit between the bar and the rows.
-
-- **Impact — a table grows by about two units of height, and its paging chrome moves inwards.**
-  Layouts that measured a table to the pixel, and screenshot tests taken against the flush bar,
-  both notice. Nothing reflows horizontally: the bar was already full width.
-
-- **Why**: the bar had no gutter at all, so the paginator sat against one edge and the row count
-  against the other, and nothing separated the band from the last row. `space-around` cannot fix
-  it — it shares out the space between the items and leaves none outside them.
-
-- **Migration**: to keep the bar flush, set the three tokens to zero.
-
-  ```scss
-  .my-table {
-  	@include hub-table-theme($footer-padding-block: 0, $footer-padding-inline: 0, $footer-spacing: 0);
-  }
-  ```
-
 ## [22.22.0] - 2026-09-08
 
 ### `<hub-icon>` no longer matches this package's icon component
