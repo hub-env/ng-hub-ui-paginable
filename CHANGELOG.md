@@ -4,6 +4,20 @@
 
 ### Fixed
 
+- **The table follows the dark theme.** Every surface it paints — the cells, the header, the
+  toolbar, the search field, the filter controls, the clear-filters button — fell back to
+  `--hub-ref-color-white`, and a reference token is precisely the one thing no theme redefines.
+  A dark application therefore got light text on white cells: the grid was unreadable, and
+  nothing in the console said so. Those surfaces fall back to `--hub-sys-surface-page` now, and
+  the quiet ones in the list and the paginator to `--hub-sys-surface-elevated`. In the light
+  theme both resolve to the same `#ffffff` and `#f8f9fa` the literals carried, so nothing moves;
+  in a dark one the table finally reads. A `--hub-table-bg` set by the application still wins,
+  exactly as before.
+
+  Two literal whites stay: the count on a filter chip and the label of the active page, which
+  sit on the accent rather than on a surface. Those belong to the accent's own contrast colour
+  and are a separate fix.
+
 - **A header cell keeps its title, its sort control and its filter on one line.** The row was
   laid out by Bootstrap utility classes written in the template, and this family ships no
   Bootstrap: in an application without it the three stacked one under another in every sortable
