@@ -1323,7 +1323,7 @@ En lugar de fijar los tokens `--hub-*` a mano, puedes tematizar la tabla o la li
 
 #### `hub-table-theme(…)` — tematiza `<hub-table>`
 
-Color (`$accent`, `$bg`, `$color`, `$border-color`, `$hover-bg`, `$hover-color`, `$selected-bg`, `$selected-color`, `$striped-bg`, `$striped-color`), borde (`$border-width`, `$border-radius`), densidad (`$cell-padding-x`, `$cell-padding-y`) y footer / barra inferior (`$footer-gap`, `$footer-justify`, `$footer-align`, `$footer-wrap`).
+Color (`$accent`, `$bg`, `$color`, `$border-color`, `$hover-bg`, `$hover-color`, `$selected-bg`, `$selected-color`, `$striped-bg`, `$striped-color`), borde (`$border-width`, `$border-radius`), densidad (`$cell-padding-x`, `$cell-padding-y`) y footer / barra inferior (`$footer-gap`, `$footer-justify`, `$footer-align`, `$footer-wrap`, `$footer-padding-block`, `$footer-padding-inline`, `$footer-spacing`).
 
 ```scss
 .tabla-facturas {

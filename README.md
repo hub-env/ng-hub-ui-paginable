@@ -1436,7 +1436,7 @@ Instead of setting the `--hub-*` tokens by hand, you can theme the table or the 
 
 #### `hub-table-theme(…)` — theme `<hub-table>`
 
-Colour (`$accent`, `$bg`, `$color`, `$border-color`, `$hover-bg`, `$hover-color`, `$selected-bg`, `$selected-color`, `$striped-bg`, `$striped-color`), border (`$border-width`, `$border-radius`), density (`$cell-padding-x`, `$cell-padding-y`) and footer / bottom-bar (`$footer-gap`, `$footer-justify`, `$footer-align`, `$footer-wrap`).
+Colour (`$accent`, `$bg`, `$color`, `$border-color`, `$hover-bg`, `$hover-color`, `$selected-bg`, `$selected-color`, `$striped-bg`, `$striped-color`), border (`$border-width`, `$border-radius`), density (`$cell-padding-x`, `$cell-padding-y`) and footer / bottom-bar (`$footer-gap`, `$footer-justify`, `$footer-align`, `$footer-wrap`, `$footer-padding-block`, `$footer-padding-inline`, `$footer-spacing`).
 
 ```scss
 .invoices-table {

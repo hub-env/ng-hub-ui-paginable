@@ -26,7 +26,7 @@
 	--hub-list-gap: var(--hub-ref-space-4, 1.5rem);
 	--hub-list-items-bg: transparent;
 	--hub-list-items-gap: var(--hub-ref-space-2, 0.5rem);
-	--hub-list-empty-bg: var(--hub-ref-surface-2, #f8f9fa);
+	--hub-list-empty-bg: var(--hub-sys-surface-elevated, #f8f9fa);
 	--hub-list-empty-border-color: var(--hub-sys-border-color-default, #dee2e6);
 	--hub-list-empty-color: var(--hub-sys-text-muted, #6c757d);
 	--hub-list-empty-padding-x: var(--hub-ref-space-3, 1rem);
@@ -37,7 +37,7 @@
 	--hub-list-item-border-radius: var(--hub-ref-radius-sm, 0.25rem);
 	--hub-list-item-color: var(--hub-sys-text-primary, #212529);
 	--hub-list-item-gap: var(--hub-ref-space-2, 0.5rem);
-	--hub-list-item-hover-bg: var(--hub-ref-surface-2, #f8f9fa);
+	--hub-list-item-hover-bg: var(--hub-sys-surface-elevated, #f8f9fa);
 	--hub-list-item-padding-x: var(--hub-ref-space-3, 1rem);
 	--hub-list-item-padding-y: var(--hub-ref-space-2, 0.5rem);
 	--hub-list-children-gap: var(--hub-list-item-padding-y);
@@ -92,7 +92,7 @@
 	--hub-list-bottom-bar-paginator-flex: 0 0 auto;
 	--hub-list-bottom-bar-settings-flex: 0 0 auto;
 	--hub-list-bottom-bar-info-flex: 0 0 auto;
-	--hub-list-search-btn-bg: var(--hub-ref-surface-2, #f8f9fa);
+	--hub-list-search-btn-bg: var(--hub-sys-surface-elevated, #f8f9fa);
 	--hub-list-search-btn-color: var(--hub-sys-text-primary, #212529);
 	--hub-list-search-button-min-width: 2.75rem;
 	--hub-list-search-input-bg: var(--hub-sys-surface-page, #ffffff);
@@ -120,7 +120,7 @@
 	--hub-list-item-dragging-cursor: grabbing;
 	--hub-list-drop-target-outline-color: var(--hub-list-accent);
 	--hub-list-drop-target-outline-width: 2px;
-	--hub-list-placeholder-bg: var(--hub-ref-surface-2, #f8f9fa);
+	--hub-list-placeholder-bg: var(--hub-sys-surface-elevated, #f8f9fa);
 	--hub-list-placeholder-border-color: var(--hub-list-accent);
 	--hub-list-placeholder-border-width: 2px;
 	--hub-list-placeholder-border-style: dashed;

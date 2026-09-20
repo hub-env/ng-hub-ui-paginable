@@ -1,5 +1,45 @@
 # Changelog
 
+## [22.23.0] - 2026-09-20
+
+### Added
+
+- **Three tokens to give the paging bar air, off by default.** The bar sits flush against the
+  grid and against its own edges, and `justify-content` cannot change that: `space-around`
+  shares the free space out between the items and leaves none outside them, so the paginator
+  ends up against one edge and the row count against the other however it is set. The gutter
+  has to be padding. `--hub-table-bottom-bar-padding-block`,
+  `--hub-table-bottom-bar-padding-inline` and `--hub-table-bottom-bar-spacing` hold it — the
+  last one separating the bar from the grid on whichever side it is drawn — and
+  `hub-table-theme()` takes them as `$footer-padding-block`, `$footer-padding-inline` and
+  `$footer-spacing`. All three are `0`, so no existing table moves; a table that wants the band
+  asks for it.
+
+### Fixed
+
+- **The table follows the dark theme.** Every surface it paints — the cells, the header, the
+  toolbar, the search field, the filter controls, the clear-filters button — fell back to
+  `--hub-ref-color-white`, and a reference token is precisely the one thing no theme redefines.
+  A dark application therefore got light text on white cells: the grid was unreadable, and
+  nothing in the console said so. Those surfaces fall back to `--hub-sys-surface-page` now, and
+  the quiet ones in the list and the paginator to `--hub-sys-surface-elevated`. In the light
+  theme both resolve to the same `#ffffff` and `#f8f9fa` the literals carried, so nothing moves;
+  in a dark one the table finally reads. A `--hub-table-bg` set by the application still wins,
+  exactly as before.
+
+  Two literal whites stay: the count on a filter chip and the label of the active page, which
+  sit on the accent rather than on a surface. Those belong to the accent's own contrast colour
+  and are a separate fix.
+
+- **A header cell keeps its title, its sort control and its filter on one line.** The row was
+  laid out by Bootstrap utility classes written in the template, and this family ships no
+  Bootstrap: in an application without it the three stacked one under another in every sortable
+  column, and the filter ended up below the arrows. The cell carries its own rules now, with
+  `--hub-table-header-cell-gap` and `--hub-table-header-cell-actions-gap` holding the spacing.
+  The same seam is closed one row down, on a row's action buttons and their icon and label —
+  `--hub-table-cell-buttons-gap` and `--hub-table-cell-btn-content-gap`. An application that
+  does load Bootstrap sees no change: the declared values are the ones the utilities applied.
+
 ## [22.22.1] - 2026-09-16
 
 ### Changed
@@ -20,13 +60,13 @@
   bug in the application rather than as two libraries colliding, and has no fix a consumer can
   apply from outside.
 
-  This one keeps `<ng-hub-ui-icon>`, which it has always matched, and gains
-  `<hub-paginable-icon>`; `<hub-icon>` now belongs to `ng-hub-ui-icons` alone. The class is
-  exported under its new name, with `HubIconComponent` kept as a deprecated alias that goes in
-  23.0.0. The component itself is unchanged — same `config` input, same output.
+    This one keeps `<ng-hub-ui-icon>`, which it has always matched, and gains
+    `<hub-paginable-icon>`; `<hub-icon>` now belongs to `ng-hub-ui-icons` alone. The class is
+    exported under its new name, with `HubIconComponent` kept as a deprecated alias that goes in
+    23.0.0. The component itself is unchanged — same `config` input, same output.
 
-  **Breaking** for a template writing `<hub-icon [config]>` — see
-  [`BREAKING_CHANGES.md`](./BREAKING_CHANGES.md).
+    **Breaking** for a template writing `<hub-icon [config]>` — see
+    [`BREAKING_CHANGES.md`](./BREAKING_CHANGES.md).
 
 ## [22.21.0] - 2026-09-08
 
@@ -60,8 +100,8 @@
   this library used it: the table draws its own tooltips through `HubTableTooltipDirective`,
   which is unaffected.
 
-  **Breaking** for an application importing `TooltipDirective` from `ng-hub-ui-paginable` —
-  see [`BREAKING_CHANGES.md`](./BREAKING_CHANGES.md).
+    **Breaking** for an application importing `TooltipDirective` from `ng-hub-ui-paginable` —
+    see [`BREAKING_CHANGES.md`](./BREAKING_CHANGES.md).
 
 ## [22.19.1] - 2026-09-07
 
