@@ -116,7 +116,7 @@ Defined on `.hub-paginator`. Control the appearance of pagination controls used 
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `--hub-paginator-link-hover-color` | `var(--hub-sys-color-primary, #0d6efd)` | Text color on hover |
-| `--hub-paginator-link-hover-bg` | `var(--hub-ref-surface-2, #f8f9fa)` | Background on hover |
+| `--hub-paginator-link-hover-bg` | `var(--hub-sys-surface-elevated, #f8f9fa)` | Background on hover |
 | `--hub-paginator-link-hover-border-color` | `var(--hub-sys-border-color-default, #dee2e6)` | Border color on hover |
 
 ### Page Links — Active (Current Page)
@@ -132,7 +132,7 @@ Defined on `.hub-paginator`. Control the appearance of pagination controls used 
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `--hub-paginator-link-disabled-color` | `var(--hub-sys-text-muted, #6c757d)` | Text color when disabled |
-| `--hub-paginator-link-disabled-bg` | `var(--hub-ref-surface-2, #f8f9fa)` | Background when disabled |
+| `--hub-paginator-link-disabled-bg` | `var(--hub-sys-surface-elevated, #f8f9fa)` | Background when disabled |
 | `--hub-paginator-link-disabled-border-color` | `var(--hub-sys-border-color-default, #dee2e6)` | Border when disabled |
 
 ### Select (Per-Page Dropdown)
@@ -245,7 +245,7 @@ Defined on `.hub-list`. Control the appearance of the `<hub-ui-list>` component 
 | `--hub-list-item-gap` | `var(--hub-ref-space-2, 0.5rem)` | Internal gap within items |
 | `--hub-list-item-padding-x` | `var(--hub-ref-space-3, 1rem)` | Horizontal padding of items |
 | `--hub-list-item-padding-y` | `var(--hub-ref-space-2, 0.5rem)` | Vertical padding of items |
-| `--hub-list-item-hover-bg` | `var(--hub-ref-surface-2, #f8f9fa)` | Background color on item hover |
+| `--hub-list-item-hover-bg` | `var(--hub-sys-surface-elevated, #f8f9fa)` | Background color on item hover |
 | `--hub-list-children-gap` | `var(--hub-list-item-padding-y)` | Top margin separating a nested children list from its parent item content |
 
 ### Items — Selected
@@ -259,7 +259,7 @@ Defined on `.hub-list`. Control the appearance of the `<hub-ui-list>` component 
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `--hub-list-empty-bg` | `var(--hub-ref-surface-2, #f8f9fa)` | Background when the list is empty |
+| `--hub-list-empty-bg` | `var(--hub-sys-surface-elevated, #f8f9fa)` | Background when the list is empty |
 | `--hub-list-empty-border-color` | `var(--hub-sys-border-color-default, #dee2e6)` | Border color of the empty state |
 | `--hub-list-empty-color` | `var(--hub-sys-text-muted, #6c757d)` | Text color of the empty state |
 | `--hub-list-empty-padding-x` | `var(--hub-ref-space-3, 1rem)` | Horizontal padding of the empty state |
@@ -273,7 +273,7 @@ Defined on `.hub-list`. Control the appearance of the `<hub-ui-list>` component 
 | `--hub-list-search-input-border-color` | `var(--hub-sys-border-color-default, #dee2e6)` | Border color of the search input |
 | `--hub-list-search-input-border-radius` | `var(--hub-ref-radius-sm, 0.25rem)` | Border radius of the search input |
 | `--hub-list-search-input-color` | `var(--hub-sys-text-primary, #212529)` | Text color of the search input |
-| `--hub-list-search-btn-bg` | `var(--hub-ref-surface-2, #f8f9fa)` | Background of the search button |
+| `--hub-list-search-btn-bg` | `var(--hub-sys-surface-elevated, #f8f9fa)` | Background of the search button |
 | `--hub-list-search-btn-color` | `var(--hub-sys-text-primary, #212529)` | Text/icon color of the search button |
 | `--hub-list-search-button-min-width` | `2.75rem` | Minimum width of the search button |
 | `--hub-list-search-border-color` | `var(--hub-list-search-input-border-color)` | Shared border color for search input/button |
@@ -306,7 +306,7 @@ Defined on `.hub-list`. Control the appearance of the `<hub-ui-list>` component 
 | `--hub-list-item-dragging-cursor` | `grabbing` | Cursor while a row is being dragged |
 | `--hub-list-drop-target-outline-color` | `var(--hub-list-accent)` | Outline color of the hovered drop target |
 | `--hub-list-drop-target-outline-width` | `2px` | Outline width of the hovered drop target |
-| `--hub-list-placeholder-bg` | `var(--hub-ref-surface-2, #f8f9fa)` | Background of the drop placeholder |
+| `--hub-list-placeholder-bg` | `var(--hub-sys-surface-elevated, #f8f9fa)` | Background of the drop placeholder |
 | `--hub-list-placeholder-border-color` | `var(--hub-list-accent)` | Border color of the drop placeholder |
 | `--hub-list-placeholder-border-width` | `2px` | Border width of the drop placeholder |
 | `--hub-list-placeholder-border-style` | `dashed` | Border style of the drop placeholder |
@@ -414,13 +414,13 @@ The table reads a single accent slot and derives its family locally (same genera
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `--hub-table-search-input-bg` | `var(--hub-table-container-bg, var(--hub-ref-color-white, #fff))` | Background of the search input |
+| `--hub-table-search-input-bg` | `var(--hub-table-container-bg, var(--hub-sys-surface-page, #fff))` | Background of the search input |
 | `--hub-table-search-input-border-color` | `var(--hub-table-border-color)` | Border color of the search input |
 | `--hub-table-search-input-color` | `var(--hub-table-container-color, var(--hub-sys-text-primary, #212529))` | Text color of the search input |
 | `--hub-table-search-input-padding-x` | `0.75rem` | Horizontal padding of the search input |
 | `--hub-table-search-input-padding-y` | `0.375rem` | Vertical padding of the search input |
 | `--hub-table-search-input-font-size` | `1rem` | Font size of the search input |
-| `--hub-table-search-button-bg` | `var(--hub-table-container-bg, var(--hub-ref-color-white, #fff))` | Background of the search button |
+| `--hub-table-search-button-bg` | `var(--hub-table-container-bg, var(--hub-sys-surface-page, #fff))` | Background of the search button |
 | `--hub-table-search-button-border-color` | `var(--hub-table-border-color)` | Border color of the search button |
 | `--hub-table-search-button-color` | `var(--hub-table-container-color, var(--hub-sys-text-primary, #212529))` | Text/icon color of the search button |
 | `--hub-table-search-button-min-width` | `2.75rem` | Minimum width of the search button |
@@ -440,7 +440,7 @@ The table reads a single accent slot and derives its family locally (same genera
 | `--hub-table-border-color` | `var(--hub-sys-border-color-default, #dee2e6)` | Border color of table rows and cells |
 | `--hub-table-border-width` | `var(--hub-ref-border-width, 1px)` | Border width of table rows and cells |
 | `--hub-table-group-separator-color` | `var(--hub-sys-border-color-default, #dee2e6)` | Color of the separator between thead and tbody |
-| `--hub-table-head-bg` | `var(--hub-table-bg, var(--hub-ref-color-white, #fff))` | Header (thead) surface; kept opaque so a sticky header covers the scrolling body |
+| `--hub-table-head-bg` | `var(--hub-table-bg, var(--hub-sys-surface-page, #fff))` | Header (thead) surface; kept opaque so a sticky header covers the scrolling body |
 | `--hub-table-head-color` | `var(--hub-table-color, var(--hub-sys-text-primary, #212529))` | Header (thead) text color |
 | `--hub-table-head-font-size` | `inherit` | Header (thead) cell font size |
 | `--hub-table-head-font-weight` | `bold` | Header (thead) cell font weight (browser `th` default; set to `var(--hub-ref-font-weight-semibold, 600)` for the DS look) |
@@ -520,7 +520,7 @@ including the two-ended range field. A cell whose filter currently holds a value
 | `--hub-table-filter-row-bg` | `var(--hub-table-head-bg)` | Background of the filter row |
 | `--hub-table-filter-cell-padding-x` | `var(--hub-table-head-padding-x)` | Horizontal padding of a filter cell |
 | `--hub-table-filter-cell-padding-y` | `var(--hub-table-head-padding-y)` | Vertical padding of a filter cell |
-| `--hub-table-filter-control-bg` | `var(--hub-table-container-bg, var(--hub-ref-color-white, #fff))` | Background of a filter control |
+| `--hub-table-filter-control-bg` | `var(--hub-table-container-bg, var(--hub-sys-surface-page, #fff))` | Background of a filter control |
 | `--hub-table-filter-control-color` | `var(--hub-table-container-color, var(--hub-sys-text-primary, #212529))` | Text color of a filter control |
 | `--hub-table-filter-control-placeholder-color` | `var(--hub-sys-text-muted, #6c757d)` | Placeholder and range-label color |
 | `--hub-table-filter-control-border-color` | `var(--hub-table-border-color)` | Border color of a filter control |
@@ -538,7 +538,7 @@ including the two-ended range field. A cell whose filter currently holds a value
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `--hub-table-delete-filters-bg` | `var(--hub-table-container-bg, var(--hub-ref-color-white, #fff))` | Background of the button |
+| `--hub-table-delete-filters-bg` | `var(--hub-table-container-bg, var(--hub-sys-surface-page, #fff))` | Background of the button |
 | `--hub-table-delete-filters-color` | `var(--hub-table-container-color, var(--hub-sys-text-primary, #212529))` | Text and icon color |
 | `--hub-table-delete-filters-border-color` | `var(--hub-table-border-color)` | Border color |
 | `--hub-table-delete-filters-border-width` | `var(--hub-table-border-width)` | Border width |
