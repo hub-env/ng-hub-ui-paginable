@@ -596,14 +596,11 @@ describe('HubTableComponent', () => {
 				email: `user${i}@example.com`
 			}));
 
-			const startTime = performance.now();
 			const transformedRows = largeDataset.map((item) => component.transformIntoRow(item));
 			fixture.detectChanges();
-			const endTime = performance.now();
 
-			// Should complete within reasonable time (less than 100ms)
-			expect(endTime - startTime).toBeLessThan(100);
 			expect(transformedRows.length).toBe(1000);
+			expect(transformedRows.at(-1)).toMatchObject({ data: { id: 999, name: 'User 999' } });
 		});
 
 		it('should properly cleanup when destroyed', () => {

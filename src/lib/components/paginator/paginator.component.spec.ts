@@ -346,38 +346,26 @@ describe('HubPaginatorComponent', () => {
 		});
 	});
 
-	describe('Performance Considerations', () => {
-		it('should handle rapid page changes efficiently', () => {
-			const startTime = performance.now();
-
-			// Simulate rapid page changes
+	/**
+	 * These used to assert a wall-clock budget, which on a loaded CI runner measures the runner
+	 * and fails for reasons that have nothing to do with the component. What is worth holding is
+	 * that a burst of changes leaves the right state behind.
+	 */
+	describe('Bursts of changes', () => {
+		it('lands on the last page after a hundred rapid changes', () => {
 			for (let i = 1; i <= 100; i++) {
 				component.page.set(i);
 				fixture.detectChanges();
 			}
 
-			const endTime = performance.now();
-			const duration = endTime - startTime;
-
-			// Should complete within reasonable time (less than 50ms)
-			expect(duration).toBeLessThan(50);
 			expect(component.page()).toBe(100);
 		});
 
-		it('should handle rapid numberOfPages changes efficiently through host', () => {
-			const startTime = performance.now();
-
-			// Simulate rapid numberOfPages changes
+		it('takes the last page count after a hundred rapid changes through the host', () => {
 			for (let i = 1; i <= 100; i++) {
 				hostComponent.setNumberOfPages(i);
 				hostFixture.detectChanges();
 			}
-
-			const endTime = performance.now();
-			const duration = endTime - startTime;
-
-			// Should complete within reasonable time (less than 50ms)
-			expect(duration).toBeLessThan(50);
 
 			const paginatorInstance = hostFixture.debugElement.query(By.directive(HubPaginatorComponent)).componentInstance;
 			expect(paginatorInstance.numberOfPages()).toBe(100);
