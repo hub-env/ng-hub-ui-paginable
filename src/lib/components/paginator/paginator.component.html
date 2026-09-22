@@ -37,7 +37,7 @@
 			</li>
 		}
 		<li class="hub-paginator__item hub-paginator__item--active">
-			<a role="button" class="hub-paginator__link" href="javascript:{}">{{ page() }}</a>
+			<a role="button" class="hub-paginator__link" href="javascript:{}" aria-current="page">{{ page() }}</a>
 		</li>
 		@if (numberOfPages()) {
 			@if (page() + 1 <= numberOfPages()!) {

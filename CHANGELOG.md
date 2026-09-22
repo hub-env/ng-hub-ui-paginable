@@ -1,5 +1,49 @@
 # Changelog
 
+## [22.25.0] - 2026-09-22
+
+### Fixed
+
+- **The table says how it is sorted.** `aria-sort` did not appear anywhere in the package: the
+  only sign of which column ordered the rows was an icon class on an element marked
+  `aria-hidden`, so a screen reader announced that a table had been reordered and never by
+  what. Every sortable column now carries `ascending`, `descending` or `none`, and a column
+  that cannot be sorted carries nothing rather than offering an action it does not have.
+- **The sort control is drawn only where it sorts.** It was rendered for any column that had
+  either sorting or a menu filter, so a column with only a filter got a focusable button with
+  no name and no effect. A consumer styling `.hub-table__sort-btn` on such a column will find
+  the element gone.
+- **Every control has a name.** The sort button, the row checkbox and radio, the select-all
+  box, the control that opens a row and each column filter were all unnamed; the page-size
+  select was named only when a form-controls adapter was registered. The labels are
+  translated, the expander also reports `aria-expanded`, and the page-size select is tied to
+  the label that was already beside it.
+- **The head row is a head row, and loading is audible.** The `<th>` elements carry
+  `scope="col"`, the table reports `aria-busy` while it loads, the row count is a live region
+  so a page change is announced, and the paginator marks the page the reader is on with
+  `aria-current`.
+- **The documentation stops promising resizable columns.** `HubResizableComponent` and
+  `HubResizableDirective` are exported, but `<hub-table>` never imported them, so the
+  `resizable` attribute the table wrote on every header cell matched nothing and no border was
+  ever draggable. The attribute is gone from the rendered `<th>`, and the README, the Spanish
+  README and `FUNCTIONALITIES.md` now say what the table does instead of what it was meant to
+  do. The two pieces stay exported for anyone building their own grid; wiring them in, with a
+  per-column opt-in, is still open work.
+- **The selection column decides once.** The head row asked for `selectable()` while the filter
+  row and the body row asked for `selectable() || batchActions.length` — the second half of
+  which read a property off the input signal itself, not off the array, and so was always
+  false. The behaviour never differed, but the three conditions now read alike, and a spec
+  pins head, filters and body to the same width.
+
+### Added
+
+- **Six label keys, in all eleven bundled languages**: `SORT_BY`, `FILTER_BY`,
+  `SELECT_ALL_ROWS`, `SELECT_ROW`, `EXPAND_ROW` and `COLLAPSE_ROW`. `SORT_BY` and `FILTER_BY`
+  take a `column` parameter, so each control is named after the column it acts on.
+- **`ariaSortFor(header)` and `columnName(header)` on `HubTableComponent`**, which is how the
+  template builds those labels. A title given as an observable cannot be read synchronously,
+  so `columnName` falls back to the property name rather than printing an object.
+
 ## [22.24.0] - 2026-09-20
 
 ### Fixed

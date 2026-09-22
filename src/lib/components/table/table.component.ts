@@ -1139,6 +1139,44 @@ export class HubTableComponent<T = any> {
 	}
 
 	/**
+	 * Sort state of a column, in the vocabulary `aria-sort` speaks.
+	 *
+	 * The visible state is an icon class on an `aria-hidden` element, so without this a screen
+	 * reader is told a table was reordered and never by which column. `null` keeps the attribute
+	 * off the columns that cannot be sorted at all, where `none` would wrongly offer the action.
+	 *
+	 * @param header The column to report on.
+	 * @returns The ARIA sort value, or `null` when the column is not sortable.
+	 */
+	ariaSortFor(header: PaginableTableHeader): 'ascending' | 'descending' | 'none' | null {
+		if (!header.sortable) {
+			return null;
+		}
+
+		const ordination = this.ordination();
+
+		if (ordination?.property !== header.property) {
+			return 'none';
+		}
+
+		return ordination.direction?.toUpperCase() === 'DESC' ? 'descending' : 'ascending';
+	}
+
+	/**
+	 * The name to put in the label of a control that acts on one column.
+	 *
+	 * A title given as an observable cannot be read synchronously here, and a control named
+	 * "Sort by [object Object]" is worse than one named after the property, so that case falls
+	 * back to the property name.
+	 *
+	 * @param header The column the control belongs to.
+	 * @returns A human-readable column name.
+	 */
+	columnName(header: PaginableTableHeader): string {
+		return typeof header.title === 'string' && header.title.length ? header.title : header.property;
+	}
+
+	/**
 	 * If it exists, returns the header cell template for the header passed by parameter
 	 *
 	 * @param {(PaginableTableHeader)} header

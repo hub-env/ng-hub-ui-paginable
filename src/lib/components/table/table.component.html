@@ -129,6 +129,7 @@
 	<table
 		class="hub-table__element"
 		hubStickyColumns
+		[attr.aria-busy]="loading()"
 		[class.hub-table__hover]="(options().hoverableRows || selectable()) && !loading()"
 		[class.hub-table__striped-odd]="striped === 'rows-odd'"
 		[class.hub-table__striped-even]="striped === 'rows-even'"
@@ -141,13 +142,18 @@
 		<thead class="hub-table__head" [formGroup]="filtersFG">
 			<tr class="hub-table__head-row">
 				@if (selectable()) {
-					<th class="hub-table__header-cell hub-table__header-cell--actions sticky-start" data-col="__hub_select">
+					<th
+						class="hub-table__header-cell hub-table__header-cell--actions sticky-start"
+						scope="col"
+						data-col="__hub_select"
+					>
 						@if (multipleSelectable()) {
 							<label class="hub-table__select-hit">
 								<input
 									type="checkbox"
 									[(ngModel)]="allRowsSelected"
 									[ngModelOptions]="{ standalone: true }"
+									[attr.aria-label]="'SELECT_ALL_ROWS' | translate | ucfirst"
 									(click)="toggleAll()"
 									[disabled]="disabled"
 								/>
@@ -159,7 +165,8 @@
 					@if (!(isColumnHidden(header) | async)) {
 						<th
 							class="hub-table__header-cell"
-							resizable
+							scope="col"
+							[attr.aria-sort]="ariaSortFor(header)"
 							[attr.data-col]="header.property"
 							[class.sticky-start]="header.sticky === 'start'"
 							[class.sticky-end]="header.sticky === 'end'"
@@ -180,15 +187,22 @@
 								</ng-container>
 								@if (header.sortable || header.filter?.mode === 'menu') {
 									<div class="hub-table__header-cell-actions d-flex gap-2 ms-auto align-items-center">
-										<button class="hub-table__sort-btn" (click)="sort(header)">
-											@if (header.sortable) {
+										@if (header.sortable) {
+											<button
+												class="hub-table__sort-btn"
+												type="button"
+												[attr.aria-label]="
+													'SORT_BY' | translate: { column: columnName(header) } | ucfirst
+												"
+												(click)="sort(header)"
+											>
 												<i
 													class="hub-table__sort-icon hub-table__icon"
 													[ngClass]="getOrdenationClass(header)"
 													aria-hidden="true"
 												></i>
-											}
-										</button>
+											</button>
+										}
 										@if (header.filter?.mode === 'menu') {
 											@let menuControl = filterControls()[header.filter.key || header.property];
 											<hub-dropdown
@@ -230,6 +244,7 @@
 				@if (templateExpandingRows().length) {
 					<th
 						class="hub-table__header-cell hub-table__header-cell--expander sticky-end"
+						scope="col"
 						data-col="__hub_expander"
 					></th>
 				}
@@ -238,7 +253,7 @@
 			<!-- Filtering -->
 			@if (hasColumnFilters()) {
 				<tr class="hub-table__filter-row">
-					@if (selectable() || batchActions.length) {
+					@if (selectable()) {
 						<th class="hub-table__filter-cell sticky-start" data-col="__hub_select"></th>
 					}
 					@for (header of fixedHeaders(); track $index; let last = $last) {
@@ -344,7 +359,8 @@
 		>
 		</hub-paginator>
 		<div class="hub-table__bottom-bar-settings hub-paginator__settings">
-			<label class="hub-paginator__label"> {{ 'ROWS_PER_PAGE' | translate | ucfirst }}: </label>
+			@let perPageId = id() + '-per-page-' + placement;
+			<label class="hub-paginator__label" [attr.for]="perPageId"> {{ 'ROWS_PER_PAGE' | translate | ucfirst }}: </label>
 			@if (formControlsAdapter) {
 				<ng-container
 					hubPaginableControl="select"
@@ -357,6 +373,7 @@
 			} @else {
 				<select
 					class="hub-paginator__select"
+					[attr.id]="perPageId"
 					[ngModel]="perPage()"
 					(ngModelChange)="perPage.set($event)"
 					[ngModelOptions]="{ standalone: true }"
@@ -370,7 +387,7 @@
 			}
 		</div>
 		@if (paginationInfo() && (clientMode() || (totalItems() !== null && totalItems() !== undefined))) {
-			<p class="hub-table__bottom-bar-info hub-paginator__info">
+			<p class="hub-table__bottom-bar-info hub-paginator__info" role="status">
 				{{
 					'SHOWING_X_OF_Y_ROWS'
 						| translate
@@ -407,7 +424,7 @@
 		[class.hub-table__body-row--clickable]="clickFn()"
 		[ngClass]="_getRowClass(item)"
 	>
-		@if (selectable() || batchActions.length) {
+		@if (selectable()) {
 			<!--
 				The whole cell stops the click, not just the box. A pointer landing anywhere in here
 				means "select this row", and a near-miss used to bubble up to the row and run the
@@ -426,10 +443,17 @@
 							type="checkbox"
 							[(ngModel)]="item.selected"
 							[ngModelOptions]="{ standalone: true }"
+							[attr.aria-label]="'SELECT_ROW' | translate | ucfirst"
 							(click)="toggle(item)"
 						/>
 					} @else {
-						<input type="radio" [name]="radioGroupName" [checked]="item.selected" (click)="toggle(item)" />
+						<input
+							type="radio"
+							[name]="radioGroupName"
+							[checked]="item.selected"
+							[attr.aria-label]="'SELECT_ROW' | translate | ucfirst"
+							(click)="toggle(item)"
+						/>
 					}
 				</label>
 			</td>
@@ -466,11 +490,18 @@
 				[class.sticky-end]="stickyActions()"
 			>
 				@if (templateExpandingRows().length) {
-					<button (click)="toggleExpandedRow(item)" type="button" class="hub-table__expander-btn">
+					<button
+						(click)="toggleExpandedRow(item)"
+						type="button"
+						class="hub-table__expander-btn"
+						[attr.aria-expanded]="!item.collapsed"
+						[attr.aria-label]="(item.collapsed ? 'EXPAND_ROW' : 'COLLAPSE_ROW') | translate | ucfirst"
+					>
 						<i
 							class="hub-table__expander-icon hub-table__icon"
 							[class.hub-table__icon--caret-up]="!item.collapsed"
 							[class.hub-table__icon--caret-down]="item.collapsed"
+							aria-hidden="true"
 						></i>
 					</button>
 				}
@@ -595,7 +626,11 @@
 <ng-template #defaultFilterTpt let-header="header" let-formControl="formControl">
 	@switch (header.filter.type) {
 		@case ('dropdown') {
-			<select [formControl]="formControl" class="hub-table__filter-control hub-table__filter-control--select">
+			<select
+				[formControl]="formControl"
+				class="hub-table__filter-control hub-table__filter-control--select"
+				[attr.aria-label]="'FILTER_BY' | translate: { column: columnName(header) } | ucfirst"
+			>
 				@if (header.filter.placeholder) {
 					<option [ngValue]="null">
 						{{ header.filter.placeholder }}
@@ -624,7 +659,11 @@
 			<hub-table-range-input type="date" [formControl]="formControl"> </hub-table-range-input>
 		}
 		@case ('boolean') {
-			<select [formControl]="formControl" class="hub-table__filter-control hub-table__filter-control--select">
+			<select
+				[formControl]="formControl"
+				class="hub-table__filter-control hub-table__filter-control--select"
+				[attr.aria-label]="'FILTER_BY' | translate: { column: columnName(header) } | ucfirst"
+			>
 				<option [ngValue]="null">
 					{{ header.filter.placeholder ?? 'SELECT_ONE' | translate | ucfirst }}
 				</option>
@@ -642,6 +681,7 @@
 				[formControl]="formControl"
 				class="hub-table__filter-control"
 				[placeholder]="header.filter.placeholder || ''"
+				[attr.aria-label]="'FILTER_BY' | translate: { column: columnName(header) } | ucfirst"
 			/>
 		}
 	}
