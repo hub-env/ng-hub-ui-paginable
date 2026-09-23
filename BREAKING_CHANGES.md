@@ -1,5 +1,18 @@
 # Breaking Changes: ng-hub-ui-paginable
 
+## [22.26.0] - 2026-09-23
+
+### Angular 18.0.x is no longer supported
+
+- **Change**: the `@angular/*` peer ranges move from `>=18.0.0` to `>=18.1.0`.
+
+- **Why**: the table and list templates use `@let`, and Angular did not ship `@let` until 18.1.
+  The old range claimed a version the code could never have worked on.
+
+- **Impact — an application on Angular 18.0.x that installs this version gets a peer warning where
+  it used to get a template compile error.** Nothing that worked stops working: 18.0.x never
+  compiled. If you are on 18.0.x, upgrade Angular to 18.1 or stay on 22.25.0.
+
 ## [22.24.0] - 2026-09-20
 
 ### The empty-state notice no longer follows your Bootstrap alerts

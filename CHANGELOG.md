@@ -1,5 +1,18 @@
 # Changelog
 
+## [22.26.0] - 2026-09-23
+
+### Changed
+
+- **BREAKING: the Angular floor rises from 18.0 to 18.1, so Angular 18.0.x is no longer supported.**
+  The table and list templates use `@let`, which Angular did not ship until 18.1, so `>=18.0.0` was
+  a promise this package could not keep: an application on 18.0.x failed to compile with a template
+  error that pointed nowhere useful. The range says `>=18.1.0` now, which turns a confusing build
+  failure into the install-time warning it should always have been. See `BREAKING_CHANGES.md`.
+- **The floor is derived and checked from now on.** `npm run peers:floors` works it out from the
+  Angular APIs the source calls, the `minVersion` markers in the compiled output and the Angular
+  types that reach the published `.d.ts`, and CI fails when a declaration drifts away from it.
+
 ## [22.25.0] - 2026-09-22
 
 ### Fixed
