@@ -1,5 +1,19 @@
 # Changelog
 
+## [22.27.0] - 2026-09-23
+
+### Changed
+
+- **BREAKING — the Angular floor rises from `18.1.0` to `21.0.0`.** The old range was
+  measured from the source alone, and `AbstractControl` grew a third type parameter in Angular 21, and the published `.d.ts` carries the shape the compiler emitted, so the types cannot compile on an older one. An application below the new floor could install this
+  package and then fail to build, with an error that pointed at Angular rather than here; it now
+  gets the peer warning it should always have had. Nothing that worked stops working. See
+  `BREAKING_CHANGES.md`.
+- **The floor is proved by running it now, not only derived.** `npm run floors:matrix` builds a real
+  project pinned to the oldest Angular this package claims, installs it there, typechecks the
+  published types against that version's `@angular/*` and runs that version's linker over the
+  compiled output. It is what found this.
+
 ## [22.26.0] - 2026-09-23
 
 ### Changed

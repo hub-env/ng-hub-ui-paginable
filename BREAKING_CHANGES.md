@@ -1,5 +1,17 @@
 # Breaking Changes: ng-hub-ui-paginable
 
+## [22.27.0] - 2026-09-23
+
+### Angular below 21.0.0 is no longer supported
+
+- **Change**: the `@angular/*` peer ranges move from `>=18.1.0` to `>=21.0.0`.
+
+- **Why**: `AbstractControl` grew a third type parameter in Angular 21, and the published `.d.ts` carries the shape the compiler emitted, so the types cannot compile on an older one.
+
+- **Impact — an application below 21.0.0 gets a peer warning where it used to get a build error.**
+  Nothing that worked stops working: those versions never compiled against this package. Upgrade
+  Angular to 21.0.0 or stay on the previous release.
+
 ## [22.26.0] - 2026-09-23
 
 ### Angular 18.0.x is no longer supported

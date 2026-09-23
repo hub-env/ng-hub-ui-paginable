@@ -23,8 +23,14 @@ import { normalizeStateDefault } from '../../utils';
 	template: `
 		@if (chosenTemplate(); as tpl) {
 			<ng-container [ngTemplateOutlet]="tpl"></ng-container>
-		} @else if (chosenComponent(); as def) {
-			<ng-container [ngComponentOutlet]="def.component" [ngComponentOutletInputs]="resolvedInputs()"></ng-container>
+		} @else {
+			<!--
+				A nested @if rather than \`@else if (chosenComponent(); as def)\`: an \`as\` on an @else if
+				is only accepted from Angular 20.2, and this package supports older ones.
+			-->
+			@if (chosenComponent(); as def) {
+				<ng-container [ngComponentOutlet]="def.component" [ngComponentOutletInputs]="resolvedInputs()"></ng-container>
+			}
 		}
 	`
 })
