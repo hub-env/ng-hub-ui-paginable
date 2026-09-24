@@ -16,21 +16,26 @@
  */
 @use '../../styles/mixins/icon' as icon;
 
-:root,
-:host {
-	--hub-table-dropdown-icon-color: currentColor;
-	--hub-table-dropdown-icon-size: 1em;
-	--hub-table-dropdown-icon-ellipsis-v: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 512'%3E%3Cpath d='M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z'/%3E%3C/svg%3E");
-}
+// No token defaults are declared here: each one lives as the fallback of the `var()`
+// that reads it, so a consumer's `:root` declaration is the only declaration there is.
+// The reasoning, measured, is at the top of `table.component.scss`.
 
 .hub-table-dropdown {
 	// The trigger's glyph. A consumer who passes `options.icon` replaces the modifier with
 	// their own class, so the box stays and the glyph becomes theirs.
 	&__icon {
-		@include icon.hub-icon-box(var(--hub-table-dropdown-icon-color), var(--hub-table-dropdown-icon-size));
+		@include icon.hub-icon-box(
+			var(--hub-table-dropdown-icon-color, currentColor),
+			var(--hub-table-dropdown-icon-size, 1em)
+		);
 
 		&--ellipsis-v {
-			@include icon.hub-icon-glyph(var(--hub-table-dropdown-icon-ellipsis-v));
+			@include icon.hub-icon-glyph(
+				var(
+					--hub-table-dropdown-icon-ellipsis-v,
+					url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 512'%3E%3Cpath d='M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z'/%3E%3C/svg%3E")
+				)
+			);
 		}
 	}
 

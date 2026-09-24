@@ -55,6 +55,8 @@
 							controlType="text"
 							[value]="searchTerm()"
 							[placeholder]="'SEARCH' | translate | ucfirst"
+							[label]="'SEARCH' | translate | ucfirst"
+							labelType="visually-hidden"
 							[ariaLabel]="'SEARCH' | translate | ucfirst"
 							cssClass="hub-table__search-input"
 							(valueChange)="searchProxy$.next($any($event))"
@@ -76,6 +78,8 @@
 							controlType="text"
 							[value]="searchTerm()"
 							[placeholder]="'SEARCH' | translate | ucfirst"
+							[label]="'SEARCH' | translate | ucfirst"
+							labelType="visually-hidden"
 							[ariaLabel]="'SEARCH' | translate | ucfirst"
 							cssClass="hub-table__search-input"
 							(valueChange)="searchProxy$.next($any($event))"
@@ -360,7 +364,14 @@
 		</hub-paginator>
 		<div class="hub-table__bottom-bar-settings hub-paginator__settings">
 			@let perPageId = id() + '-per-page-' + placement;
-			<label class="hub-paginator__label" [attr.for]="perPageId"> {{ 'ROWS_PER_PAGE' | translate | ucfirst }}: </label>
+			<!--
+				`for` only reaches the native control: the one an adapter builds has an id of its
+				own that this template never sees, so the attribute would point at nothing and the
+				control would still be unnamed. There it carries its own name instead.
+			-->
+			<label class="hub-paginator__label" [attr.for]="formControlsAdapter ? null : perPageId">
+				{{ 'ROWS_PER_PAGE' | translate | ucfirst }}:
+			</label>
 			@if (formControlsAdapter) {
 				<ng-container
 					hubPaginableControl="select"

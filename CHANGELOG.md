@@ -1,5 +1,47 @@
 # Changelog
 
+## [22.28.0] - 2026-09-23
+
+### Changed
+
+- **BREAKING — a `--hub-*` token set on `:root` now themes the table, the list and the
+  paginator, which is what the README always said it did.** Every default was declared in a
+  `:root, :host` block inside the component's own stylesheet, and Angular's emulated
+  encapsulation turns that into a declaration on the `<hub-table>` element itself. A custom
+  property declared on an element beats the one it would inherit from an ancestor — specificity
+  never enters into it — so the defaults quietly won against every consumer. Measured in Chrome
+  on 22.23.0: `--hub-table-bottom-bar-gap: 99px` at `:root` moved nothing, and the same
+  declaration on the element moved everything. Nothing is declared any more: each default now
+  travels as the fallback of the `var()` that reads it, so a consumer's declaration is the only
+  one there is. See `BREAKING_CHANGES.md`.
+- **A default assembled from other tokens carries its whole chain at the point of use.** A custom
+  property resolves the `var()`s in its value where it is declared, not where it is used, so
+  arithmetic parked in a shared block reads that block's copy of every token it names and ignores
+  a local override of any of them. `--hub-table-row-divider-color` following a re-themed
+  `--hub-table-border-color` is the case this fixes.
+- **The rows-per-page label stops pointing at a control that is not there.** With a form-controls
+  adapter wired, the `<label for>` named an id only the native `<select>` carries, so it reached
+  nothing and named nothing.
+
+### Added
+
+- **`label` and `labelType` on the form-controls adapter contract.** `HubPaginableControlConfig`
+  carried `ariaLabel` alone, so there was no way to ask an adapter for the one label type a table
+  actually needs — a real `<label>`, associated with the control, that the layout does not show.
+  `ng-hub-ui-forms` has shipped `labelType="visually-hidden"` since 22.33.0; the seam can now
+  reach it. The table asks for it on its search box.
+- **`HubPaginableControlLabelType`**, the four label presentations an adapter may be asked for.
+  Spelled out rather than imported, so the package keeps no dependency on `ng-hub-ui-forms`.
+
+### Fixed
+
+- **A control built through an adapter is never left anonymous.** The adapter is optional and
+  structurally typed, so the table could hand a label over and never learn whether it was used —
+  and the implementation `ng-hub-ui-forms` ships reads `kind`, `value`, `placeholder` and
+  `cssClass` and drops the rest, which left the search box and the rows-per-page select with
+  nothing a screen reader could announce. The table now checks the control it got back and names
+  it if nobody else did.
+
 ## [22.27.0] - 2026-09-23
 
 ### Changed

@@ -1,54 +1,13 @@
 @use '../../styles/mixins/icon' as icon;
 
-:root,
-:host {
-	// Paginator Properties
-	--hub-paginator-font-size: var(--hub-ref-font-size-base, 1rem);
-	--hub-paginator-gap: var(--hub-ref-space-1, 0.25rem);
-	--hub-paginator-icon-color: var(--hub-sys-text-primary, #212529);
-	--hub-paginator-icon-size: 1em;
-	--hub-paginator-info-color: var(--hub-sys-text-muted, #6c757d);
-	--hub-paginator-label-color: var(--hub-sys-text-muted, #6c757d);
-	--hub-paginator-link-active-bg: var(--hub-sys-color-primary, #0d6efd);
-	--hub-paginator-link-active-border-color: var(--hub-sys-color-primary, #0d6efd);
-	--hub-paginator-link-active-color: var(--hub-ref-color-white, #fff);
-	--hub-paginator-link-bg: var(--hub-sys-surface-page, #ffffff);
-	--hub-paginator-link-border-color: var(--hub-sys-border-color-default, #dee2e6);
-	--hub-paginator-link-border-radius: var(--hub-ref-radius-sm, 0.25rem);
-	--hub-paginator-link-border-width: 1px;
-	--hub-paginator-link-color: var(--hub-sys-color-primary, #0d6efd);
-	--hub-paginator-link-padding-x: 0.75rem;
-	--hub-paginator-link-padding-y: 0.375rem;
-	--hub-paginator-link-focus-shadow: 0 0 0 var(--hub-sys-focus-ring-width, 0.25rem)
-		var(--hub-sys-focus-ring-color, rgba(13, 110, 253, 0.25));
-	--hub-paginator-transition:
-		color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out,
-		box-shadow 0.15s ease-in-out;
-	--hub-paginator-link-disabled-bg: var(--hub-sys-surface-elevated, #f8f9fa);
-	--hub-paginator-link-disabled-border-color: var(--hub-sys-border-color-default, #dee2e6);
-	--hub-paginator-link-disabled-color: var(--hub-sys-text-muted, #6c757d);
-	--hub-paginator-link-hover-bg: var(--hub-sys-surface-elevated, #f8f9fa);
-	--hub-paginator-link-hover-border-color: var(--hub-sys-border-color-default, #dee2e6);
-	--hub-paginator-link-hover-color: var(--hub-sys-color-primary, #0d6efd);
-	--hub-paginator-select-bg: var(--hub-sys-surface-page, #ffffff);
-	--hub-paginator-select-border-color: var(--hub-sys-border-color-default, #dee2e6);
-	--hub-paginator-select-border-width: 1px;
-	--hub-paginator-select-border-radius: var(--hub-ref-radius-sm, 0.25rem);
-	--hub-paginator-select-color: var(--hub-sys-text-primary, #212529);
-	--hub-paginator-select-padding-x: var(--hub-ref-space-2, 0.5rem);
-	--hub-paginator-select-padding-y: var(--hub-ref-space-1, 0.25rem);
-	--hub-paginator-settings-gap: var(--hub-ref-space-2, 0.5rem);
-	// Icon SVG variables
-	--hub-paginator-icon-angle-left: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'%3E%3Cpath d='M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z'/%3E%3C/svg%3E");
-	--hub-paginator-icon-angle-right: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'%3E%3Cpath d='M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z'/%3E%3C/svg%3E");
-	--hub-paginator-icon-angle-double-left: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160zm352-160l-160 160c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L301.3 256 438.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0z'/%3E%3C/svg%3E");
-	--hub-paginator-icon-angle-double-right: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M470.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 256 265.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160zm-352 160l160-160c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L210.7 256 73.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0z'/%3E%3C/svg%3E");
-}
+// No token defaults are declared here: each one lives as the fallback of the `var()`
+// that reads it, so a consumer's `:root` declaration is the only declaration there is.
+// The reasoning, measured, is at the top of `table.component.scss`.
 
 .hub-paginator-container {
 	display: flex;
 	align-items: center;
-	font-size: var(--hub-paginator-font-size);
+	font-size: var(--hub-paginator-font-size, var(--hub-ref-font-size-base, 1rem));
 }
 
 .hub-paginator {
@@ -56,7 +15,7 @@
 	padding-left: 0;
 	list-style: none;
 	margin-bottom: 0;
-	gap: var(--hub-paginator-gap);
+	gap: var(--hub-paginator-gap, var(--hub-ref-space-1, 0.25rem));
 
 	&__item {
 		display: list-item;
@@ -64,18 +23,18 @@
 		&--active {
 			.hub-paginator__link {
 				z-index: 3;
-				color: var(--hub-paginator-link-active-color);
-				background-color: var(--hub-paginator-link-active-bg);
-				border-color: var(--hub-paginator-link-active-border-color);
+				color: var(--hub-paginator-link-active-color, var(--hub-ref-color-white, #fff));
+				background-color: var(--hub-paginator-link-active-bg, var(--hub-sys-color-primary, #0d6efd));
+				border-color: var(--hub-paginator-link-active-border-color, var(--hub-sys-color-primary, #0d6efd));
 			}
 		}
 
 		&--disabled {
 			.hub-paginator__link {
 				pointer-events: none;
-				color: var(--hub-paginator-link-disabled-color);
-				background-color: var(--hub-paginator-link-disabled-bg);
-				border-color: var(--hub-paginator-link-disabled-border-color);
+				color: var(--hub-paginator-link-disabled-color, var(--hub-sys-text-muted, #6c757d));
+				background-color: var(--hub-paginator-link-disabled-bg, var(--hub-sys-surface-elevated, #f8f9fa));
+				border-color: var(--hub-paginator-link-disabled-border-color, var(--hub-sys-border-color-default, #dee2e6));
 			}
 		}
 	}
@@ -83,37 +42,47 @@
 	&__link {
 		position: relative;
 		display: block;
-		padding: var(--hub-paginator-link-padding-y) var(--hub-paginator-link-padding-x);
+		padding: var(--hub-paginator-link-padding-y, 0.375rem) var(--hub-paginator-link-padding-x, 0.75rem);
 		text-decoration: none;
-		color: var(--hub-paginator-link-color);
-		background-color: var(--hub-paginator-link-bg);
-		border: var(--hub-paginator-link-border-width) solid var(--hub-paginator-link-border-color);
-		border-radius: var(--hub-paginator-link-border-radius);
-		transition: var(--hub-paginator-transition);
+		color: var(--hub-paginator-link-color, var(--hub-sys-color-primary, #0d6efd));
+		background-color: var(--hub-paginator-link-bg, var(--hub-sys-surface-page, #ffffff));
+		border: var(--hub-paginator-link-border-width, 1px) solid
+			var(--hub-paginator-link-border-color, var(--hub-sys-border-color-default, #dee2e6));
+		border-radius: var(--hub-paginator-link-border-radius, var(--hub-ref-radius-sm, 0.25rem));
+		transition: var(
+			--hub-paginator-transition,
+			color 0.15s ease-in-out,
+			background-color 0.15s ease-in-out,
+			border-color 0.15s ease-in-out,
+			box-shadow 0.15s ease-in-out
+		);
 
 		&:hover {
 			z-index: 2;
-			color: var(--hub-paginator-link-hover-color);
-			background-color: var(--hub-paginator-link-hover-bg);
-			border-color: var(--hub-paginator-link-hover-border-color);
+			color: var(--hub-paginator-link-hover-color, var(--hub-sys-color-primary, #0d6efd));
+			background-color: var(--hub-paginator-link-hover-bg, var(--hub-sys-surface-elevated, #f8f9fa));
+			border-color: var(--hub-paginator-link-hover-border-color, var(--hub-sys-border-color-default, #dee2e6));
 		}
 
 		&:focus {
 			z-index: 3;
 			outline: 0;
-			box-shadow: var(--hub-paginator-link-focus-shadow);
+			box-shadow: var(
+				--hub-paginator-link-focus-shadow,
+				0 0 0 var(--hub-sys-focus-ring-width, 0.25rem) var(--hub-sys-focus-ring-color, rgba(13, 110, 253, 0.25))
+			);
 		}
 	}
 
 	&__settings {
 		display: flex;
 		align-items: center;
-		gap: var(--hub-paginator-settings-gap, 0.5rem);
+		gap: var(--hub-paginator-settings-gap, var(--hub-ref-space-2, 0.5rem));
 		margin: auto;
 	}
 
 	&__label {
-		color: var(--hub-paginator-label-color);
+		color: var(--hub-paginator-label-color, var(--hub-sys-text-muted, #6c757d));
 		margin-bottom: 0;
 	}
 
@@ -127,11 +96,13 @@
 	 * boxed twice. Naming the element confines it to the fallback it was written for.
 	 */
 	select#{&}__select {
-		background-color: var(--hub-paginator-select-bg);
-		border: var(--hub-paginator-select-border-width) solid var(--hub-paginator-select-border-color);
-		border-radius: var(--hub-paginator-select-border-radius);
-		color: var(--hub-paginator-select-color);
-		padding: var(--hub-paginator-select-padding-y) var(--hub-paginator-select-padding-x);
+		background-color: var(--hub-paginator-select-bg, var(--hub-sys-surface-page, #ffffff));
+		border: var(--hub-paginator-select-border-width, 1px) solid
+			var(--hub-paginator-select-border-color, var(--hub-sys-border-color-default, #dee2e6));
+		border-radius: var(--hub-paginator-select-border-radius, var(--hub-ref-radius-sm, 0.25rem));
+		color: var(--hub-paginator-select-color, var(--hub-sys-text-primary, #212529));
+		padding: var(--hub-paginator-select-padding-y, var(--hub-ref-space-1, 0.25rem))
+			var(--hub-paginator-select-padding-x, var(--hub-ref-space-2, 0.5rem));
 	}
 
 	/*
@@ -146,27 +117,50 @@
 	}
 
 	&__info {
-		color: var(--hub-paginator-info-color);
+		color: var(--hub-paginator-info-color, var(--hub-sys-text-muted, #6c757d));
 		margin-bottom: 0;
 	}
 
 	&__icon {
-		@include icon.hub-icon-box(var(--hub-paginator-icon-color), var(--hub-paginator-icon-size));
+		@include icon.hub-icon-box(
+			var(--hub-paginator-icon-color, var(--hub-sys-text-primary, #212529)),
+			var(--hub-paginator-icon-size, 1em)
+		);
 
 		&--angle-left {
-			@include icon.hub-icon-glyph(var(--hub-paginator-icon-angle-left));
+			@include icon.hub-icon-glyph(
+				var(
+					--hub-paginator-icon-angle-left,
+					url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'%3E%3Cpath d='M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z'/%3E%3C/svg%3E")
+				)
+			);
 		}
 
 		&--angle-right {
-			@include icon.hub-icon-glyph(var(--hub-paginator-icon-angle-right));
+			@include icon.hub-icon-glyph(
+				var(
+					--hub-paginator-icon-angle-right,
+					url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'%3E%3Cpath d='M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z'/%3E%3C/svg%3E")
+				)
+			);
 		}
 
 		&--angle-double-left {
-			@include icon.hub-icon-glyph(var(--hub-paginator-icon-angle-double-left));
+			@include icon.hub-icon-glyph(
+				var(
+					--hub-paginator-icon-angle-double-left,
+					url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160zm352-160l-160 160c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L301.3 256 438.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0z'/%3E%3C/svg%3E")
+				)
+			);
 		}
 
 		&--angle-double-right {
-			@include icon.hub-icon-glyph(var(--hub-paginator-icon-angle-double-right));
+			@include icon.hub-icon-glyph(
+				var(
+					--hub-paginator-icon-angle-double-right,
+					url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M470.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 256 265.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160zm-352 160l160-160c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L210.7 256 73.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0z'/%3E%3C/svg%3E")
+				)
+			);
 		}
 	}
 }

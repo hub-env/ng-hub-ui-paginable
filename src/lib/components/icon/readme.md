@@ -8,11 +8,11 @@ The `HubIconComponent` is a versatile Angular component designed to render icons
 
 This component is part of the ng-hub-ui ecosystem, which includes:
 
-*   [ng-hub-ui-paginable](https://www.npmjs.com/package/ng-hub-ui-paginable)
-*   [ng-hub-ui-modal](https://www.npmjs.com/package/ng-hub-ui-modal)
-*   [ng-hub-ui-stepper](https://www.npmjs.com/package/ng-hub-ui-stepper)
-*   [ng-hub-ui-breadcrumbs](https://www.npmjs.com/package/ng-hub-ui-breadcrumbs)
-*   [ng-hub-ui-portal](https://www.npmjs.com/package/ng-hub-ui-portal)
+- [ng-hub-ui-paginable](https://www.npmjs.com/package/ng-hub-ui-paginable)
+- [ng-hub-ui-modal](https://www.npmjs.com/package/ng-hub-ui-modal)
+- [ng-hub-ui-stepper](https://www.npmjs.com/package/ng-hub-ui-stepper)
+- [ng-hub-ui-breadcrumbs](https://www.npmjs.com/package/ng-hub-ui-breadcrumbs)
+- [ng-hub-ui-portal](https://www.npmjs.com/package/ng-hub-ui-portal)
 
 ## Installation
 
@@ -48,9 +48,9 @@ The `Icon` object has the following structure:
 
 ```typescript
 interface Icon {
-  type?: 'font-awesome' | 'material' | 'bootstrap';
-  value?: string;
-  variant?: string;
+	type?: 'font-awesome' | 'material' | 'bootstrap';
+	value?: string;
+	variant?: string;
 }
 ```
 
@@ -76,7 +76,7 @@ The component supports three types of icons:
 <ng-hub-ui-icon [config]="{ type: 'font-awesome', value: 'fa-user' }"></ng-hub-ui-icon>
 ```
 
-or 
+or
 
 ```html
 <ng-hub-ui-icon [config]="'fas fa-user'"></ng-hub-ui-icon>
@@ -110,17 +110,16 @@ You can easily switch between different icons dynamically:
 
 ```typescript
 export class MyComponent {
-  currentIcon: Icon = { type: 'font-awesome', value: 'fa-home' };
+	currentIcon: Icon = { type: 'font-awesome', value: 'fa-home' };
 
-  changeIcon() {
-    this.currentIcon = { type: 'material', value: 'settings' };
-  }
+	changeIcon() {
+		this.currentIcon = { type: 'material', value: 'settings' };
+	}
 }
 ```
 
 ```html
-<ng-hub-ui-icon [config]="currentIcon"></ng-hub-ui-icon>
-<button (click)="changeIcon()">Change Icon</button>
+<ng-hub-ui-icon [config]="currentIcon"></ng-hub-ui-icon> <button (click)="changeIcon()">Change Icon</button>
 ```
 
 ## How It Works
@@ -154,4 +153,3 @@ Contributions to improve the `HubIconComponent` are welcome. Please ensure that 
 ## License
 
 [Specify the license under which this component is released]
-

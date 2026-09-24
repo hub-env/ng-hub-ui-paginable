@@ -253,12 +253,30 @@ const PAGINATOR_PAIRS: ReadonlyArray<readonly [string, string, Reflection]> = [
 ];
 
 describe('icon glyph symmetry', () => {
-	/** Reads a token off the element the component's own stylesheet declares it on. */
-	function tokenReader(element: Element, prefix: string) {
+	/**
+	 * Reads a glyph out of the component's own shipped rules.
+	 *
+	 * The glyphs used to be declared on the host and could be read off the element with
+	 * `getComputedStyle`. They are now the fallbacks of the `var()`s that draw them, because a
+	 * declaration on the host is one no consumer can override — see `token-defaults.spec.ts`.
+	 */
+	function tokenReader(component: unknown, prefix: string) {
+		const css = ((component as { ɵcmp?: { styles?: string[] } }).ɵcmp?.styles ?? []).join('\n');
+
 		return (name: string) => {
-			const value = getComputedStyle(element).getPropertyValue(`${prefix}${name}`);
-			expect(value, `${prefix}${name} is not declared`).not.toBe('');
-			return glyphOf(value);
+			const token = `${prefix}${name}`;
+			const opens = css.indexOf(`var(${token},`);
+
+			expect(opens, `${token} is never read`).toBeGreaterThan(-1);
+
+			let depth = 0;
+			for (let i = opens + 3; i < css.length; i++) {
+				if (css[i] === '(') depth++;
+				else if (css[i] === ')' && --depth === 0) {
+					return glyphOf(css.slice(css.indexOf(',', opens) + 1, i).trim());
+				}
+			}
+			throw new Error(`unterminated var(${token}, …)`);
 		};
 	}
 
@@ -290,10 +308,7 @@ describe('icon glyph symmetry', () => {
 				]
 			}).compileComponents();
 
-			// Instantiating the component is what loads its stylesheet into the document.
-			const fixture = TestBed.createComponent(HubTableComponent);
-			fixture.detectChanges();
-			read = tokenReader(fixture.nativeElement, '--hub-table-icon-');
+			read = tokenReader(HubTableComponent, '--hub-table-icon-');
 		});
 
 		for (const pair of PAIRS) {
@@ -310,10 +325,7 @@ describe('icon glyph symmetry', () => {
 				providers: [{ provide: HubTranslationService, useClass: MockHubTranslationService }]
 			}).compileComponents();
 
-			const fixture = TestBed.createComponent(HubPaginatorComponent);
-			fixture.detectChanges();
-			// The paginator ships unencapsulated, so its declarations land on `:root`.
-			read = tokenReader(document.documentElement, '--hub-paginator-icon-');
+			read = tokenReader(HubPaginatorComponent, '--hub-paginator-icon-');
 		});
 
 		for (const pair of PAGINATOR_PAIRS) {

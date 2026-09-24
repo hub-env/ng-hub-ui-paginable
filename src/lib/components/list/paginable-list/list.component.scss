@@ -1,139 +1,9 @@
 @use '../../../styles/mixins/list-theme' as theme;
 @use '../../../styles/mixins/icon' as icon;
 
-:root,
-:host {
-	// List Properties
-	--hub-list-checkbox-size: 1rem;
-	// The radio of single selection, sized like the checkbox of multiple: the two are the
-	// same control wearing a different rule about how many may be on.
-	--hub-list-radio-size: var(--hub-list-checkbox-size);
-	--hub-list-chevron-size: var(--hub-ref-icon-size, 1em);
-	// The list's own glyphs. They used to be the table's — same variables, same
-	// classes — so a product could not change the chevron here without changing it
-	// there, and the borrowed classes never arrived anyway: the table's stylesheet
-	// is scoped to the table's own view.
-	--hub-list-icon-color: currentColor;
-	--hub-list-icon-size: var(--hub-ref-icon-size, 1em);
-	--hub-list-icon-chevron-up: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z'/%3E%3C/svg%3E");
-	--hub-list-icon-chevron-down: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z'/%3E%3C/svg%3E");
-	--hub-list-icon-info: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z'/%3E%3C/svg%3E");
-	--hub-list-icon-search: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z'/%3E%3C/svg%3E");
-	--hub-list-bg: transparent;
-	--hub-list-border-radius: var(--hub-ref-radius-md, 0.375rem);
-	--hub-list-padding-x: var(--hub-ref-space-0, 0);
-	--hub-list-padding-y: var(--hub-ref-space-0, 0);
-	--hub-list-gap: var(--hub-ref-space-4, 1.5rem);
-	--hub-list-items-bg: transparent;
-	--hub-list-items-gap: var(--hub-ref-space-2, 0.5rem);
-	--hub-list-empty-bg: var(--hub-sys-surface-elevated, #f8f9fa);
-	--hub-list-empty-border-color: var(--hub-sys-border-color-default, #dee2e6);
-	--hub-list-empty-color: var(--hub-sys-text-muted, #6c757d);
-	--hub-list-empty-padding-x: var(--hub-ref-space-3, 1rem);
-	--hub-list-empty-padding-y: var(--hub-ref-space-3, 1rem);
-	--hub-list-item-bg: var(--hub-sys-surface-page, #ffffff);
-	--hub-list-item-border-color: var(--hub-sys-border-color-default, #dee2e6);
-	--hub-list-item-border-width: 1px;
-	--hub-list-item-border-radius: var(--hub-ref-radius-sm, 0.25rem);
-	--hub-list-item-color: var(--hub-sys-text-primary, #212529);
-	--hub-list-item-gap: var(--hub-ref-space-2, 0.5rem);
-	--hub-list-item-hover-bg: var(--hub-sys-surface-elevated, #f8f9fa);
-	--hub-list-item-padding-x: var(--hub-ref-space-3, 1rem);
-	--hub-list-item-padding-y: var(--hub-ref-space-2, 0.5rem);
-	--hub-list-children-gap: var(--hub-list-item-padding-y);
-	// Flush: the rule that stands in for the gap between rows when the card chrome is off.
-	// Only read under `.hub-list--flush`, so setting them alone changes nothing.
-	--hub-list-divider-width: var(--hub-ref-border-width, 1px);
-	--hub-list-divider-color: var(--hub-list-item-border-color);
-	// Semantic accent for the selected item — re-based per `variant`
-	// (applies to both the `list` and `cards` display modes).
-	//
-	// Local accent slot: defaults to the primary system accent but accepts ANY
-	// colour at runtime (built-in variant, theme override, or a user-defined
-	// accent such as `brand`). The role family is derived from this single slot
-	// with `color-mix(in oklch, …)` / relative-colour syntax, mirroring the ds
-	// engine; the selected item now reads its text colour from the derived
-	// `-on` contrast token, so a light accent keeps legible (dark) text.
-	--hub-list-accent: var(--hub-sys-color-primary, #0d6efd);
-	--hub-list-accent-emphasis: color-mix(in oklch, var(--hub-list-accent) 80%, var(--hub-sys-color-ink, #212529));
-	--hub-list-accent-subtle: color-mix(in oklch, var(--hub-list-accent) 12%, var(--hub-sys-surface-page, #ffffff));
-	// Contrast / on-color: grayscale flip driven by the accent's own lightness.
-	--hub-list-accent-on: oklch(from var(--hub-list-accent) clamp(0, (0.62 - l) * 1000, 1) 0 h);
-	--hub-list-item-selected-bg: var(--hub-list-accent);
-	--hub-list-item-selected-color: var(--hub-list-accent-on);
-	--hub-list-cards-min-column-width: 18rem;
-	--hub-list-cards-gap: var(--hub-list-items-gap);
-	--hub-list-cards-columns: auto-fit;
-	--hub-list-cards-row-gap: var(--hub-list-cards-gap);
-	--hub-list-cards-column-gap: var(--hub-list-cards-gap);
-	--hub-list-cards-bg: var(--hub-list-item-bg, transparent);
-	--hub-list-cards-color: var(--hub-list-item-color);
-	--hub-list-cards-padding-x: var(--hub-list-item-padding-x);
-	--hub-list-cards-padding-y: var(--hub-list-item-padding-y);
-	--hub-list-cards-border-color: var(--hub-list-item-border-color);
-	--hub-list-cards-border-width: var(--hub-list-item-border-width, 1px);
-	--hub-list-cards-border-radius: var(--hub-list-item-border-radius);
-	--hub-list-cards-shadow: none;
-	--hub-list-cards-hover-bg: var(--hub-list-item-hover-bg);
-	--hub-list-cards-hover-shadow: var(--hub-list-cards-shadow);
-	--hub-list-cards-transition: background-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-	--hub-list-top-bar-gap: var(--hub-ref-space-2, 0.5rem);
-	--hub-list-top-bar-justify-content: end;
-	--hub-list-top-bar-align-items: center;
-	--hub-list-top-bar-wrap: wrap;
-	--hub-list-batch-actions-gap: var(--hub-ref-space-2, 0.5rem);
-	--hub-list-bottom-bar-gap: var(--hub-ref-space-3, 1rem);
-	--hub-list-bottom-bar-justify-content: space-around;
-	--hub-list-bottom-bar-align-items: center;
-	--hub-list-bottom-bar-wrap: wrap;
-	--hub-list-bottom-bar-paginator-order: 1;
-	--hub-list-bottom-bar-settings-order: 2;
-	--hub-list-bottom-bar-info-order: 3;
-	--hub-list-bottom-bar-paginator-flex: 0 0 auto;
-	--hub-list-bottom-bar-settings-flex: 0 0 auto;
-	--hub-list-bottom-bar-info-flex: 0 0 auto;
-	--hub-list-search-btn-bg: var(--hub-sys-surface-elevated, #f8f9fa);
-	--hub-list-search-btn-color: var(--hub-sys-text-primary, #212529);
-	--hub-list-search-button-min-width: 2.75rem;
-	--hub-list-search-input-bg: var(--hub-sys-surface-page, #ffffff);
-	--hub-list-search-input-border-color: var(--hub-sys-border-color-default, #dee2e6);
-	--hub-list-search-input-border-radius: var(--hub-ref-radius-sm, 0.25rem);
-	--hub-list-search-input-color: var(--hub-sys-text-primary, #212529);
-	--hub-list-search-border-color: var(--hub-list-search-input-border-color);
-	--hub-list-search-border-width: 1px;
-	--hub-list-search-border-radius: var(--hub-list-search-input-border-radius);
-	--hub-list-search-input-padding-x: 0.75rem;
-	--hub-list-search-input-padding-y: 0.375rem;
-	--hub-list-search-input-font-size: 1rem;
-	--hub-list-action-btn-bg: var(--hub-sys-surface-page, #ffffff);
-	--hub-list-action-btn-color: var(--hub-list-item-color);
-	--hub-list-action-btn-border-color: var(--hub-list-item-border-color);
-	--hub-list-action-btn-border-radius: var(--hub-list-item-border-radius);
-	--hub-list-action-btn-padding-y: 0.375rem;
-	--hub-list-action-btn-padding-x: 0.75rem;
-	--hub-list-action-btn-hover-bg: var(--hub-list-item-hover-bg);
-	// Drag & drop reordering
-	--hub-list-drag-handle-color: var(--hub-sys-text-muted, #6c757d);
-	--hub-list-drag-handle-cursor: grab;
-	--hub-list-drag-handle-size: var(--hub-ref-icon-size, 1em);
-	--hub-list-item-dragging-opacity: 0.5;
-	--hub-list-item-dragging-cursor: grabbing;
-	--hub-list-drop-target-outline-color: var(--hub-list-accent);
-	--hub-list-drop-target-outline-width: 2px;
-	--hub-list-placeholder-bg: var(--hub-sys-surface-elevated, #f8f9fa);
-	--hub-list-placeholder-border-color: var(--hub-list-accent);
-	--hub-list-placeholder-border-width: 2px;
-	--hub-list-placeholder-border-style: dashed;
-	--hub-list-placeholder-border-radius: var(--hub-list-item-border-radius);
-	--hub-list-placeholder-min-height: 2.5rem;
-	--hub-list-ghost-opacity: 0.85;
-	--hub-list-ghost-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-	// Item connector (opt-in `connected` — timeline / pipeline look)
-	--hub-list-connector-color: var(--hub-sys-border-color-default, #dee2e6);
-	--hub-list-connector-width: 2px;
-	--hub-list-connector-style: solid;
-	--hub-list-connector-offset: var(--hub-list-item-padding-x, var(--hub-ref-space-3, 1rem));
-}
+// No token defaults are declared here: each one lives as the fallback of the `var()`
+// that reads it, so a consumer's `:root` declaration is the only declaration there is.
+// The reasoning, measured, is at the top of `table.component.scss`.
 
 // The host element carries the `.hub-list` block class, but Angular's emulated
 // encapsulation scopes a bare `.hub-list` selector to content nodes, not the host.
@@ -141,44 +11,44 @@
 :host {
 	display: flex;
 	flex-direction: column;
-	gap: var(--hub-list-gap);
-	padding: var(--hub-list-padding-y) var(--hub-list-padding-x);
-	background-color: var(--hub-list-bg);
-	border-radius: var(--hub-list-border-radius);
+	gap: var(--hub-list-gap, var(--hub-ref-space-4, 1.5rem));
+	padding: var(--hub-list-padding-y, var(--hub-ref-space-0, 0)) var(--hub-list-padding-x, var(--hub-ref-space-0, 0));
+	background-color: var(--hub-list-bg, transparent);
+	border-radius: var(--hub-list-border-radius, var(--hub-ref-radius-md, 0.375rem));
 
 	.hub-list__bottom-bar {
 		display: flex;
-		justify-content: var(--hub-list-bottom-bar-justify-content);
-		align-items: var(--hub-list-bottom-bar-align-items);
-		flex-wrap: var(--hub-list-bottom-bar-wrap);
-		gap: var(--hub-list-bottom-bar-gap);
+		justify-content: var(--hub-list-bottom-bar-justify-content, space-around);
+		align-items: var(--hub-list-bottom-bar-align-items, center);
+		flex-wrap: var(--hub-list-bottom-bar-wrap, wrap);
+		gap: var(--hub-list-bottom-bar-gap, var(--hub-ref-space-3, 1rem));
 	}
 
 	.hub-list__bottom-bar-paginator {
-		order: var(--hub-list-bottom-bar-paginator-order);
-		flex: var(--hub-list-bottom-bar-paginator-flex);
+		order: var(--hub-list-bottom-bar-paginator-order, 1);
+		flex: var(--hub-list-bottom-bar-paginator-flex, 0 0 auto);
 		overflow: auto;
 		margin: 0;
 	}
 
 	.hub-list__bottom-bar-settings {
-		order: var(--hub-list-bottom-bar-settings-order);
-		flex: var(--hub-list-bottom-bar-settings-flex);
+		order: var(--hub-list-bottom-bar-settings-order, 2);
+		flex: var(--hub-list-bottom-bar-settings-flex, 0 0 auto);
 		margin: 0;
 	}
 
 	.hub-list__bottom-bar-info {
-		order: var(--hub-list-bottom-bar-info-order);
-		flex: var(--hub-list-bottom-bar-info-flex);
+		order: var(--hub-list-bottom-bar-info-order, 3);
+		flex: var(--hub-list-bottom-bar-info-flex, 0 0 auto);
 		margin: 0;
 	}
 
 	.hub-list__top-bar {
 		display: flex;
-		align-items: var(--hub-list-top-bar-align-items);
-		justify-content: var(--hub-list-top-bar-justify-content);
-		flex-wrap: var(--hub-list-top-bar-wrap);
-		gap: var(--hub-list-top-bar-gap);
+		align-items: var(--hub-list-top-bar-align-items, center);
+		justify-content: var(--hub-list-top-bar-justify-content, end);
+		flex-wrap: var(--hub-list-top-bar-wrap, wrap);
+		gap: var(--hub-list-top-bar-gap, var(--hub-ref-space-2, 0.5rem));
 		direction: ltr;
 	}
 
@@ -186,7 +56,7 @@
 		display: flex;
 		flex-wrap: nowrap;
 		align-items: center;
-		gap: var(--hub-list-batch-actions-gap);
+		gap: var(--hub-list-batch-actions-gap, var(--hub-ref-space-2, 0.5rem));
 	}
 
 	.hub-list__batch-action-btn {
@@ -201,18 +71,28 @@
 		align-items: center;
 		justify-content: center;
 		gap: 0.35rem;
-		padding: var(--hub-list-action-btn-padding-y) var(--hub-list-action-btn-padding-x);
-		color: var(--hub-list-action-btn-color);
-		background-color: var(--hub-list-action-btn-bg);
-		border: var(--hub-ref-border-width, 1px) solid var(--hub-list-action-btn-border-color);
-		border-radius: var(--hub-list-action-btn-border-radius);
+		padding: var(--hub-list-action-btn-padding-y, 0.375rem) var(--hub-list-action-btn-padding-x, 0.75rem);
+		color: var(--hub-list-action-btn-color, var(--hub-list-item-color, var(--hub-sys-text-primary, #212529)));
+		background-color: var(--hub-list-action-btn-bg, var(--hub-sys-surface-page, #ffffff));
+		border: var(--hub-ref-border-width, 1px) solid
+			var(
+				--hub-list-action-btn-border-color,
+				var(--hub-list-item-border-color, var(--hub-sys-border-color-default, #dee2e6))
+			);
+		border-radius: var(
+			--hub-list-action-btn-border-radius,
+			var(--hub-list-item-border-radius, var(--hub-ref-radius-sm, 0.25rem))
+		);
 		transition:
 			background-color 0.15s ease-in-out,
 			border-color 0.15s ease-in-out,
 			color 0.15s ease-in-out;
 
 		&:hover:not(:disabled) {
-			background-color: var(--hub-list-action-btn-hover-bg);
+			background-color: var(
+				--hub-list-action-btn-hover-bg,
+				var(--hub-list-item-hover-bg, var(--hub-sys-surface-elevated, #f8f9fa))
+			);
 		}
 	}
 
@@ -229,7 +109,7 @@
 		// For tree-like structures, mirror nested indentation in RTL.
 		.hub-list__items {
 			padding-left: 0;
-			padding-right: var(--hub-list-item-padding-x);
+			padding-right: var(--hub-list-item-padding-x, var(--hub-ref-space-3, 1rem));
 		}
 	}
 
@@ -242,11 +122,28 @@
 		&-input {
 			direction: ltr;
 			text-align: right;
-			border-radius: 0 var(--hub-list-search-border-radius) var(--hub-list-search-border-radius) 0 !important;
+			border-radius: 0
+				var(
+					--hub-list-search-border-radius,
+					var(--hub-list-search-input-border-radius, var(--hub-ref-radius-sm, 0.25rem))
+				)
+				var(
+					--hub-list-search-border-radius,
+					var(--hub-list-search-input-border-radius, var(--hub-ref-radius-sm, 0.25rem))
+				)
+				0 !important;
 		}
 
 		&-btn {
-			border-radius: var(--hub-list-search-border-radius) 0 0 var(--hub-list-search-border-radius) !important;
+			border-radius: var(
+					--hub-list-search-border-radius,
+					var(--hub-list-search-input-border-radius, var(--hub-ref-radius-sm, 0.25rem))
+				)
+				0 0
+				var(
+					--hub-list-search-border-radius,
+					var(--hub-list-search-input-border-radius, var(--hub-ref-radius-sm, 0.25rem))
+				) !important;
 		}
 	}
 
@@ -285,8 +182,8 @@
 	&__items {
 		display: flex;
 		flex-direction: column;
-		gap: var(--hub-list-items-gap);
-		background-color: var(--hub-list-items-bg);
+		gap: var(--hub-list-items-gap, var(--hub-ref-space-2, 0.5rem));
+		background-color: var(--hub-list-items-bg, transparent);
 		list-style: none;
 		margin: 0;
 		padding: 0;
@@ -294,8 +191,8 @@
 		// For tree-like structures, indent nested children collections and
 		// separate them from the parent item content with a top margin.
 		.hub-list__items {
-			margin-top: var(--hub-list-children-gap);
-			padding-left: var(--hub-list-item-padding-x);
+			margin-top: var(--hub-list-children-gap, var(--hub-list-item-padding-y, var(--hub-ref-space-2, 0.5rem)));
+			padding-left: var(--hub-list-item-padding-x, var(--hub-ref-space-3, 1rem));
 			padding-right: 0;
 			padding-top: 0;
 			padding-bottom: 0;
@@ -310,10 +207,11 @@
 		> .hub-list__item + .hub-list__item::before {
 			content: '';
 			position: absolute;
-			inset-block-start: calc(-1 * var(--hub-list-items-gap));
-			inset-inline-start: var(--hub-list-connector-offset);
-			block-size: var(--hub-list-items-gap);
-			border-inline-start: var(--hub-list-connector-width) var(--hub-list-connector-style) var(--hub-list-connector-color);
+			inset-block-start: calc(-1 * var(--hub-list-items-gap, var(--hub-ref-space-2, 0.5rem)));
+			inset-inline-start: var(--hub-list-connector-offset, var(--hub-list-item-padding-x, var(--hub-ref-space-3, 1rem)));
+			block-size: var(--hub-list-items-gap, var(--hub-ref-space-2, 0.5rem));
+			border-inline-start: var(--hub-list-connector-width, 2px) var(--hub-list-connector-style, solid)
+				var(--hub-list-connector-color, var(--hub-sys-border-color-default, #dee2e6));
 		}
 	}
 
@@ -330,53 +228,94 @@
 			min-width: 0;
 			display: block;
 			width: 100%;
-			padding: var(--hub-list-search-input-padding-y) var(--hub-list-search-input-padding-x);
-			font-size: var(--hub-list-search-input-font-size);
+			padding: var(--hub-list-search-input-padding-y, 0.375rem) var(--hub-list-search-input-padding-x, 0.75rem);
+			font-size: var(--hub-list-search-input-font-size, 1rem);
 			font-weight: var(--hub-ref-font-weight-base, 400);
 			line-height: var(--hub-ref-line-height-base, 1.5);
-			background-color: var(--hub-list-search-input-bg);
-			border-color: var(--hub-list-search-border-color) !important;
-			color: var(--hub-list-search-input-color);
-			border: var(--hub-list-search-border-width) solid var(--hub-list-search-border-color);
-			border-radius: var(--hub-list-search-border-radius) 0 0 var(--hub-list-search-border-radius) !important;
+			background-color: var(--hub-list-search-input-bg, var(--hub-sys-surface-page, #ffffff));
+			border-color: var(
+				--hub-list-search-border-color,
+				var(--hub-list-search-input-border-color, var(--hub-sys-border-color-default, #dee2e6))
+			) !important;
+			color: var(--hub-list-search-input-color, var(--hub-sys-text-primary, #212529));
+			border: var(--hub-list-search-border-width, 1px) solid
+				var(
+					--hub-list-search-border-color,
+					var(--hub-list-search-input-border-color, var(--hub-sys-border-color-default, #dee2e6))
+				);
+			border-radius: var(
+					--hub-list-search-border-radius,
+					var(--hub-list-search-input-border-radius, var(--hub-ref-radius-sm, 0.25rem))
+				)
+				0 0
+				var(
+					--hub-list-search-border-radius,
+					var(--hub-list-search-input-border-radius, var(--hub-ref-radius-sm, 0.25rem))
+				) !important;
 		}
 
 		&-btn {
 			display: inline-flex;
 			align-items: center;
 			justify-content: center;
-			min-width: var(--hub-list-search-button-min-width);
-			padding: var(--hub-list-search-input-padding-y) var(--hub-list-search-input-padding-x);
-			background-color: var(--hub-list-search-btn-bg) !important;
-			color: var(--hub-list-search-btn-color) !important;
-			border-color: var(--hub-list-search-border-color) !important;
-			border: var(--hub-list-search-border-width) solid var(--hub-list-search-border-color);
-			border-radius: 0 var(--hub-list-search-border-radius) var(--hub-list-search-border-radius) 0 !important;
+			min-width: var(--hub-list-search-button-min-width, 2.75rem);
+			padding: var(--hub-list-search-input-padding-y, 0.375rem) var(--hub-list-search-input-padding-x, 0.75rem);
+			background-color: var(--hub-list-search-btn-bg, var(--hub-sys-surface-elevated, #f8f9fa)) !important;
+			color: var(--hub-list-search-btn-color, var(--hub-sys-text-primary, #212529)) !important;
+			border-color: var(
+				--hub-list-search-border-color,
+				var(--hub-list-search-input-border-color, var(--hub-sys-border-color-default, #dee2e6))
+			) !important;
+			border: var(--hub-list-search-border-width, 1px) solid
+				var(
+					--hub-list-search-border-color,
+					var(--hub-list-search-input-border-color, var(--hub-sys-border-color-default, #dee2e6))
+				);
+			border-radius: 0
+				var(
+					--hub-list-search-border-radius,
+					var(--hub-list-search-input-border-radius, var(--hub-ref-radius-sm, 0.25rem))
+				)
+				var(
+					--hub-list-search-border-radius,
+					var(--hub-list-search-input-border-radius, var(--hub-ref-radius-sm, 0.25rem))
+				)
+				0 !important;
 			cursor: pointer;
 		}
 
 		&-icon {
-			@include icon.hub-icon-box(var(--hub-list-icon-color), var(--hub-list-icon-size));
-			@include icon.hub-icon-glyph(var(--hub-list-icon-search));
+			@include icon.hub-icon-box(
+				var(--hub-list-icon-color, currentColor),
+				var(--hub-list-icon-size, var(--hub-ref-icon-size, 1em))
+			);
+			@include icon.hub-icon-glyph(
+				var(
+					--hub-list-icon-search,
+					url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z'/%3E%3C/svg%3E")
+				)
+			);
 		}
 	}
 
 	&__item {
 		display: flex;
 		flex-direction: column;
-		padding: var(--hub-list-item-padding-y) var(--hub-list-item-padding-x);
-		background-color: var(--hub-list-item-bg);
-		color: var(--hub-list-item-color);
-		border-radius: var(--hub-list-item-border-radius);
+		padding: var(--hub-list-item-padding-y, var(--hub-ref-space-2, 0.5rem))
+			var(--hub-list-item-padding-x, var(--hub-ref-space-3, 1rem));
+		background-color: var(--hub-list-item-bg, var(--hub-sys-surface-page, #ffffff));
+		color: var(--hub-list-item-color, var(--hub-sys-text-primary, #212529));
+		border-radius: var(--hub-list-item-border-radius, var(--hub-ref-radius-sm, 0.25rem));
 		transition: background-color 0.15s ease-in-out;
 		position: relative;
-		border: var(--hub-list-item-border-width) solid var(--hub-list-item-border-color);
+		border: var(--hub-list-item-border-width, 1px) solid
+			var(--hub-list-item-border-color, var(--hub-sys-border-color-default, #dee2e6));
 
 		&--clickable {
 			cursor: pointer;
 
 			&:hover {
-				background-color: var(--hub-list-item-hover-bg);
+				background-color: var(--hub-list-item-hover-bg, var(--hub-sys-surface-elevated, #f8f9fa));
 			}
 		}
 
@@ -386,25 +325,52 @@
 		}
 
 		&--selected {
-			background-color: var(--hub-list-item-selected-bg) !important;
-			color: var(--hub-list-item-selected-color);
-			border-color: var(--hub-list-item-selected-bg);
+			background-color: var(
+				--hub-list-item-selected-bg,
+				var(--hub-list-accent, var(--hub-sys-color-primary, #0d6efd))
+			) !important;
+			color: var(
+				--hub-list-item-selected-color,
+				var(
+					--hub-list-accent-on,
+					oklch(from var(--hub-list-accent, var(--hub-sys-color-primary, #0d6efd)) clamp(0, (0.62 - l) * 1000, 1) 0 h)
+				)
+			);
+			border-color: var(--hub-list-item-selected-bg, var(--hub-list-accent, var(--hub-sys-color-primary, #0d6efd)));
 
 			.hub-list__label {
-				color: var(--hub-list-item-selected-color);
+				color: var(
+					--hub-list-item-selected-color,
+					var(
+						--hub-list-accent-on,
+						oklch(
+							from var(--hub-list-accent, var(--hub-sys-color-primary, #0d6efd)) clamp(0, (0.62 - l) * 1000, 1) 0
+								h
+						)
+					)
+				);
 			}
 
 			.hub-list__actions button {
-				color: var(--hub-list-item-selected-color);
+				color: var(
+					--hub-list-item-selected-color,
+					var(
+						--hub-list-accent-on,
+						oklch(
+							from var(--hub-list-accent, var(--hub-sys-color-primary, #0d6efd)) clamp(0, (0.62 - l) * 1000, 1) 0
+								h
+						)
+					)
+				);
 			}
 		}
 
 		&--empty {
-			background-color: var(--hub-list-empty-bg);
-			color: var(--hub-list-empty-color);
+			background-color: var(--hub-list-empty-bg, var(--hub-sys-surface-elevated, #f8f9fa));
+			color: var(--hub-list-empty-color, var(--hub-sys-text-muted, #6c757d));
 			padding: var(--hub-list-empty-padding-y, var(--hub-ref-space-3, 1rem))
 				var(--hub-list-empty-padding-x, var(--hub-ref-space-3, 1rem));
-			border-color: var(--hub-list-empty-border-color);
+			border-color: var(--hub-list-empty-border-color, var(--hub-sys-border-color-default, #dee2e6));
 			text-align: center;
 		}
 	}
@@ -412,24 +378,39 @@
 	&__items--cards {
 		display: grid;
 		grid-template-columns: repeat(
-			var(--hub-list-cards-columns),
-			minmax(min(100%, var(--hub-list-cards-min-column-width)), 1fr)
+			var(--hub-list-cards-columns, auto-fit),
+			minmax(min(100%, var(--hub-list-cards-min-column-width, 18rem)), 1fr)
 		);
-		gap: var(--hub-list-cards-row-gap) var(--hub-list-cards-column-gap);
+		gap: var(--hub-list-cards-row-gap, var(--hub-list-cards-gap, var(--hub-list-items-gap, var(--hub-ref-space-2, 0.5rem))))
+			var(
+				--hub-list-cards-column-gap,
+				var(--hub-list-cards-gap, var(--hub-list-items-gap, var(--hub-ref-space-2, 0.5rem)))
+			);
 
 		> .hub-list__item {
 			height: 100%;
-			background-color: var(--hub-list-cards-bg);
-			color: var(--hub-list-cards-color);
-			padding: var(--hub-list-cards-padding-y) var(--hub-list-cards-padding-x);
-			border: var(--hub-list-cards-border-width) solid var(--hub-list-cards-border-color);
-			border-radius: var(--hub-list-cards-border-radius);
-			box-shadow: var(--hub-list-cards-shadow);
-			transition: var(--hub-list-cards-transition);
+			background-color: var(--hub-list-cards-bg, var(--hub-list-item-bg, var(--hub-sys-surface-page, #ffffff)));
+			color: var(--hub-list-cards-color, var(--hub-list-item-color, var(--hub-sys-text-primary, #212529)));
+			padding: var(--hub-list-cards-padding-y, var(--hub-list-item-padding-y, var(--hub-ref-space-2, 0.5rem)))
+				var(--hub-list-cards-padding-x, var(--hub-list-item-padding-x, var(--hub-ref-space-3, 1rem)));
+			border: var(--hub-list-cards-border-width, var(--hub-list-item-border-width, 1px)) solid
+				var(
+					--hub-list-cards-border-color,
+					var(--hub-list-item-border-color, var(--hub-sys-border-color-default, #dee2e6))
+				);
+			border-radius: var(
+				--hub-list-cards-border-radius,
+				var(--hub-list-item-border-radius, var(--hub-ref-radius-sm, 0.25rem))
+			);
+			box-shadow: var(--hub-list-cards-shadow, none);
+			transition: var(--hub-list-cards-transition, background-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out);
 
 			&.hub-list__item--clickable:hover {
-				background-color: var(--hub-list-cards-hover-bg);
-				box-shadow: var(--hub-list-cards-hover-shadow);
+				background-color: var(
+					--hub-list-cards-hover-bg,
+					var(--hub-list-item-hover-bg, var(--hub-sys-surface-elevated, #f8f9fa))
+				);
+				box-shadow: var(--hub-list-cards-hover-shadow, var(--hub-list-cards-shadow, none));
 			}
 		}
 
@@ -461,13 +442,13 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		gap: var(--hub-list-item-gap);
+		gap: var(--hub-list-item-gap, var(--hub-ref-space-2, 0.5rem));
 		width: 100%;
 	}
 
 	&__checkbox {
-		width: var(--hub-list-checkbox-size);
-		height: var(--hub-list-checkbox-size);
+		width: var(--hub-list-checkbox-size, 1rem);
+		height: var(--hub-list-checkbox-size, 1rem);
 		flex-shrink: 0;
 		cursor: pointer;
 	}
@@ -475,11 +456,11 @@
 	// Single selection's control. It shipped with the mode and had no rule at all, so it
 	// rendered at the browser's own size beside a themed list — visibly not part of it.
 	&__radio {
-		width: var(--hub-list-radio-size);
-		height: var(--hub-list-radio-size);
+		width: var(--hub-list-radio-size, var(--hub-list-checkbox-size, 1rem));
+		height: var(--hub-list-radio-size, var(--hub-list-checkbox-size, 1rem));
 		flex-shrink: 0;
 		cursor: pointer;
-		accent-color: var(--hub-list-accent);
+		accent-color: var(--hub-list-accent, var(--hub-sys-color-primary, #0d6efd));
 	}
 
 	&__actions {
@@ -490,7 +471,7 @@
 
 	&__chevron {
 		padding: 0;
-		font-size: var(--hub-list-chevron-size);
+		font-size: var(--hub-list-chevron-size, var(--hub-ref-icon-size, 1em));
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -502,22 +483,40 @@
 	// The list's glyphs. The base class carries the machinery, the modifier picks the
 	// glyph, and both read variables named after this component.
 	&__icon {
-		@include icon.hub-icon-box(var(--hub-list-icon-color), var(--hub-list-icon-size));
+		@include icon.hub-icon-box(
+			var(--hub-list-icon-color, currentColor),
+			var(--hub-list-icon-size, var(--hub-ref-icon-size, 1em))
+		);
 
 		&--2x {
 			--hub-list-icon-size: 2em;
 		}
 
 		&--chevron-up {
-			@include icon.hub-icon-glyph(var(--hub-list-icon-chevron-up));
+			@include icon.hub-icon-glyph(
+				var(
+					--hub-list-icon-chevron-up,
+					url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z'/%3E%3C/svg%3E")
+				)
+			);
 		}
 
 		&--chevron-down {
-			@include icon.hub-icon-glyph(var(--hub-list-icon-chevron-down));
+			@include icon.hub-icon-glyph(
+				var(
+					--hub-list-icon-chevron-down,
+					url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z'/%3E%3C/svg%3E")
+				)
+			);
 		}
 
 		&--info {
-			@include icon.hub-icon-glyph(var(--hub-list-icon-info));
+			@include icon.hub-icon-glyph(
+				var(
+					--hub-list-icon-info,
+					url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z'/%3E%3C/svg%3E")
+				)
+			);
 		}
 	}
 
@@ -534,9 +533,9 @@
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		font-size: var(--hub-list-drag-handle-size);
-		color: var(--hub-list-drag-handle-color);
-		cursor: var(--hub-list-drag-handle-cursor);
+		font-size: var(--hub-list-drag-handle-size, var(--hub-ref-icon-size, 1em));
+		color: var(--hub-list-drag-handle-color, var(--hub-sys-text-muted, #6c757d));
+		cursor: var(--hub-list-drag-handle-cursor, grab);
 		// Prevents the browser from scrolling instead of dragging on touch devices.
 		touch-action: none;
 		user-select: none;
@@ -544,8 +543,8 @@
 
 	// Row currently being dragged (kept in place and dimmed while a ghost follows the pointer).
 	&__item--dragging {
-		opacity: var(--hub-list-item-dragging-opacity);
-		cursor: var(--hub-list-item-dragging-cursor);
+		opacity: var(--hub-list-item-dragging-opacity, 0.5);
+		cursor: var(--hub-list-item-dragging-cursor, grabbing);
 	}
 
 	// Row excluded from reordering via `sortDisabled`.
@@ -561,11 +560,14 @@
 	&__placeholder {
 		list-style: none;
 		pointer-events: none;
-		min-height: var(--hub-list-placeholder-min-height);
-		background-color: var(--hub-list-placeholder-bg);
-		border: var(--hub-list-placeholder-border-width) var(--hub-list-placeholder-border-style)
-			var(--hub-list-placeholder-border-color);
-		border-radius: var(--hub-list-placeholder-border-radius);
+		min-height: var(--hub-list-placeholder-min-height, 2.5rem);
+		background-color: var(--hub-list-placeholder-bg, var(--hub-sys-surface-elevated, #f8f9fa));
+		border: var(--hub-list-placeholder-border-width, 2px) var(--hub-list-placeholder-border-style, dashed)
+			var(--hub-list-placeholder-border-color, var(--hub-list-accent, var(--hub-sys-color-primary, #0d6efd)));
+		border-radius: var(
+			--hub-list-placeholder-border-radius,
+			var(--hub-list-item-border-radius, var(--hub-ref-radius-sm, 0.25rem))
+		);
 	}
 
 	// In the cards grid the placeholder fills its grid cell.

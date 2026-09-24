@@ -33,8 +33,27 @@ describe('menu filter icon tokens', () => {
 		return getComputedStyle(element!).maskImage;
 	}
 
-	function declared(token: string): string {
-		return getComputedStyle(fixture.nativeElement).getPropertyValue(token);
+	/**
+	 * What the component falls back to for `token`, read off its shipped rules.
+	 *
+	 * The default used to be declared on the host and could be read off the element. It is now
+	 * the fallback of the `var()` that reads it, because a declaration on the host is one no
+	 * consumer can override — see `token-defaults.spec.ts`.
+	 */
+	function fallbackFor(token: string): string {
+		const css = ((MenuFilterComponent as unknown as { ɵcmp: { styles: string[] } }).ɵcmp.styles ?? []).join('\n');
+		const opens = css.indexOf(`var(${token},`);
+
+		expect(opens, `${token} is never read`).toBeGreaterThan(-1);
+
+		let depth = 0;
+		for (let i = opens + 3; i < css.length; i++) {
+			if (css[i] === '(') depth++;
+			else if (css[i] === ')' && --depth === 0) {
+				return css.slice(css.indexOf(',', opens) + 1, i).trim();
+			}
+		}
+		throw new Error(`unterminated var(${token}, …)`);
 	}
 
 	beforeEach(() => {
@@ -63,21 +82,21 @@ describe('menu filter icon tokens', () => {
 	});
 
 	it('draws the remove-rule glyph from its own variable', () => {
-		expect(maskOf('.hub-filter__remove-rule .hub-filter__icon')).toBe('var(--hub-filter-icon-trash)');
+		expect(maskOf('.hub-filter__remove-rule .hub-filter__icon')).toMatch(/^var\(--hub-filter-icon-trash[,)]/);
 	});
 
 	it('draws the add-rule glyph from its own variable', () => {
-		expect(maskOf('.hub-filter__add-rule-btn .hub-filter__icon')).toBe('var(--hub-filter-icon-plus)');
+		expect(maskOf('.hub-filter__add-rule-btn .hub-filter__icon')).toMatch(/^var\(--hub-filter-icon-plus[,)]/);
 	});
 
 	it('ships a default for every glyph it draws', () => {
 		for (const token of ['--hub-filter-icon-trash', '--hub-filter-icon-plus']) {
-			expect(declared(token), `${token} has no default`).toMatch(/^url\(/);
+			expect(fallbackFor(token), `${token} has no default`).toMatch(/^url\(/);
 		}
 	});
 
 	it('exposes the ink and the size of its glyphs as its own variables', () => {
-		expect(declared('--hub-filter-icon-color')).not.toBe('');
-		expect(declared('--hub-filter-icon-size')).not.toBe('');
+		expect(fallbackFor('--hub-filter-icon-color')).not.toBe('');
+		expect(fallbackFor('--hub-filter-icon-size')).not.toBe('');
 	});
 });

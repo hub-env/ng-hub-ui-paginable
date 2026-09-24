@@ -21,9 +21,10 @@ class MockHubTranslationService {
  * last row. `space-around` distributes the free space between the items and leaves none outside
  * them, so the gutter has to be padding.
  *
- * jsdom performs no layout, but it resolves the cascade, which is what is under test. The declared
- * value is asserted rather than a pixel count — these are variable slots, and a number would only
- * pin today's default.
+ * jsdom performs no layout, but it resolves the cascade, which is what is under test. The variable
+ * is asserted rather than a pixel count — these are slots, and a number would only pin today's
+ * default. Matched by its head, because the default now travels with the variable as its fallback
+ * (see `token-defaults.spec.ts`) rather than being declared on the host.
  */
 describe('HubTableComponent bottom bar spacing', () => {
 	let fixture: ComponentFixture<HubTableComponent>;
@@ -46,8 +47,8 @@ describe('HubTableComponent bottom bar spacing', () => {
 		const bar = fixture.nativeElement.querySelector('.hub-table__bottom-bar')!;
 		const style = getComputedStyle(bar);
 
-		expect(style.paddingInline).toBe('var(--hub-table-bottom-bar-padding-inline)');
-		expect(style.paddingBlock).toBe('var(--hub-table-bottom-bar-padding-block)');
+		expect(style.paddingInline).toMatch(/^var\(--hub-table-bottom-bar-padding-inline[,)]/);
+		expect(style.paddingBlock).toMatch(/^var\(--hub-table-bottom-bar-padding-block[,)]/);
 	});
 
 	it('pushes each bar away from the grid it belongs to, whichever side it is on', () => {
@@ -59,7 +60,7 @@ describe('HubTableComponent bottom bar spacing', () => {
 
 		// The bar above separates itself downwards and the one below upwards: a single
 		// margin-top would leave the top bar glued to the header row.
-		expect(getComputedStyle(top).marginBlockEnd).toBe('var(--hub-table-bottom-bar-spacing)');
-		expect(getComputedStyle(bottom).marginBlockStart).toBe('var(--hub-table-bottom-bar-spacing)');
+		expect(getComputedStyle(top).marginBlockEnd).toMatch(/^var\(--hub-table-bottom-bar-spacing[,)]/);
+		expect(getComputedStyle(bottom).marginBlockStart).toMatch(/^var\(--hub-table-bottom-bar-spacing[,)]/);
 	});
 });

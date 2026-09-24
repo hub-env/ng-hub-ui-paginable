@@ -26,14 +26,14 @@ Optional inputs:
 5. Do not render a code panel inside the example component template.
 6. The source code must be shown only through the top tabs managed by `example-viewer`.
 7. Add the code blocks shown in those tabs as string properties on the component:
-   - `templateCode`
-   - `componentCode`
-   - `cssCode` only when the example includes styling
+    - `templateCode`
+    - `componentCode`
+    - `cssCode` only when the example includes styling
 8. Make the snippets match the rendered demo exactly.
 9. Keep the component self-contained:
-   - declare its own demo data
-   - import only the modules it uses
-   - avoid relying on external state unless the example explicitly demonstrates that integration
+    - declare its own demo data
+    - import only the modules it uses
+    - avoid relying on external state unless the example explicitly demonstrates that integration
 10. If the example needs styling, define the demo theme in the component `styles` and expose the same rules in `cssCode`.
 11. If the example needs more than one visual variant, render each variant in a separate sample block inside the same example component.
 12. Register the example in the page that lists examples for the library.

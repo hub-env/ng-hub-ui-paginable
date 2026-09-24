@@ -1,5 +1,35 @@
 # Breaking Changes: ng-hub-ui-paginable
 
+## [22.28.0] - 2026-09-23
+
+### Token defaults are no longer declared on the component, so a declaration of yours now wins
+
+- **Change**: the `:root, :host` blocks that held every `--hub-table-*`, `--hub-list-*`,
+  `--hub-paginator-*`, `--hub-filter-*` and `--hub-table-dropdown-*` default are gone. Each
+  default is now the fallback of the `var()` that reads it.
+
+- **Why**: Angular's emulated encapsulation shims `:host` to an attribute the host element
+  carries, so those defaults were declared on `<hub-table>` itself — and a custom property
+  declared on an element beats the one it would inherit from an ancestor, whatever the selector.
+  Every `:root { --hub-table-…: … }` the theming mixin invites was read and then discarded.
+
+- **Impact — a token you set on `:root`, on a container or on a route takes effect now, and may
+  not have before.** If you worked around this by declaring the token where it would reach the
+  element — `:root hub-table { … }` was the common shape — that still works and still wins: it
+  is a declaration on the element, and there is nothing left to tie with. What changes is that a
+  declaration you wrote higher up and had given up on will start applying. Look at any `:root`
+  block naming these tokens before upgrading; it is about to do what it says.
+
+- **Impact — reading a default back off the element returns nothing.**
+  `getComputedStyle(table).getPropertyValue('--hub-table-border-color')` answered with the
+  default while it was declared there and answers `''` now, unless you set the token yourself.
+  Two tokens the library reads this way, `--hub-list-ghost-opacity` and `--hub-list-ghost-shadow`,
+  keep working: the code that reads them carries the same default.
+
+- **Migration**: none required for appearance — nothing changes for a consumer who set no tokens.
+  Remove any `:root hub-table { … }` workaround if you want the declaration back where it belongs,
+  and stop reading defaults off the element.
+
 ## [22.27.0] - 2026-09-23
 
 ### Angular below 21.0.0 is no longer supported

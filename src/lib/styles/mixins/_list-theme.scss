@@ -195,7 +195,8 @@
 	// The rule that stands in for the gap. Between siblings only, so the list
 	// neither opens nor closes with one and sits flush against what holds it.
 	.hub-list__item + .hub-list__item {
-		border-top: var(--hub-list-divider-width) solid var(--hub-list-divider-color);
+		border-top: var(--hub-list-divider-width, var(--hub-ref-border-width, 1px)) solid
+			var(--hub-list-divider-color, var(--hub-list-item-border-color, var(--hub-sys-border-color-default, #dee2e6)));
 	}
 
 	// A group and its first child belong together: no rule between a parent row

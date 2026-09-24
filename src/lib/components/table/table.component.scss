@@ -1,265 +1,33 @@
 @use '../../styles/mixins/icon' as icon;
 
-// Default token catalogue on `:host`. Angular emulated encapsulation shims `:host`
-// → `[_nghost]`, which the host element carries, so every default reliably applies.
-// (`:where(:host)` is NOT used: ShadowCss shims it to `[_ngcontent]:where([_nghost])`,
-// a content-attr the host does NOT carry, so the whole block would silently never
-// match — leaving the cells and the sticky header transparent.)
+// ─────────────────────────────────────────────────────────────────────────
+// This stylesheet declares no token defaults, and neither does any other in the
+// package. Every default lives as the fallback of the `var()` that reads it.
 //
-// The re-themeable SURFACE tokens — `--hub-table-bg` / `--hub-table-color` and the
-// container pair — are deliberately NOT declared here. A `:host` declaration (0,1,0)
-// would out-rank a consumer's `hub-table { --hub-table-bg: … }` tag rule (0,0,1), so
-// the rows/cells would ignore a dark-mode re-theme (only headers picked it up). Each
-// consumption site instead reads them as `var(--hub-table-bg, <default>)`, so a plain
-// tag selector re-themes the surface WITHOUT `!important`, and the header always
-// resolves to an opaque colour via the same fallback.
-:root,
-:host {
-	// Table Properties
-	--hub-table-border-color: var(--hub-sys-border-color-default, #dee2e6);
-	--hub-table-border-radius: var(--hub-ref-radius-md, 0.375rem);
-	--hub-table-border-width: var(--hub-ref-border-width, 1px);
-	// Inter-row divider — defaults to the frame border colour so the header,
-	// vertical borders and outer frame stay independent of the row rules.
-	--hub-table-row-divider-color: var(--hub-table-border-color);
-	// Fixed-height scroll body + sticky-header offset. Both are no-ops by
-	// default; set `--hub-table-container-max-block-size` (with `options.scrollable`)
-	// to cap the body height and engage the already-present sticky header.
-	--hub-table-container-max-block-size: none;
-	// Scroll behaviour of the built-in `.hub-table__container`. Defaults to `auto`
-	// (the frame owns vertical + horizontal scroll and, with a capped
-	// `--hub-table-container-max-block-size`, pins the header itself). `[stickyHeader]`
-	// flips this to `visible` so the container does NOT establish its own scroll
-	// context: the header then sticks to the consumer's OWN scroll ancestor (a plain
-	// `max-height` + `overflow:auto` box) instead of being trapped inside a frame that
-	// isn't the one actually scrolling.
-	--hub-table-container-overflow: auto;
-	--hub-table-head-sticky-top: 0;
-	// NOTE: responsive breakpoints (576/768/992/1200/1400px) are fixed and live in the
-	// `@media` queries below. CSS custom properties cannot be read inside `@media`
-	// conditions, so they are intentionally NOT exposed as overridable variables.
-	--hub-table-container-gap: var(--hub-ref-space-3, 1rem);
-	--hub-table-top-bar-gap: var(--hub-ref-space-3, 1rem);
-	--hub-table-top-bar-justify-content: end;
-	--hub-table-top-bar-align-items: center;
-	--hub-table-top-bar-wrap: wrap;
-	--hub-table-batch-actions-gap: var(--hub-ref-space-2, 0.5rem);
-	// The header cell lays its own row out. The template asks Bootstrap for it with utility
-	// classes, and this family does not ship Bootstrap: without these the title, the sort
-	// arrows and the filter stack one under another in every sortable column.
-	--hub-table-header-cell-gap: var(--hub-ref-space-2, 0.5rem);
-	--hub-table-header-cell-actions-gap: var(--hub-ref-space-2, 0.5rem);
-	--hub-table-cell-buttons-gap: var(--hub-ref-space-2, 0.5rem);
-	--hub-table-cell-btn-content-gap: var(--hub-ref-space-1, 0.25rem);
-	// The empty state used to be an `alert alert-info` from Bootstrap, which this family does
-	// not ship: without it the notice rendered as bare text against the page, and with it the
-	// panel stayed light blue in a dark theme. The design system already has the recipe for a
-	// quiet informative panel, and all three of its parts follow the theme.
-	// The tint is the background's job and the text stays the theme's own. The emphasis role
-	// is calibrated for text on white — the design system says so where it is declared — and on
-	// the dark surface this panel takes in a dark theme it lands around 2:1. `text-primary` is
-	// guaranteed against the page surface, and a 12% tint of it barely moves.
-	--hub-table-no-data-bg: var(--hub-sys-color-info-subtle, #cff4fc);
-	--hub-table-no-data-color: var(--hub-sys-text-primary, #212529);
-	--hub-table-no-data-border-color: var(--hub-sys-color-info-border-subtle, #b6effb);
-	--hub-table-no-data-border-width: var(--hub-ref-border-width, 1px);
-	--hub-table-no-data-border-radius: var(--hub-ref-radius-md, 0.375rem);
-	--hub-table-no-data-padding: var(--hub-ref-space-3, 1rem);
-	--hub-table-no-data-margin: var(--hub-ref-space-4, 1.5rem);
-	--hub-table-no-data-gap: var(--hub-ref-space-4, 1.5rem);
-	--hub-table-batch-actions-margin-inline-end: auto;
-	--hub-table-bottom-bar-gap: var(--hub-ref-space-3, 1rem);
-	// Air around the bar, so it can read as a band rather than a line stuck to the last row.
-	// `justify-content` cannot give it: `space-around` shares the free space out between the
-	// items and leaves none outside them, so the paginator ends up against one edge and the
-	// row count against the other however it is set.
-	//
-	// Zero by default, because every table that exists was laid out against the flush bar and
-	// none of them asked for this. A table that wants the air asks for it — the three
-	// `$footer-padding-block` / `$footer-padding-inline` / `$footer-spacing` arguments of
-	// `hub-table-theme()`, or these variables directly.
-	--hub-table-bottom-bar-padding-block: 0;
-	--hub-table-bottom-bar-padding-inline: 0;
-	--hub-table-bottom-bar-spacing: 0;
-	--hub-table-bottom-bar-justify-content: space-around;
-	--hub-table-bottom-bar-align-items: center;
-	--hub-table-bottom-bar-wrap: wrap;
-	--hub-table-bottom-bar-paginator-order: 1;
-	--hub-table-bottom-bar-settings-order: 2;
-	--hub-table-bottom-bar-info-order: 3;
-	--hub-table-bottom-bar-paginator-flex: 0 0 auto;
-	--hub-table-bottom-bar-settings-flex: 0 0 auto;
-	--hub-table-bottom-bar-info-flex: 0 0 auto;
-	--hub-table-icon-color: currentColor;
-	--hub-table-icon-size: 1em;
-	// Sort icon SVG variables
-	--hub-table-icon-sort: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'%3E%3Cpath d='M137.4 41.4c12.5-12.5 32.8-12.5 45.3 0l128 128c9.2 9.2 11.9 22.9 6.9 34.9s-16.6 19.8-29.6 19.8H32c-12.9 0-24.6-7.8-29.6-19.8s-2.2-25.7 6.9-34.9l128-128zm0 429.3l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8 29.6-19.8H288c12.9 0 24.6 7.8 29.6 19.8s2.2 25.7-6.9 34.9l-128 128c-12.5 12.5-32.8 12.5-45.3 0z'/%3E%3C/svg%3E");
-	--hub-table-icon-sort-up: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'%3E%3Cpath d='M182.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-9.2 9.2-11.9 22.9-6.9 34.9s16.6 19.8 29.6 19.8H288c12.9 0 24.6-7.8 29.6-19.8s2.2-25.7-6.9-34.9l-128-128z'/%3E%3C/svg%3E");
-	--hub-table-icon-sort-down: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'%3E%3Cpath d='M137.4 374.6c12.5 12.5 32.8 12.5 45.3 0l128-128c9.2-9.2 11.9-22.9 6.9-34.9s-16.6-19.8-29.6-19.8H32c-12.9 0-24.6 7.8-29.6 19.8s-2.2 25.7 6.9 34.9l128 128z'/%3E%3C/svg%3E");
-	// Row-expander (disclosure) caret icons — overridable via var indirection,
-	// exactly like the sort icons above, so a product can swap the expander glyph.
-	--hub-table-icon-caret-up: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'%3E%3Cpath d='M182.6 137.4c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-9.2 9.2-11.9 22.9-6.9 34.9s16.6 19.8 29.6 19.8H288c12.9 0 24.6-7.8 29.6-19.8s2.2-25.7-6.9-34.9l-128-128z'/%3E%3C/svg%3E");
-	--hub-table-icon-caret-down: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'%3E%3Cpath d='M137.4 374.6c12.5 12.5 32.8 12.5 45.3 0l128-128c9.2-9.2 11.9-22.9 6.9-34.9s-16.6-19.8-29.6-19.8H32c-12.9 0-24.6 7.8-29.6 19.8s-2.2 25.7 6.9 34.9l128 128z'/%3E%3C/svg%3E");
-	// Toolbar / pagination / state icons — overridable via var indirection (same as sort/caret above).
-	--hub-table-icon-search: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z'/%3E%3C/svg%3E");
-	--hub-table-icon-filter: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M3.9 54.9C10.5 40.9 24.5 32 40 32H472c15.5 0 29.5 8.9 36.1 22.9s4.6 30.5-5.2 42.5L320 320.9V448c0 12.1-6.8 23.2-17.7 28.6s-23.8 4.3-33.5-3l-64-48c-8.1-6-12.8-15.5-12.8-25.6V320.9L9 97.3C-.7 85.4-2.8 68.8 3.9 54.9z'/%3E%3C/svg%3E");
-	--hub-table-icon-eraser: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512'%3E%3Cpath d='M290.7 57.4L57.4 290.7c-25 25-25 65.5 0 90.5l80 80c12 12 28.3 18.7 45.3 18.7H288h9.4H512c17.7 0 32-14.3 32-32s-14.3-32-32-32H387.9L518.6 285.3c25-25 25-65.5 0-90.5L381.3 57.4c-25-25-65.5-25-90.5 0zM297.4 416H288l-105.4 0-80-80L227.3 211.3 364.7 348.7 297.4 416z'/%3E%3C/svg%3E");
-	--hub-table-icon-close: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 384 512'%3E%3Cpath d='M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z'/%3E%3C/svg%3E");
-	--hub-table-icon-info: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z'/%3E%3C/svg%3E");
-	--hub-table-icon-chevron-up: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z'/%3E%3C/svg%3E");
-	--hub-table-icon-chevron-down: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z'/%3E%3C/svg%3E");
-	--hub-table-icon-chevron-left: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z'/%3E%3C/svg%3E");
-	--hub-table-icon-chevron-right: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 105.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z'/%3E%3C/svg%3E");
-	--hub-table-icon-angle-left: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'%3E%3Cpath d='M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z'/%3E%3C/svg%3E");
-	--hub-table-icon-angle-right: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'%3E%3Cpath d='M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z'/%3E%3C/svg%3E");
-	--hub-table-icon-angle-double-left: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160zm352-160l-160 160c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L301.3 256 438.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0z'/%3E%3C/svg%3E");
-	--hub-table-icon-angle-double-right: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M470.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 256 265.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160zm-352 160l160-160c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L210.7 256 73.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0z'/%3E%3C/svg%3E");
-	--hub-table-icon-ellipsis-v: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 512'%3E%3Cpath d='M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z'/%3E%3C/svg%3E");
-	--hub-table-icon-trash: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath d='M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z'/%3E%3C/svg%3E");
-	--hub-table-icon-plus: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath d='M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z'/%3E%3C/svg%3E");
-	--hub-table-accent-bg: transparent;
-	--hub-table-active-bg: var(--hub-sys-state-active-bg, rgba(0, 0, 0, 0.1));
-	--hub-table-active-color: var(--hub-sys-text-primary, #212529);
-	// Semantic accent for the selected-row state — re-based per `variant`
-	// (`options.variant`). The selected row reads as a soft accent tint.
-	//
-	// Local accent slot: defaults to the primary system accent but accepts ANY
-	// colour at runtime (built-in variant, theme override, or a user-defined
-	// accent such as `brand`). The role family is derived from this single slot
-	// with `color-mix(in oklch, …)` / relative-colour syntax, mirroring the ds
-	// engine, so overriding `--hub-table-accent` alone recomputes the family.
-	--hub-table-accent: var(--hub-sys-color-primary, #0d6efd);
-	--hub-table-accent-emphasis: color-mix(in oklch, var(--hub-table-accent) 80%, var(--hub-sys-color-ink, #212529));
-	--hub-table-accent-subtle: color-mix(in oklch, var(--hub-table-accent) 12%, var(--hub-sys-surface-page, #ffffff));
-	// Contrast / on-color: grayscale flip driven by the accent's own lightness.
-	--hub-table-accent-on: oklch(from var(--hub-table-accent) clamp(0, (0.62 - l) * 1000, 1) 0 h);
-	--hub-table-selected-bg: var(--hub-table-accent-subtle);
-	--hub-table-selected-color: var(--hub-sys-text-primary, #212529);
-	// Optional accent bar on the selected row's leading (inline-start) edge — the
-	// master-detail "active row" affordance. Off by default (`width: 0`, no visual
-	// change); set `--hub-table-selected-bar-width` to reveal a solid bar keyed to
-	// `--hub-table-selected-bar-color` (defaults to the accent). Applies to both the
-	// built-in selection and a consumer-set `hub-table__row--selected` ([rowClass]).
-	--hub-table-selected-bar-width: 0;
-	--hub-table-selected-bar-color: var(--hub-table-accent);
-	// Header (thead) surface — defaults to the table surface, carrying the SAME opaque
-	// white / text fallback the cells use, so the header stays opaque under a sticky
-	// header even before a consumer sets `--hub-table-bg`. Override for distinct chrome.
-	--hub-table-head-bg: var(--hub-table-bg, var(--hub-sys-surface-page, #fff));
-	--hub-table-head-color: var(--hub-table-color, var(--hub-sys-text-primary, #212529));
-	// Header chrome — typography + padding. `-bg` / `-color` already exist above, so
-	// only the genuinely-missing slots are added here, in the SAME `--hub-table-head-*`
-	// namespace. Each defaults to an existing value (cell padding / browser `th`
-	// weight), so there is no visual change until a consumer overrides one.
-	--hub-table-head-font-size: inherit;
-	// Defaults to `bold` to match the browser `th` default (zero visual change);
-	// set to `var(--hub-ref-font-weight-semibold, 600)` for the DS look.
-	--hub-table-head-font-weight: bold;
-	--hub-table-head-padding-x: var(--hub-table-cell-padding-x);
-	--hub-table-head-padding-y: var(--hub-table-cell-padding-y);
-	// Header bottom-border thickness — defaults to the shared cell border, so
-	// nothing moves until overridden. A thicker-header theme (Bootstrap's 2px
-	// convention) sets it to `calc(var(--hub-table-border-width) * 2)` and it
-	// keeps following the base width.
-	--hub-table-head-border-width: var(--hub-table-border-width);
-	// Uppercase/tracked column headers without reaching for a `th` rule; both
-	// default to the browser values (zero visual change).
-	--hub-table-head-text-transform: none;
-	--hub-table-head-letter-spacing: normal;
-	// Sticky-header position knob (consumed when [stickyHeader] is set). Override to
-	// `static` to opt a specific table out without touching the input.
-	--hub-table-head-position: sticky;
-	--hub-table-bg-state: initial;
-	--hub-table-bg-type: initial;
-	--hub-table-cell-padding-x: var(--hub-ref-space-3, 1rem);
-	--hub-table-cell-padding-x-sm: var(--hub-ref-space-2, 0.5rem);
-	--hub-table-cell-padding-y: var(--hub-ref-space-2, 0.5rem);
-	--hub-table-cell-padding-y-sm: var(--hub-ref-space-1, 0.25rem);
-	--hub-table-cell-vertical-align: middle;
-	--hub-table-color-state: initial;
-	--hub-table-color-type: initial;
-	--hub-table-group-separator-color: var(--hub-sys-border-color-default, #dee2e6);
-	--hub-table-search-button-bg: var(--hub-table-container-bg, var(--hub-sys-surface-page, #fff));
-	--hub-table-search-button-border-color: var(--hub-table-border-color);
-	--hub-table-search-button-color: var(--hub-table-container-color, var(--hub-sys-text-primary, #212529));
-	--hub-table-search-button-min-width: 2.75rem;
-	--hub-table-search-input-bg: var(--hub-table-container-bg, var(--hub-sys-surface-page, #fff));
-	--hub-table-search-input-border-color: var(--hub-table-border-color);
-	--hub-table-search-input-color: var(--hub-table-container-color, var(--hub-sys-text-primary, #212529));
-	--hub-table-search-border-width: var(--hub-table-border-width);
-	--hub-table-search-border-radius: var(--hub-table-border-radius);
-	--hub-table-search-input-padding-x: 0.75rem;
-	--hub-table-search-input-padding-y: 0.375rem;
-	--hub-table-search-input-font-size: 1rem;
-	// Clear affordance inside the search group — muted until pointed at, so it does not
-	// compete with the term it erases.
-	--hub-table-search-clear-color: var(--hub-sys-text-muted, #6c757d);
-	--hub-table-search-clear-hover-color: var(--hub-table-container-color, var(--hub-sys-text-primary, #212529));
-	--hub-table-search-clear-icon-size: 0.75em;
-	--hub-table-search-clear-padding-x: var(--hub-ref-space-2, 0.5rem);
-	// Column-filter row — the inline controls this table draws under the header, and
-	// the band they sit on. The row reads as header chrome (its own surface), the
-	// controls as fields, so a filterable column is visibly a filterable column.
-	--hub-table-filter-row-bg: var(--hub-table-head-bg);
-	--hub-table-filter-cell-padding-x: var(--hub-table-head-padding-x);
-	--hub-table-filter-cell-padding-y: var(--hub-table-head-padding-y);
-	--hub-table-filter-control-bg: var(--hub-table-container-bg, var(--hub-sys-surface-page, #fff));
-	--hub-table-filter-control-color: var(--hub-table-container-color, var(--hub-sys-text-primary, #212529));
-	--hub-table-filter-control-placeholder-color: var(--hub-sys-text-muted, #6c757d);
-	--hub-table-filter-control-border-color: var(--hub-table-border-color);
-	--hub-table-filter-control-border-width: var(--hub-table-border-width);
-	--hub-table-filter-control-border-radius: var(--hub-ref-radius-sm, 0.25rem);
-	--hub-table-filter-control-padding-x: var(--hub-ref-space-2, 0.5rem);
-	--hub-table-filter-control-padding-y: var(--hub-ref-space-1, 0.25rem);
-	--hub-table-filter-control-font-size: var(--hub-ref-font-size-sm, 0.875rem);
-	--hub-table-filter-control-focus-border-color: var(--hub-table-accent);
-	--hub-table-filter-control-focus-shadow: 0 0 0 0.2rem color-mix(in oklch, var(--hub-table-accent) 25%, transparent);
-	// A filter that is actually narrowing the collection wears the same green the
-	// menu-filter trigger already uses, so "there is a filter here" and "it is on"
-	// read the same wherever the filter lives.
-	--hub-table-filter-control-active-bg: var(--hub-table-filter-button-active-bg);
-	--hub-table-filter-control-active-border-color: var(--hub-table-filter-button-active-border-color);
-	--hub-table-filter-button-active-bg: color-mix(in oklch, var(--hub-sys-color-success, #198754) 10%, transparent);
-	--hub-table-filter-button-active-border-color: var(--hub-sys-color-success, #198754);
-	--hub-table-filter-button-hover-bg: rgba(0, 0, 0, 0.05);
-	--hub-table-filter-button-icon-active-color: var(--hub-sys-color-success, #198754);
-	--hub-table-filter-button-icon-color: var(--hub-sys-text-muted, #6c757d);
-	--hub-table-filter-button-gap: var(--hub-ref-space-2, 0.5rem);
-	--hub-table-filter-button-padding-x: 0.75rem;
-	--hub-table-filter-button-padding-y: 0.375rem;
-	--hub-table-filter-button-border-width: 1px;
-	--hub-table-filter-button-border-color: transparent;
-	--hub-table-filter-button-border-radius: var(--hub-ref-radius-sm, 0.25rem);
-	--hub-table-filter-button-transition: all 0.2s ease;
-	--hub-table-filter-count-bg: var(--hub-sys-color-success, #198754);
-	--hub-table-filter-count-color: var(--hub-ref-color-white, #fff);
-	--hub-table-filter-count-size: 1.25rem;
-	--hub-table-filter-count-padding-x: 0.4em;
-	--hub-table-filter-count-font-size: 0.7rem;
-	--hub-table-filter-count-font-weight: var(--hub-ref-font-weight-bold, 700);
-	--hub-table-filter-count-border-radius: var(--hub-ref-radius-pill, 50rem);
-	// Clear-filters button — toolbar chrome at rest (it stands beside the search
-	// group and is not a destructive act on the data), destructive only under the
-	// cursor, where the intent is already declared.
-	--hub-table-delete-filters-bg: var(--hub-table-container-bg, var(--hub-sys-surface-page, #fff));
-	--hub-table-delete-filters-color: var(--hub-table-container-color, var(--hub-sys-text-primary, #212529));
-	--hub-table-delete-filters-border-color: var(--hub-table-border-color);
-	--hub-table-delete-filters-border-width: var(--hub-table-border-width);
-	--hub-table-delete-filters-border-radius: var(--hub-table-border-radius);
-	--hub-table-delete-filters-padding-x: 0.75rem;
-	--hub-table-delete-filters-padding-y: 0.375rem;
-	--hub-table-delete-filters-font-size: var(--hub-table-search-input-font-size);
-	--hub-table-delete-filters-gap: var(--hub-ref-space-2, 0.5rem);
-	--hub-table-delete-filters-hover-bg: color-mix(in oklch, var(--hub-sys-color-danger, #dc3545) 10%, transparent);
-	--hub-table-delete-filters-hover-border-color: var(--hub-sys-color-danger, #dc3545);
-	--hub-table-delete-filters-hover-color: var(--hub-sys-color-danger, #dc3545);
-	--hub-table-delete-filters-disabled-opacity: 0.5;
-	--hub-table-batch-actions-btn-icon-gap: var(--hub-ref-space-1, 0.25rem);
-	--hub-table-hover-bg: var(--hub-sys-state-hover-bg, rgba(0, 0, 0, 0.075));
-	--hub-table-hover-color: var(--hub-sys-text-primary, #212529);
-	--hub-table-striped-bg: var(--hub-sys-state-striped-bg, rgba(0, 0, 0, 0.05));
-	--hub-table-striped-color: var(--hub-sys-text-primary, #212529);
-}
+// A default declared on `:host` lands on the `<hub-table>` element itself, and a
+// custom property declared on an element beats the one it would otherwise inherit
+// from an ancestor — specificity never enters into it, so there is no selector a
+// consumer can write at `:root` that gets a look in. Every `:root { --hub-table-…: … }`
+// the theming mixin invites was parsed, matched and then thrown away. Measured in
+// Chrome: `--hub-table-bottom-bar-gap: 99px` at `:root` moved nothing, and the same
+// declaration on the element moved everything.
+//
+// As a fallback the default is consulted last instead of first, so a consumer's
+// declaration is the only declaration there is and wins wherever it is written — the
+// element, a container, a route, or `:root` for the whole application.
+//
+// A default built out of other tokens carries the whole chain inline for a second
+// reason: a custom property resolves the `var()`s in its value where it is DECLARED,
+// not where it is used, so arithmetic parked in a `:root` token would read `:root`'s
+// copy of every token it names and ignore a local override of any of them. Written
+// into the rule, it resolves against whatever reaches that rule.
+//
+// Variant blocks still declare on the host, and should: `:host(.hub-table--flush)` is
+// the component deciding about itself, and it is meant to out-rank the default it
+// replaces.
+//
+// The catalogue of tokens with their defaults is `docs/css-variables-reference.md`.
+// ─────────────────────────────────────────────────────────────────────────
 
 /**
  * Flush: the table drawn as rows rather than as a grid.
@@ -331,28 +99,28 @@
 	// Layout
 	display: flex;
 	flex-direction: column;
-	gap: var(--hub-table-container-gap);
+	gap: var(--hub-table-container-gap, var(--hub-ref-space-3, 1rem));
 	min-width: 0;
 	color: var(--hub-table-container-color, var(--hub-sys-text-primary, #212529));
 
 	// Top bar (actions and filters)
 	.hub-table__top-bar {
 		display: flex;
-		justify-content: var(--hub-table-top-bar-justify-content);
-		align-items: var(--hub-table-top-bar-align-items);
-		flex-wrap: var(--hub-table-top-bar-wrap);
-		gap: var(--hub-table-top-bar-gap);
+		justify-content: var(--hub-table-top-bar-justify-content, end);
+		align-items: var(--hub-table-top-bar-align-items, center);
+		flex-wrap: var(--hub-table-top-bar-wrap, wrap);
+		gap: var(--hub-table-top-bar-gap, var(--hub-ref-space-3, 1rem));
 	}
 
 	// Batch actions — left-aligned, pushing search to the right
 	.hub-table__batch-actions {
 		display: flex;
 		align-items: center;
-		gap: var(--hub-table-batch-actions-gap);
-		margin-inline-end: var(--hub-table-batch-actions-margin-inline-end);
+		gap: var(--hub-table-batch-actions-gap, var(--hub-ref-space-2, 0.5rem));
+		margin-inline-end: var(--hub-table-batch-actions-margin-inline-end, auto);
 
 		&-btn-icon {
-			margin-right: var(--hub-table-batch-actions-btn-icon-gap);
+			margin-right: var(--hub-table-batch-actions-btn-icon-gap, var(--hub-ref-space-1, 0.25rem));
 		}
 	}
 
@@ -371,14 +139,14 @@
 		flex-wrap: nowrap;
 		align-items: center;
 		justify-content: space-between;
-		gap: var(--hub-table-header-cell-gap);
+		gap: var(--hub-table-header-cell-gap, var(--hub-ref-space-2, 0.5rem));
 	}
 
 	.hub-table__header-cell-actions {
 		display: flex;
 		flex-wrap: nowrap;
 		align-items: center;
-		gap: var(--hub-table-header-cell-actions-gap);
+		gap: var(--hub-table-header-cell-actions-gap, var(--hub-ref-space-2, 0.5rem));
 		margin-inline-start: auto;
 	}
 
@@ -388,7 +156,7 @@
 		flex-wrap: nowrap;
 		align-items: center;
 		justify-content: flex-end;
-		gap: var(--hub-table-cell-buttons-gap);
+		gap: var(--hub-table-cell-buttons-gap, var(--hub-ref-space-2, 0.5rem));
 	}
 
 	.hub-table__sort-btn {
@@ -435,8 +203,8 @@
 				var(--hub-sys-color-ink, #212529)
 			);
 
-			border: var(--hub-table-border-width) solid transparent;
-			border-radius: var(--hub-table-border-radius);
+			border: var(--hub-table-border-width, var(--hub-ref-border-width, 1px)) solid transparent;
+			border-radius: var(--hub-table-border-radius, var(--hub-ref-radius-md, 0.375rem));
 		}
 
 		&--soft {
@@ -496,8 +264,9 @@
 
 	.hub-table__batch-actions-btn--default,
 	.hub-table__cell-btn--default {
-		border: var(--hub-table-border-width) solid var(--hub-table-border-color);
-		border-radius: var(--hub-table-border-radius);
+		border: var(--hub-table-border-width, var(--hub-ref-border-width, 1px)) solid
+			var(--hub-table-border-color, var(--hub-sys-border-color-default, #dee2e6));
+		border-radius: var(--hub-table-border-radius, var(--hub-ref-radius-md, 0.375rem));
 	}
 
 	// A row-action button is sized by the LINE BOX of the glyph inside it, and an icon font's
@@ -518,7 +287,7 @@
 		display: flex;
 		flex-wrap: nowrap;
 		align-items: center;
-		gap: var(--hub-table-cell-btn-content-gap);
+		gap: var(--hub-table-cell-btn-content-gap, var(--hub-ref-space-1, 0.25rem));
 		min-height: 1.5rem;
 
 		hub-paginable-icon,
@@ -553,7 +322,11 @@
 		 * The stacking gap is NOT zeroed here: a control the adapter creates is embedded
 		 * wherever it is created, so `ng-hub-ui-forms` states that once, in the adapter.
 		 */
-		--hub-input-border-radius: var(--hub-table-search-border-radius) 0 0 var(--hub-table-search-border-radius);
+		--hub-input-border-radius: var(
+				--hub-table-search-border-radius,
+				var(--hub-table-border-radius, var(--hub-ref-radius-md, 0.375rem))
+			)
+			0 0 var(--hub-table-search-border-radius, var(--hub-table-border-radius, var(--hub-ref-radius-md, 0.375rem)));
 
 		&-input {
 			position: relative;
@@ -562,16 +335,27 @@
 			min-width: 0;
 			display: block;
 			width: 100%;
-			padding: var(--hub-table-search-input-padding-y) var(--hub-table-search-input-padding-x);
-			font-size: var(--hub-table-search-input-font-size);
+			padding: var(--hub-table-search-input-padding-y, 0.375rem) var(--hub-table-search-input-padding-x, 0.75rem);
+			font-size: var(--hub-table-search-input-font-size, 1rem);
 			font-weight: var(--hub-ref-font-weight-base, 400);
 			line-height: var(--hub-ref-line-height-base, 1.5);
-			color: var(--hub-table-search-input-color);
+			color: var(--hub-table-search-input-color, var(--hub-table-container-color, var(--hub-sys-text-primary, #212529)));
 			appearance: none;
-			background-color: var(--hub-table-search-input-bg);
+			background-color: var(
+				--hub-table-search-input-bg,
+				var(--hub-table-container-bg, var(--hub-sys-surface-page, #fff))
+			);
 			background-clip: padding-box;
-			border: var(--hub-table-search-border-width) solid var(--hub-table-search-input-border-color);
-			border-radius: var(--hub-table-search-border-radius) 0 0 var(--hub-table-search-border-radius);
+			border: var(--hub-table-search-border-width, var(--hub-table-border-width, var(--hub-ref-border-width, 1px))) solid
+				var(
+					--hub-table-search-input-border-color,
+					var(--hub-table-border-color, var(--hub-sys-border-color-default, #dee2e6))
+				);
+			border-radius: var(
+					--hub-table-search-border-radius,
+					var(--hub-table-border-radius, var(--hub-ref-radius-md, 0.375rem))
+				)
+				0 0 var(--hub-table-search-border-radius, var(--hub-table-border-radius, var(--hub-ref-radius-md, 0.375rem)));
 			transition:
 				border-color 0.15s ease-in-out,
 				box-shadow 0.15s ease-in-out;
@@ -591,10 +375,17 @@
 			display: inline-flex;
 			align-items: center;
 			justify-content: center;
-			padding-inline: var(--hub-table-search-clear-padding-x);
-			color: var(--hub-table-search-clear-color);
-			background-color: var(--hub-table-search-input-bg);
-			border: var(--hub-table-search-border-width) solid var(--hub-table-search-input-border-color);
+			padding-inline: var(--hub-table-search-clear-padding-x, var(--hub-ref-space-2, 0.5rem));
+			color: var(--hub-table-search-clear-color, var(--hub-sys-text-muted, #6c757d));
+			background-color: var(
+				--hub-table-search-input-bg,
+				var(--hub-table-container-bg, var(--hub-sys-surface-page, #fff))
+			);
+			border: var(--hub-table-search-border-width, var(--hub-table-border-width, var(--hub-ref-border-width, 1px))) solid
+				var(
+					--hub-table-search-input-border-color,
+					var(--hub-table-border-color, var(--hub-sys-border-color-default, #dee2e6))
+				);
 			border-inline-start: 0;
 			border-radius: 0;
 			cursor: pointer;
@@ -602,67 +393,79 @@
 
 			&:hover,
 			&:focus-visible {
-				color: var(--hub-table-search-clear-hover-color);
+				color: var(
+					--hub-table-search-clear-hover-color,
+					var(--hub-table-container-color, var(--hub-sys-text-primary, #212529))
+				);
 			}
 		}
 
 		&-clear-icon {
-			--hub-table-icon-size: var(--hub-table-search-clear-icon-size);
+			--hub-table-icon-size: var(--hub-table-search-clear-icon-size, 0.75em);
 		}
 
 		&-button {
 			display: inline-flex;
 			align-items: center;
 			justify-content: center;
-			min-width: var(--hub-table-search-button-min-width);
-			color: var(--hub-table-search-button-color);
-			background-color: var(--hub-table-search-button-bg);
+			min-width: var(--hub-table-search-button-min-width, 2.75rem);
+			color: var(--hub-table-search-button-color, var(--hub-table-container-color, var(--hub-sys-text-primary, #212529)));
+			background-color: var(
+				--hub-table-search-button-bg,
+				var(--hub-table-container-bg, var(--hub-sys-surface-page, #fff))
+			);
 			// Width and style as well as colour. Only the colour was declared, which
 			// assumed the host application brought Bootstrap's `.btn` to supply the rest
 			// — this family does not ship it, so without it the browser's own button
 			// chrome showed through beside the search field.
-			border: var(--hub-table-search-border-width) solid var(--hub-table-search-button-border-color);
+			border: var(--hub-table-search-border-width, var(--hub-table-border-width, var(--hub-ref-border-width, 1px))) solid
+				var(
+					--hub-table-search-button-border-color,
+					var(--hub-table-border-color, var(--hub-sys-border-color-default, #dee2e6))
+				);
 			// One hairline between field and button, not two touching.
 			border-inline-start: 0;
-			border-radius: 0 var(--hub-table-search-border-radius) var(--hub-table-search-border-radius) 0;
+			border-radius: 0
+				var(--hub-table-search-border-radius, var(--hub-table-border-radius, var(--hub-ref-radius-md, 0.375rem)))
+				var(--hub-table-search-border-radius, var(--hub-table-border-radius, var(--hub-ref-radius-md, 0.375rem))) 0;
 		}
 	}
 
 	// Bottom bar (pagination and info)
 	.hub-table__bottom-bar {
 		display: flex;
-		justify-content: var(--hub-table-bottom-bar-justify-content);
-		align-items: var(--hub-table-bottom-bar-align-items);
-		flex-wrap: var(--hub-table-bottom-bar-wrap);
-		gap: var(--hub-table-bottom-bar-gap);
-		padding-block: var(--hub-table-bottom-bar-padding-block);
-		padding-inline: var(--hub-table-bottom-bar-padding-inline);
+		justify-content: var(--hub-table-bottom-bar-justify-content, space-around);
+		align-items: var(--hub-table-bottom-bar-align-items, center);
+		flex-wrap: var(--hub-table-bottom-bar-wrap, wrap);
+		gap: var(--hub-table-bottom-bar-gap, var(--hub-ref-space-3, 1rem));
+		padding-block: var(--hub-table-bottom-bar-padding-block, 0);
+		padding-inline: var(--hub-table-bottom-bar-padding-inline, 0);
 	}
 
 	// The separation goes on the side facing the grid, so a bar drawn above and a bar
 	// drawn below are each pushed away from it rather than both downwards.
 	.hub-table__bottom-bar--bottom {
-		margin-block-start: var(--hub-table-bottom-bar-spacing);
+		margin-block-start: var(--hub-table-bottom-bar-spacing, 0);
 	}
 
 	.hub-table__bottom-bar--top {
-		margin-block-end: var(--hub-table-bottom-bar-spacing);
+		margin-block-end: var(--hub-table-bottom-bar-spacing, 0);
 	}
 
 	.hub-table__bottom-bar-paginator {
-		order: var(--hub-table-bottom-bar-paginator-order);
-		flex: var(--hub-table-bottom-bar-paginator-flex);
+		order: var(--hub-table-bottom-bar-paginator-order, 1);
+		flex: var(--hub-table-bottom-bar-paginator-flex, 0 0 auto);
 	}
 
 	.hub-table__bottom-bar-settings {
-		order: var(--hub-table-bottom-bar-settings-order);
-		flex: var(--hub-table-bottom-bar-settings-flex);
+		order: var(--hub-table-bottom-bar-settings-order, 2);
+		flex: var(--hub-table-bottom-bar-settings-flex, 0 0 auto);
 		margin: 0;
 	}
 
 	.hub-table__bottom-bar-info {
-		order: var(--hub-table-bottom-bar-info-order);
-		flex: var(--hub-table-bottom-bar-info-flex);
+		order: var(--hub-table-bottom-bar-info-order, 3);
+		flex: var(--hub-table-bottom-bar-info-flex, 0 0 auto);
 		margin: 0;
 	}
 
@@ -677,32 +480,35 @@
 		display: flex;
 		flex-wrap: nowrap;
 		align-items: center;
-		gap: var(--hub-table-filter-button-gap);
-		padding: var(--hub-table-filter-button-padding-y) var(--hub-table-filter-button-padding-x);
+		gap: var(--hub-table-filter-button-gap, var(--hub-ref-space-2, 0.5rem));
+		padding: var(--hub-table-filter-button-padding-y, 0.375rem) var(--hub-table-filter-button-padding-x, 0.75rem);
 		cursor: pointer;
-		border: var(--hub-table-filter-button-border-width) solid var(--hub-table-filter-button-border-color);
-		border-radius: var(--hub-table-filter-button-border-radius);
-		transition: var(--hub-table-filter-button-transition);
+		border: var(--hub-table-filter-button-border-width, 1px) solid var(--hub-table-filter-button-border-color, transparent);
+		border-radius: var(--hub-table-filter-button-border-radius, var(--hub-ref-radius-sm, 0.25rem));
+		transition: var(--hub-table-filter-button-transition, all 0.2s ease);
 
 		// Hover state
 		&:hover {
-			background-color: var(--hub-table-filter-button-hover-bg);
+			background-color: var(--hub-table-filter-button-hover-bg, rgba(0, 0, 0, 0.05));
 		}
 
 		// Active state (when filters are applied)
 		&--active {
-			background-color: var(--hub-table-filter-button-active-bg);
-			border-color: var(--hub-table-filter-button-active-border-color);
+			background-color: var(
+				--hub-table-filter-button-active-bg,
+				color-mix(in oklch, var(--hub-sys-color-success, #198754) 10%, transparent)
+			);
+			border-color: var(--hub-table-filter-button-active-border-color, var(--hub-sys-color-success, #198754));
 
 			.hub-table__filter-button-icon {
-				color: var(--hub-table-filter-button-icon-active-color);
+				color: var(--hub-table-filter-button-icon-active-color, var(--hub-sys-color-success, #198754));
 			}
 		}
 
 		// Icon inside filter button
 		&-icon {
 			transition: color 0.2s ease;
-			color: var(--hub-table-filter-button-icon-color);
+			color: var(--hub-table-filter-button-icon-color, var(--hub-sys-text-muted, #6c757d));
 		}
 	}
 
@@ -711,17 +517,17 @@
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		min-width: var(--hub-table-filter-count-size);
-		height: var(--hub-table-filter-count-size);
-		padding: 0 var(--hub-table-filter-count-padding-x);
-		font-size: var(--hub-table-filter-count-font-size);
-		font-weight: var(--hub-table-filter-count-font-weight);
+		min-width: var(--hub-table-filter-count-size, 1.25rem);
+		height: var(--hub-table-filter-count-size, 1.25rem);
+		padding: 0 var(--hub-table-filter-count-padding-x, 0.4em);
+		font-size: var(--hub-table-filter-count-font-size, 0.7rem);
+		font-weight: var(--hub-table-filter-count-font-weight, var(--hub-ref-font-weight-bold, 700));
 		line-height: 1;
-		color: var(--hub-table-filter-count-color);
+		color: var(--hub-table-filter-count-color, var(--hub-ref-color-white, #fff));
 		text-align: center;
 		white-space: nowrap;
-		background-color: var(--hub-table-filter-count-bg);
-		border-radius: var(--hub-table-filter-count-border-radius);
+		background-color: var(--hub-table-filter-count-bg, var(--hub-sys-color-success, #198754));
+		border-radius: var(--hub-table-filter-count-border-radius, var(--hub-ref-radius-pill, 50rem));
 		animation: badge-appear 0.2s ease;
 	}
 
@@ -738,8 +544,18 @@
 	 * search field beside it already is.
 	 */
 	.hub-table__filter-row > .hub-table__filter-cell {
-		padding: var(--hub-table-filter-cell-padding-y) var(--hub-table-filter-cell-padding-x);
-		background-color: var(--hub-table-filter-row-bg);
+		padding: var(
+				--hub-table-filter-cell-padding-y,
+				var(--hub-table-head-padding-y, var(--hub-table-cell-padding-y, var(--hub-ref-space-2, 0.5rem)))
+			)
+			var(
+				--hub-table-filter-cell-padding-x,
+				var(--hub-table-head-padding-x, var(--hub-table-cell-padding-x, var(--hub-ref-space-3, 1rem)))
+			);
+		background-color: var(
+			--hub-table-filter-row-bg,
+			var(--hub-table-head-bg, var(--hub-table-bg, var(--hub-sys-surface-page, #fff)))
+		);
 		vertical-align: middle;
 	}
 
@@ -747,28 +563,41 @@
 		display: block;
 		inline-size: 100%;
 		min-inline-size: 0;
-		padding: var(--hub-table-filter-control-padding-y) var(--hub-table-filter-control-padding-x);
+		padding: var(--hub-table-filter-control-padding-y, var(--hub-ref-space-1, 0.25rem))
+			var(--hub-table-filter-control-padding-x, var(--hub-ref-space-2, 0.5rem));
 		font-family: inherit;
-		font-size: var(--hub-table-filter-control-font-size);
+		font-size: var(--hub-table-filter-control-font-size, var(--hub-ref-font-size-sm, 0.875rem));
 		font-weight: var(--hub-ref-font-weight-base, 400);
 		line-height: var(--hub-ref-line-height-base, 1.5);
-		color: var(--hub-table-filter-control-color);
-		background-color: var(--hub-table-filter-control-bg);
+		color: var(--hub-table-filter-control-color, var(--hub-table-container-color, var(--hub-sys-text-primary, #212529)));
+		background-color: var(--hub-table-filter-control-bg, var(--hub-table-container-bg, var(--hub-sys-surface-page, #fff)));
 		background-clip: padding-box;
-		border: var(--hub-table-filter-control-border-width) solid var(--hub-table-filter-control-border-color);
-		border-radius: var(--hub-table-filter-control-border-radius);
+		border: var(--hub-table-filter-control-border-width, var(--hub-table-border-width, var(--hub-ref-border-width, 1px)))
+			solid
+			var(
+				--hub-table-filter-control-border-color,
+				var(--hub-table-border-color, var(--hub-sys-border-color-default, #dee2e6))
+			);
+		border-radius: var(--hub-table-filter-control-border-radius, var(--hub-ref-radius-sm, 0.25rem));
 		transition:
 			border-color 0.15s ease-in-out,
 			box-shadow 0.15s ease-in-out;
 
 		&::placeholder {
-			color: var(--hub-table-filter-control-placeholder-color);
+			color: var(--hub-table-filter-control-placeholder-color, var(--hub-sys-text-muted, #6c757d));
 		}
 
 		&:focus {
 			outline: 0;
-			border-color: var(--hub-table-filter-control-focus-border-color);
-			box-shadow: var(--hub-table-filter-control-focus-shadow);
+			border-color: var(
+				--hub-table-filter-control-focus-border-color,
+				var(--hub-table-accent, var(--hub-sys-color-primary, #0d6efd))
+			);
+			box-shadow: var(
+				--hub-table-filter-control-focus-shadow,
+				0 0 0 0.2rem
+					color-mix(in oklch, var(--hub-table-accent, var(--hub-sys-color-primary, #0d6efd)) 25%, transparent)
+			);
 		}
 
 		// The select keeps the platform's own disclosure arrow: drawing one here would
@@ -782,8 +611,17 @@
 	// A filter holding a value says so, so the row answers both questions at a glance:
 	// which columns can be filtered, and which of them currently are.
 	.hub-table__filter-cell--active {
-		--hub-table-filter-control-bg: var(--hub-table-filter-control-active-bg);
-		--hub-table-filter-control-border-color: var(--hub-table-filter-control-active-border-color);
+		--hub-table-filter-control-bg: var(
+			--hub-table-filter-control-active-bg,
+			var(
+				--hub-table-filter-button-active-bg,
+				color-mix(in oklch, var(--hub-sys-color-success, #198754) 10%, transparent)
+			)
+		);
+		--hub-table-filter-control-border-color: var(
+			--hub-table-filter-control-active-border-color,
+			var(--hub-table-filter-button-active-border-color, var(--hub-sys-color-success, #198754))
+		);
 	}
 
 	/*
@@ -797,15 +635,23 @@
 	.hub-table__delete-filters-btn {
 		display: inline-flex;
 		align-items: center;
-		gap: var(--hub-table-delete-filters-gap);
-		padding: var(--hub-table-delete-filters-padding-y) var(--hub-table-delete-filters-padding-x);
+		gap: var(--hub-table-delete-filters-gap, var(--hub-ref-space-2, 0.5rem));
+		padding: var(--hub-table-delete-filters-padding-y, 0.375rem) var(--hub-table-delete-filters-padding-x, 0.75rem);
 		font-family: inherit;
-		font-size: var(--hub-table-delete-filters-font-size);
+		font-size: var(--hub-table-delete-filters-font-size, var(--hub-table-search-input-font-size, 1rem));
 		line-height: var(--hub-ref-line-height-base, 1.5);
-		color: var(--hub-table-delete-filters-color);
-		background-color: var(--hub-table-delete-filters-bg);
-		border: var(--hub-table-delete-filters-border-width) solid var(--hub-table-delete-filters-border-color);
-		border-radius: var(--hub-table-delete-filters-border-radius);
+		color: var(--hub-table-delete-filters-color, var(--hub-table-container-color, var(--hub-sys-text-primary, #212529)));
+		background-color: var(--hub-table-delete-filters-bg, var(--hub-table-container-bg, var(--hub-sys-surface-page, #fff)));
+		border: var(--hub-table-delete-filters-border-width, var(--hub-table-border-width, var(--hub-ref-border-width, 1px)))
+			solid
+			var(
+				--hub-table-delete-filters-border-color,
+				var(--hub-table-border-color, var(--hub-sys-border-color-default, #dee2e6))
+			);
+		border-radius: var(
+			--hub-table-delete-filters-border-radius,
+			var(--hub-table-border-radius, var(--hub-ref-radius-md, 0.375rem))
+		);
 		cursor: pointer;
 		transition:
 			color 0.15s ease-in-out,
@@ -814,13 +660,16 @@
 
 		&:hover:not(:disabled),
 		&:focus-visible:not(:disabled) {
-			color: var(--hub-table-delete-filters-hover-color);
-			background-color: var(--hub-table-delete-filters-hover-bg);
-			border-color: var(--hub-table-delete-filters-hover-border-color);
+			color: var(--hub-table-delete-filters-hover-color, var(--hub-sys-color-danger, #dc3545));
+			background-color: var(
+				--hub-table-delete-filters-hover-bg,
+				color-mix(in oklch, var(--hub-sys-color-danger, #dc3545) 10%, transparent)
+			);
+			border-color: var(--hub-table-delete-filters-hover-border-color, var(--hub-sys-color-danger, #dc3545));
 		}
 
 		&:disabled {
-			opacity: var(--hub-table-delete-filters-disabled-opacity);
+			opacity: var(--hub-table-delete-filters-disabled-opacity, 0.5);
 			cursor: not-allowed;
 		}
 	}
@@ -828,13 +677,14 @@
 	.hub-table__no-data {
 		display: flex;
 		align-items: center;
-		gap: var(--hub-table-no-data-gap);
-		margin: var(--hub-table-no-data-margin);
-		padding: var(--hub-table-no-data-padding);
-		border: var(--hub-table-no-data-border-width) solid var(--hub-table-no-data-border-color);
-		border-radius: var(--hub-table-no-data-border-radius);
-		background-color: var(--hub-table-no-data-bg);
-		color: var(--hub-table-no-data-color);
+		gap: var(--hub-table-no-data-gap, var(--hub-ref-space-4, 1.5rem));
+		margin: var(--hub-table-no-data-margin, var(--hub-ref-space-4, 1.5rem));
+		padding: var(--hub-table-no-data-padding, var(--hub-ref-space-3, 1rem));
+		border: var(--hub-table-no-data-border-width, var(--hub-ref-border-width, 1px)) solid
+			var(--hub-table-no-data-border-color, var(--hub-sys-color-info-border-subtle, #b6effb));
+		border-radius: var(--hub-table-no-data-border-radius, var(--hub-ref-radius-md, 0.375rem));
+		background-color: var(--hub-table-no-data-bg, var(--hub-sys-color-info-subtle, #cff4fc));
+		color: var(--hub-table-no-data-color, var(--hub-sys-text-primary, #212529));
 	}
 
 	// Header icon spacing
@@ -844,7 +694,7 @@
 
 	// Base icon class
 	.hub-table__icon {
-		@include icon.hub-icon-box(var(--hub-table-icon-color), var(--hub-table-icon-size));
+		@include icon.hub-icon-box(var(--hub-table-icon-color, currentColor), var(--hub-table-icon-size, 1em));
 
 		// Size modifiers
 		&--xs {
@@ -877,100 +727,205 @@
 
 		// Search icon
 		&--search {
-			@include icon.hub-icon-glyph(var(--hub-table-icon-search));
+			@include icon.hub-icon-glyph(
+				var(
+					--hub-table-icon-search,
+					url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z'/%3E%3C/svg%3E")
+				)
+			);
 		}
 
 		// Filter icon
 		&--filter {
-			@include icon.hub-icon-glyph(var(--hub-table-icon-filter));
+			@include icon.hub-icon-glyph(
+				var(
+					--hub-table-icon-filter,
+					url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M3.9 54.9C10.5 40.9 24.5 32 40 32H472c15.5 0 29.5 8.9 36.1 22.9s4.6 30.5-5.2 42.5L320 320.9V448c0 12.1-6.8 23.2-17.7 28.6s-23.8 4.3-33.5-3l-64-48c-8.1-6-12.8-15.5-12.8-25.6V320.9L9 97.3C-.7 85.4-2.8 68.8 3.9 54.9z'/%3E%3C/svg%3E")
+				)
+			);
 		}
 
 		// Eraser/Clear icon
 		&--eraser {
-			@include icon.hub-icon-glyph(var(--hub-table-icon-eraser));
+			@include icon.hub-icon-glyph(
+				var(
+					--hub-table-icon-eraser,
+					url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512'%3E%3Cpath d='M290.7 57.4L57.4 290.7c-25 25-25 65.5 0 90.5l80 80c12 12 28.3 18.7 45.3 18.7H288h9.4H512c17.7 0 32-14.3 32-32s-14.3-32-32-32H387.9L518.6 285.3c25-25 25-65.5 0-90.5L381.3 57.4c-25-25-65.5-25-90.5 0zM297.4 416H288l-105.4 0-80-80L227.3 211.3 364.7 348.7 297.4 416z'/%3E%3C/svg%3E")
+				)
+			);
 		}
 
 		// Close/Dismiss icon
 		&--close {
-			@include icon.hub-icon-glyph(var(--hub-table-icon-close));
+			@include icon.hub-icon-glyph(
+				var(
+					--hub-table-icon-close,
+					url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 384 512'%3E%3Cpath d='M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z'/%3E%3C/svg%3E")
+				)
+			);
 		}
 
 		// Info icon
 		&--info {
-			@include icon.hub-icon-glyph(var(--hub-table-icon-info));
+			@include icon.hub-icon-glyph(
+				var(
+					--hub-table-icon-info,
+					url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z'/%3E%3C/svg%3E")
+				)
+			);
 			margin-right: var(--hub-ref-space-4, 1.5rem);
 		}
 
 		// Sort icons
 		&--sort {
-			@include icon.hub-icon-glyph(var(--hub-table-icon-sort));
+			@include icon.hub-icon-glyph(
+				var(
+					--hub-table-icon-sort,
+					url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'%3E%3Cpath d='M137.4 41.4c12.5-12.5 32.8-12.5 45.3 0l128 128c9.2 9.2 11.9 22.9 6.9 34.9s-16.6 19.8-29.6 19.8H32c-12.9 0-24.6-7.8-29.6-19.8s-2.2-25.7 6.9-34.9l128-128zm0 429.3l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8 29.6-19.8H288c12.9 0 24.6 7.8 29.6 19.8s2.2 25.7-6.9 34.9l-128 128c-12.5 12.5-32.8 12.5-45.3 0z'/%3E%3C/svg%3E")
+				)
+			);
 		}
 
 		&--sort-up {
-			@include icon.hub-icon-glyph(var(--hub-table-icon-sort-up));
+			@include icon.hub-icon-glyph(
+				var(
+					--hub-table-icon-sort-up,
+					url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'%3E%3Cpath d='M182.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-9.2 9.2-11.9 22.9-6.9 34.9s16.6 19.8 29.6 19.8H288c12.9 0 24.6-7.8 29.6-19.8s2.2-25.7-6.9-34.9l-128-128z'/%3E%3C/svg%3E")
+				)
+			);
 		}
 
 		&--sort-down {
-			@include icon.hub-icon-glyph(var(--hub-table-icon-sort-down));
+			@include icon.hub-icon-glyph(
+				var(
+					--hub-table-icon-sort-down,
+					url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'%3E%3Cpath d='M137.4 374.6c12.5 12.5 32.8 12.5 45.3 0l128-128c9.2-9.2 11.9-22.9 6.9-34.9s-16.6-19.8-29.6-19.8H32c-12.9 0-24.6 7.8-29.6 19.8s-2.2 25.7 6.9 34.9l128 128z'/%3E%3C/svg%3E")
+				)
+			);
 		}
 
 		// Caret icons (row-expander disclosure) — consume the overridable vars.
 		&--caret-up {
-			@include icon.hub-icon-glyph(var(--hub-table-icon-caret-up));
+			@include icon.hub-icon-glyph(
+				var(
+					--hub-table-icon-caret-up,
+					url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'%3E%3Cpath d='M182.6 137.4c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-9.2 9.2-11.9 22.9-6.9 34.9s16.6 19.8 29.6 19.8H288c12.9 0 24.6-7.8 29.6-19.8s2.2-25.7-6.9-34.9l-128-128z'/%3E%3C/svg%3E")
+				)
+			);
 		}
 
 		&--caret-down {
-			@include icon.hub-icon-glyph(var(--hub-table-icon-caret-down));
+			@include icon.hub-icon-glyph(
+				var(
+					--hub-table-icon-caret-down,
+					url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'%3E%3Cpath d='M137.4 374.6c12.5 12.5 32.8 12.5 45.3 0l128-128c9.2-9.2 11.9-22.9 6.9-34.9s-16.6-19.8-29.6-19.8H32c-12.9 0-24.6 7.8-29.6 19.8s-2.2 25.7 6.9 34.9l128 128z'/%3E%3C/svg%3E")
+				)
+			);
 		}
 
 		// Chevron icons (for expand/collapse)
 		&--chevron-up {
-			@include icon.hub-icon-glyph(var(--hub-table-icon-chevron-up));
+			@include icon.hub-icon-glyph(
+				var(
+					--hub-table-icon-chevron-up,
+					url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z'/%3E%3C/svg%3E")
+				)
+			);
 		}
 
 		&--chevron-down {
-			@include icon.hub-icon-glyph(var(--hub-table-icon-chevron-down));
+			@include icon.hub-icon-glyph(
+				var(
+					--hub-table-icon-chevron-down,
+					url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z'/%3E%3C/svg%3E")
+				)
+			);
 		}
 
 		&--chevron-left {
-			@include icon.hub-icon-glyph(var(--hub-table-icon-chevron-left));
+			@include icon.hub-icon-glyph(
+				var(
+					--hub-table-icon-chevron-left,
+					url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z'/%3E%3C/svg%3E")
+				)
+			);
 		}
 
 		&--chevron-right {
-			@include icon.hub-icon-glyph(var(--hub-table-icon-chevron-right));
+			@include icon.hub-icon-glyph(
+				var(
+					--hub-table-icon-chevron-right,
+					url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 105.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z'/%3E%3C/svg%3E")
+				)
+			);
 		}
 
 		// Angle icons (for pagination)
 		&--angle-left {
-			@include icon.hub-icon-glyph(var(--hub-table-icon-angle-left));
+			@include icon.hub-icon-glyph(
+				var(
+					--hub-table-icon-angle-left,
+					url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'%3E%3Cpath d='M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z'/%3E%3C/svg%3E")
+				)
+			);
 		}
 
 		&--angle-right {
-			@include icon.hub-icon-glyph(var(--hub-table-icon-angle-right));
+			@include icon.hub-icon-glyph(
+				var(
+					--hub-table-icon-angle-right,
+					url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'%3E%3Cpath d='M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z'/%3E%3C/svg%3E")
+				)
+			);
 		}
 
 		&--angle-double-left {
-			@include icon.hub-icon-glyph(var(--hub-table-icon-angle-double-left));
+			@include icon.hub-icon-glyph(
+				var(
+					--hub-table-icon-angle-double-left,
+					url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160zm352-160l-160 160c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L301.3 256 438.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0z'/%3E%3C/svg%3E")
+				)
+			);
 		}
 
 		&--angle-double-right {
-			@include icon.hub-icon-glyph(var(--hub-table-icon-angle-double-right));
+			@include icon.hub-icon-glyph(
+				var(
+					--hub-table-icon-angle-double-right,
+					url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M470.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 256 265.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160zm-352 160l160-160c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L210.7 256 73.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0z'/%3E%3C/svg%3E")
+				)
+			);
 		}
 
 		// Ellipsis icon (for menu)
 		&--ellipsis-v {
-			@include icon.hub-icon-glyph(var(--hub-table-icon-ellipsis-v));
+			@include icon.hub-icon-glyph(
+				var(
+					--hub-table-icon-ellipsis-v,
+					url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 512'%3E%3Cpath d='M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z'/%3E%3C/svg%3E")
+				)
+			);
 		}
 
 		// Trash icon (for delete/remove)
 		&--trash {
-			@include icon.hub-icon-glyph(var(--hub-table-icon-trash));
+			@include icon.hub-icon-glyph(
+				var(
+					--hub-table-icon-trash,
+					url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath d='M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z'/%3E%3C/svg%3E")
+				)
+			);
 			margin-right: var(--hub-ref-space-2, 0.5rem);
 		}
 
 		// Plus icon (for add)
 		&--plus {
-			@include icon.hub-icon-glyph(var(--hub-table-icon-plus));
+			@include icon.hub-icon-glyph(
+				var(
+					--hub-table-icon-plus,
+					url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath d='M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z'/%3E%3C/svg%3E")
+				)
+			);
 			margin-right: var(--hub-ref-space-2, 0.5rem);
 		}
 	}
@@ -978,10 +933,11 @@
 	// Table container
 	.hub-table__container {
 		overflow: var(--hub-table-container-overflow, auto);
-		max-block-size: var(--hub-table-container-max-block-size);
+		max-block-size: var(--hub-table-container-max-block-size, none);
 		background-color: var(--hub-table-container-bg, var(--hub-sys-surface-page, #fff));
-		border: var(--hub-table-border-width) solid var(--hub-table-border-color);
-		border-radius: var(--hub-table-border-radius);
+		border: var(--hub-table-border-width, var(--hub-ref-border-width, 1px)) solid
+			var(--hub-table-border-color, var(--hub-sys-border-color-default, #dee2e6));
+		border-radius: var(--hub-table-border-radius, var(--hub-ref-radius-md, 0.375rem));
 		color: var(--hub-table-container-color, var(--hub-sys-text-primary, #212529));
 	}
 
@@ -991,8 +947,8 @@
 		width: 100%;
 		border-collapse: collapse;
 		border-spacing: 0;
-		vertical-align: var(--hub-table-cell-vertical-align);
-		border-color: var(--hub-table-border-color);
+		vertical-align: var(--hub-table-cell-vertical-align, middle);
+		border-color: var(--hub-table-border-color, var(--hub-sys-border-color-default, #dee2e6));
 		background-color: var(--hub-table-bg, var(--hub-sys-surface-page, #fff));
 		color: var(--hub-table-color, var(--hub-sys-text-primary, #212529));
 
@@ -1021,24 +977,25 @@
 		// The universal selectors reduce selector count and specificity for easier overrides.
 		// stylelint-disable-next-line selector-max-universal
 		> :not(caption) > * > * {
-			padding: var(--hub-table-cell-padding-y) var(--hub-table-cell-padding-x);
-			vertical-align: var(--hub-table-cell-vertical-align);
+			padding: var(--hub-table-cell-padding-y, var(--hub-ref-space-2, 0.5rem))
+				var(--hub-table-cell-padding-x, var(--hub-ref-space-3, 1rem));
+			vertical-align: var(--hub-table-cell-vertical-align, middle);
 			// Following the cascade pattern: https://codepen.io/miriamsuzanne/full/vYNgodb
-			color: var(
-				--hub-table-color-state,
-				var(--hub-table-color-type, var(--hub-table-color, var(--hub-sys-text-primary, #212529)))
-			);
+			color: var(--hub-table-color-state, var(--hub-table-color-type, initial));
 			background-color: var(--hub-table-bg, var(--hub-sys-surface-page, #fff));
 			border-bottom-style: solid;
-			border-bottom-color: var(--hub-table-row-divider-color);
-			border-bottom-width: var(--hub-table-border-width);
+			border-bottom-color: var(
+				--hub-table-row-divider-color,
+				var(--hub-table-border-color, var(--hub-sys-border-color-default, #dee2e6))
+			);
+			border-bottom-width: var(--hub-table-border-width, var(--hub-ref-border-width, 1px));
 			// Leading accent bar (per-cell `--hub-table-cell-bar-*`, default 0/transparent =
 			// invisible) composited ON TOP of the state/tint layer. Painting it from THIS
 			// base rule lets a selected row reveal the bar by setting the two custom
 			// properties, with no specificity battle over the `box-shadow` property.
 			box-shadow:
 				inset var(--hub-table-cell-bar-width, 0) 0 0 0 var(--hub-table-cell-bar-color, transparent),
-				inset 0 0 0 9999px var(--hub-table-bg-state, var(--hub-table-bg-type, var(--hub-table-accent-bg)));
+				inset 0 0 0 9999px var(--hub-table-bg-state, var(--hub-table-bg-type, var(--hub-table-accent-bg, transparent)));
 		}
 
 		> tbody {
@@ -1051,22 +1008,26 @@
 			// Header surface — kept opaque so a sticky header covers the scrolling
 			// body. Defaults match the table surface (no visual change until set).
 			> tr > * {
-				background-color: var(--hub-table-head-bg);
-				color: var(--hub-table-head-color);
-				border-bottom-width: var(--hub-table-head-border-width);
+				background-color: var(--hub-table-head-bg, var(--hub-table-bg, var(--hub-sys-surface-page, #fff)));
+				color: var(--hub-table-head-color, var(--hub-table-color, var(--hub-sys-text-primary, #212529)));
+				border-bottom-width: var(
+					--hub-table-head-border-width,
+					var(--hub-table-border-width, var(--hub-ref-border-width, 1px))
+				);
 			}
 
 			// Header cell chrome — padding and typography, each defaulting to an
 			// existing value (cell padding / browser `th` weight) for zero change.
 			.hub-table__header-cell {
-				padding: var(--hub-table-head-padding-y) var(--hub-table-head-padding-x);
+				padding: var(--hub-table-head-padding-y, var(--hub-table-cell-padding-y, var(--hub-ref-space-2, 0.5rem)))
+					var(--hub-table-head-padding-x, var(--hub-table-cell-padding-x, var(--hub-ref-space-3, 1rem)));
 			}
 
 			.hub-table__header-title-text {
-				font-size: var(--hub-table-head-font-size);
-				font-weight: var(--hub-table-head-font-weight);
-				text-transform: var(--hub-table-head-text-transform);
-				letter-spacing: var(--hub-table-head-letter-spacing);
+				font-size: var(--hub-table-head-font-size, inherit);
+				font-weight: var(--hub-table-head-font-weight, bold);
+				text-transform: var(--hub-table-head-text-transform, none);
+				letter-spacing: var(--hub-table-head-letter-spacing, normal);
 			}
 		}
 	}
@@ -1076,7 +1037,7 @@
 	.hub-table__scrollable {
 		thead {
 			position: sticky;
-			top: var(--hub-table-head-sticky-top);
+			top: var(--hub-table-head-sticky-top, 0);
 			z-index: 10;
 		}
 	}
@@ -1102,14 +1063,16 @@
 
 	// Group divider
 	.hub-table__group-divider {
-		border-top: calc(var(--hub-table-border-width) * 2) solid var(--hub-table-group-separator-color);
+		border-top: calc(var(--hub-table-border-width, var(--hub-ref-border-width, 1px)) * 2) solid
+			var(--hub-table-group-separator-color, var(--hub-sys-border-color-default, #dee2e6));
 	}
 
 	// Small table
 	.hub-table__sm {
 		// stylelint-disable-next-line selector-max-universal
 		> :not(caption) > * > * {
-			padding: var(--hub-table-cell-padding-y-sm) var(--hub-table-cell-padding-x-sm);
+			padding: var(--hub-table-cell-padding-y-sm, var(--hub-ref-space-1, 0.25rem))
+				var(--hub-table-cell-padding-x-sm, var(--hub-ref-space-2, 0.5rem));
 		}
 	}
 
@@ -1117,11 +1080,11 @@
 	.hub-table__bordered {
 		> :not(caption) > * {
 			border-style: solid;
-			border-width: var(--hub-table-border-width) 0;
+			border-width: var(--hub-table-border-width, var(--hub-ref-border-width, 1px)) 0;
 			// stylelint-disable-next-line selector-max-universal
 			> * {
 				border-style: solid;
-				border-width: 0 var(--hub-table-border-width);
+				border-width: 0 var(--hub-table-border-width, var(--hub-ref-border-width, 1px));
 			}
 		}
 	}
@@ -1141,46 +1104,46 @@
 	// Striped rows (odd)
 	.hub-table__striped-odd {
 		> tbody > tr:nth-of-type(odd) > * {
-			color: var(--hub-table-striped-color);
-			background-color: var(--hub-table-striped-bg);
+			color: var(--hub-table-striped-color, var(--hub-sys-text-primary, #212529));
+			background-color: var(--hub-table-striped-bg, var(--hub-sys-state-striped-bg, rgba(0, 0, 0, 0.05)));
 		}
 	}
 
 	// Striped rows (even)
 	.hub-table__striped-even {
 		> tbody > tr:nth-of-type(even) > * {
-			color: var(--hub-table-striped-color);
-			background-color: var(--hub-table-striped-bg);
+			color: var(--hub-table-striped-color, var(--hub-sys-text-primary, #212529));
+			background-color: var(--hub-table-striped-bg, var(--hub-sys-state-striped-bg, rgba(0, 0, 0, 0.05)));
 		}
 	}
 
 	// Striped columns (odd)
 	.hub-table__striped-columns-odd {
 		> :not(caption) > tr > :nth-child(odd) {
-			color: var(--hub-table-striped-color);
-			background-color: var(--hub-table-striped-bg);
+			color: var(--hub-table-striped-color, var(--hub-sys-text-primary, #212529));
+			background-color: var(--hub-table-striped-bg, var(--hub-sys-state-striped-bg, rgba(0, 0, 0, 0.05)));
 		}
 	}
 
 	// Striped columns (even)
 	.hub-table__striped-columns-even {
 		> :not(caption) > tr > :nth-child(even) {
-			color: var(--hub-table-striped-color);
-			background-color: var(--hub-table-striped-bg);
+			color: var(--hub-table-striped-color, var(--hub-sys-text-primary, #212529));
+			background-color: var(--hub-table-striped-bg, var(--hub-sys-state-striped-bg, rgba(0, 0, 0, 0.05)));
 		}
 	}
 
 	// Active table
 	.hub-table__active {
-		--hub-table-color-state: var(--hub-table-active-color);
-		--hub-table-bg-state: var(--hub-table-active-bg);
+		--hub-table-color-state: var(--hub-table-active-color, var(--hub-sys-text-primary, #212529));
+		--hub-table-bg-state: var(--hub-table-active-bg, var(--hub-sys-state-active-bg, rgba(0, 0, 0, 0.1)));
 	}
 
 	// Hover effect
 	.hub-table__hover {
 		> tbody > tr:hover > * {
-			--hub-table-color-state: var(--hub-table-hover-color);
-			--hub-table-bg-state: var(--hub-table-hover-bg);
+			--hub-table-color-state: var(--hub-table-hover-color, var(--hub-sys-text-primary, #212529));
+			--hub-table-bg-state: var(--hub-table-hover-bg, var(--hub-sys-state-hover-bg, rgba(0, 0, 0, 0.075)));
 		}
 	}
 
@@ -1192,8 +1155,18 @@
 	.hub-table__row--selected > *,
 	.hub-table__hover > tbody > tr.hub-table__body-row--selected:hover > *,
 	.hub-table__hover > tbody > tr.hub-table__row--selected:hover > * {
-		--hub-table-color-state: var(--hub-table-selected-color);
-		--hub-table-bg-state: var(--hub-table-selected-bg);
+		--hub-table-color-state: var(--hub-table-selected-color, var(--hub-sys-text-primary, #212529));
+		--hub-table-bg-state: var(
+			--hub-table-selected-bg,
+			var(
+				--hub-table-accent-subtle,
+				color-mix(
+					in oklch,
+					var(--hub-table-accent, var(--hub-sys-color-primary, #0d6efd)) 12%,
+					var(--hub-sys-surface-page, #ffffff)
+				)
+			)
+		);
 	}
 
 	// Leading accent bar on the selected row's first cell — the master-detail
@@ -1203,8 +1176,11 @@
 	// that (more specific) rule for the `box-shadow` property.
 	.hub-table__body-row--selected > *:first-child,
 	.hub-table__row--selected > *:first-child {
-		--hub-table-cell-bar-width: var(--hub-table-selected-bar-width);
-		--hub-table-cell-bar-color: var(--hub-table-selected-bar-color, var(--hub-table-accent));
+		--hub-table-cell-bar-width: var(--hub-table-selected-bar-width, 0);
+		--hub-table-cell-bar-color: var(
+			--hub-table-selected-bar-color,
+			var(--hub-table-accent, var(--hub-sys-color-primary, #0d6efd))
+		);
 	}
 
 	// Selectable rows advertise interactivity with a pointer cursor
@@ -1257,7 +1233,7 @@ $hub-table-variants: primary, secondary, success, danger, warning, info, neutral
 
 		&-btn-icon {
 			margin-right: 0;
-			margin-left: var(--hub-table-batch-actions-btn-icon-gap);
+			margin-left: var(--hub-table-batch-actions-btn-icon-gap, var(--hub-ref-space-1, 0.25rem));
 		}
 	}
 
@@ -1270,20 +1246,42 @@ $hub-table-variants: primary, secondary, success, danger, warning, info, neutral
 		&-input {
 			direction: ltr;
 			text-align: right;
-			border-radius: 0 var(--hub-table-search-border-radius) var(--hub-table-search-border-radius) 0;
+			border-radius: 0
+				var(--hub-table-search-border-radius, var(--hub-table-border-radius, var(--hub-ref-radius-md, 0.375rem)))
+				var(--hub-table-search-border-radius, var(--hub-table-border-radius, var(--hub-ref-radius-md, 0.375rem))) 0;
 		}
 
 		// Mirrored group: the button is now the LEADING segment, so the edge it drops is the
 		// one it shares with the field — the right — and the outer left edge it was left
 		// without gets its hairline back. Same for the clear segment between them.
 		&-button {
-			border-inline-start: var(--hub-table-search-border-width) solid var(--hub-table-search-button-border-color);
+			border-inline-start: var(
+					--hub-table-search-border-width,
+					var(--hub-table-border-width, var(--hub-ref-border-width, 1px))
+				)
+				solid
+				var(
+					--hub-table-search-button-border-color,
+					var(--hub-table-border-color, var(--hub-sys-border-color-default, #dee2e6))
+				);
 			border-inline-end: 0;
-			border-radius: var(--hub-table-search-border-radius) 0 0 var(--hub-table-search-border-radius);
+			border-radius: var(
+					--hub-table-search-border-radius,
+					var(--hub-table-border-radius, var(--hub-ref-radius-md, 0.375rem))
+				)
+				0 0 var(--hub-table-search-border-radius, var(--hub-table-border-radius, var(--hub-ref-radius-md, 0.375rem)));
 		}
 
 		&-clear {
-			border-inline-start: var(--hub-table-search-border-width) solid var(--hub-table-search-input-border-color);
+			border-inline-start: var(
+					--hub-table-search-border-width,
+					var(--hub-table-border-width, var(--hub-ref-border-width, 1px))
+				)
+				solid
+				var(
+					--hub-table-search-input-border-color,
+					var(--hub-table-border-color, var(--hub-sys-border-color-default, #dee2e6))
+				);
 			border-inline-end: 0;
 		}
 	}
@@ -1297,8 +1295,11 @@ $hub-table-variants: primary, secondary, success, danger, warning, info, neutral
 	// negative bar width makes the base cell's inset shadow draw from the right edge.
 	.hub-table__body-row--selected > *:first-child,
 	.hub-table__row--selected > *:first-child {
-		--hub-table-cell-bar-width: calc(-1 * var(--hub-table-selected-bar-width));
-		--hub-table-cell-bar-color: var(--hub-table-selected-bar-color, var(--hub-table-accent));
+		--hub-table-cell-bar-width: calc(-1 * var(--hub-table-selected-bar-width, 0));
+		--hub-table-cell-bar-color: var(
+			--hub-table-selected-bar-color,
+			var(--hub-table-accent, var(--hub-sys-color-primary, #0d6efd))
+		);
 	}
 }
 

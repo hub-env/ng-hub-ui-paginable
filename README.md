@@ -1427,6 +1427,25 @@ timeline / pipeline look, in the list display only; it is skipped in cards. Them
 <hub-list [items]="steps" [connected]="true" [bindLabel]="'title'"> … </hub-list>
 ```
 
+### Where a token goes
+
+Anywhere that reaches the component: on the element, on a container, on a route, or on `:root`
+for the whole application. The library declares no defaults of its own — each one travels as the
+fallback of the `var()` that reads it — so whatever you declare is the only declaration there is
+and wins without `!important` and without a more specific selector.
+
+```scss
+:root {
+	--hub-table-border-radius: 0.5rem;
+	--hub-table-bottom-bar-padding-inline: 1rem;
+}
+```
+
+> Before 22.28.0 this did nothing: the defaults were declared on the `<hub-table>` element
+> itself, and a property declared on an element beats one inherited from an ancestor. If you
+> carry a `:root hub-table { … }` workaround from that era it still works, and you can now
+> unwind it.
+
 ### 🧩 SCSS mixins — one-call theming
 
 Instead of setting the `--hub-*` tokens by hand, you can theme the table or the list in a single `@include`. Every parameter is optional and defaults to `null`, so only the ones you pass are emitted (the rest keep the component defaults). Import the mixin you need from the distributed styles:
@@ -1755,6 +1774,24 @@ The table component follows WCAG 2.1 AA guidelines:
 The component exposes no `ariaLabel` / `ariaDescription` inputs. Its own controls (search,
 clear, sort, pagination) carry translated ARIA labels; to name the table itself, wrap it in a
 labelled region or precede it with a heading the region points at.
+
+Controls built through a form-controls adapter are named too. The table asks the adapter for a
+real `<label>` it can hide — `label` plus `labelType: 'visually-hidden'` on
+`HubPaginableControlConfig` — which is the better outcome, since a label element survives
+translation and answers to voice control where an `aria-label` string does neither. An adapter
+that ignores the request does not leave the control anonymous: the table checks what it got back
+and applies `ariaLabel` itself if nothing else named it.
+
+```ts
+const myAdapter: HubPaginableFormControlsAdapter = {
+	create(container, config) {
+		const ref = container.createComponent(HubInputComponent);
+		ref.setInput('label', config.label ?? '');
+		ref.setInput('labelType', config.labelType ?? 'stacked');
+		// …
+	}
+};
+```
 
 ## 🧪 Testing Guide
 

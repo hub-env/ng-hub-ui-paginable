@@ -65,10 +65,13 @@ This table lists the functionalities of the `ng-hub-ui-paginable` library:
 |                             | App-wide default state components (provider `states`)                                                              |     ✅      |   ✅    |
 | **Configuration**           | App-wide input defaults (`providePaginable({ defaults })`)                                                         |     ✅      |   ❌    |
 |                             | Agnostic form-controls adapter (`provideHubPaginableFormControls`)                                                 |     ✅      |   ✅    |
+|                             | Hidden label for an adapter-built control (`label` + `labelType: 'visually-hidden'`)                               |     ✅      |   ❌    |
+|                             | Accessible name guaranteed on an adapter-built control, whatever the adapter honours                               |     ✅      |   ❌    |
 |                             | Agnostic row-actions adapter (`provideHubPaginableActions`)                                                        |     ✅      |   ✅    |
 |                             | RTL layout                                                                                                         |     ✅      |   ✅    |
 |                             | Internationalization (i18n)                                                                                        |     ✅      |   ✅    |
 |                             | CSS variables theming                                                                                              |     ✅      |   ✅    |
+|                             | Tokens settable from `:root`, a container or a route (no default declared on the component)                        |     ✅      |   ❌    |
 
 ## Paginable List (`hub-ui-list`)
 

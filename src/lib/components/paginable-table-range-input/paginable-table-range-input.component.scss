@@ -17,38 +17,55 @@
 	display: flex;
 	flex-direction: column;
 	inline-size: 100%;
-	color: var(--hub-table-filter-control-color, inherit);
-	background-color: var(--hub-table-filter-control-bg, #fff);
+	color: var(--hub-table-filter-control-color, var(--hub-table-container-color, var(--hub-sys-text-primary, #212529)));
+	background-color: var(--hub-table-filter-control-bg, var(--hub-table-container-bg, var(--hub-sys-surface-page, #fff)));
 	background-clip: padding-box;
-	border: var(--hub-table-filter-control-border-width, 1px) solid var(--hub-table-filter-control-border-color, #dee2e6);
-	border-radius: var(--hub-table-filter-control-border-radius, 0.25rem);
+	border: var(--hub-table-filter-control-border-width, var(--hub-table-border-width, var(--hub-ref-border-width, 1px))) solid
+		var(
+			--hub-table-filter-control-border-color,
+			var(--hub-table-border-color, var(--hub-sys-border-color-default, #dee2e6))
+		);
+	border-radius: var(--hub-table-filter-control-border-radius, var(--hub-ref-radius-sm, 0.25rem));
 	transition:
 		border-color 0.15s ease-in-out,
 		box-shadow 0.15s ease-in-out;
 
 	&:focus-within {
-		border-color: var(--hub-table-filter-control-focus-border-color, #0d6efd);
-		box-shadow: var(--hub-table-filter-control-focus-shadow, none);
+		border-color: var(
+			--hub-table-filter-control-focus-border-color,
+			var(--hub-table-accent, var(--hub-sys-color-primary, #0d6efd))
+		);
+		box-shadow: var(
+			--hub-table-filter-control-focus-shadow,
+			0 0 0 0.2rem color-mix(in oklch, var(--hub-table-accent, var(--hub-sys-color-primary, #0d6efd)) 25%, transparent)
+		);
 	}
 
 	&__field {
 		display: flex;
 		align-items: center;
 		gap: var(--hub-ref-space-1, 0.25rem);
-		padding-inline: var(--hub-table-filter-control-padding-x, 0.5rem);
+		padding-inline: var(--hub-table-filter-control-padding-x, var(--hub-ref-space-2, 0.5rem));
 
 		// One hairline between the two ends, none above the first or below the last:
 		// the wrapper's own border already closes the field.
 		& + & {
-			border-block-start: var(--hub-table-filter-control-border-width, 1px) solid
-				var(--hub-table-filter-control-border-color, #dee2e6);
+			border-block-start: var(
+					--hub-table-filter-control-border-width,
+					var(--hub-table-border-width, var(--hub-ref-border-width, 1px))
+				)
+				solid
+				var(
+					--hub-table-filter-control-border-color,
+					var(--hub-table-border-color, var(--hub-sys-border-color-default, #dee2e6))
+				);
 		}
 	}
 
 	&__label {
 		margin-bottom: 0;
-		color: var(--hub-table-filter-control-placeholder-color, #6c757d);
-		font-size: var(--hub-table-filter-control-font-size, 0.875rem);
+		color: var(--hub-table-filter-control-placeholder-color, var(--hub-sys-text-muted, #6c757d));
+		font-size: var(--hub-table-filter-control-font-size, var(--hub-ref-font-size-sm, 0.875rem));
 		white-space: nowrap;
 	}
 
@@ -58,16 +75,16 @@
 		// column: without this it pushes the field past the cell instead of shrinking.
 		min-inline-size: 0;
 		inline-size: 100%;
-		padding-block: var(--hub-table-filter-control-padding-y, 0.25rem);
+		padding-block: var(--hub-table-filter-control-padding-y, var(--hub-ref-space-1, 0.25rem));
 		font-family: inherit;
-		font-size: var(--hub-table-filter-control-font-size, 0.875rem);
+		font-size: var(--hub-table-filter-control-font-size, var(--hub-ref-font-size-sm, 0.875rem));
 		color: inherit;
 		background-color: transparent;
 		border: none;
 		outline: none;
 
 		&::placeholder {
-			color: var(--hub-table-filter-control-placeholder-color, #6c757d);
+			color: var(--hub-table-filter-control-placeholder-color, var(--hub-sys-text-muted, #6c757d));
 		}
 
 		&::-webkit-calendar-picker-indicator {

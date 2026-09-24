@@ -20,8 +20,29 @@ describe('table dropdown icon tokens', () => {
 		return getComputedStyle(element!).maskImage;
 	}
 
-	function declared(token: string): string {
-		return getComputedStyle(fixture.nativeElement).getPropertyValue(token);
+	/**
+	 * What the component falls back to for `token`, read off its shipped rules.
+	 *
+	 * The default used to be declared on the host and could be read off the element. It is now
+	 * the fallback of the `var()` that reads it, because a declaration on the host is one no
+	 * consumer can override — see `token-defaults.spec.ts`.
+	 */
+	function fallbackFor(token: string): string {
+		const styles = (
+			(HubPaginableTableDropdownComponent as unknown as { ɵcmp: { styles: string[] } }).ɵcmp.styles ?? []
+		).join('\n');
+		const opens = styles.indexOf(`var(${token},`);
+
+		expect(opens, `${token} is never read`).toBeGreaterThan(-1);
+
+		let depth = 0;
+		for (let i = opens + 3; i < styles.length; i++) {
+			if (styles[i] === '(') depth++;
+			else if (styles[i] === ')' && --depth === 0) {
+				return styles.slice(styles.indexOf(',', opens) + 1, i).trim();
+			}
+		}
+		throw new Error(`unterminated var(${token}, …)`);
 	}
 
 	beforeEach(() => {
@@ -37,16 +58,16 @@ describe('table dropdown icon tokens', () => {
 	});
 
 	it('draws the trigger glyph from its own variable', () => {
-		expect(maskOf('.hub-table-dropdown__icon')).toBe('var(--hub-table-dropdown-icon-ellipsis-v)');
+		expect(maskOf('.hub-table-dropdown__icon')).toMatch(/^var\(--hub-table-dropdown-icon-ellipsis-v[,)]/);
 	});
 
 	it('ships a default for the glyph it draws', () => {
-		expect(declared('--hub-table-dropdown-icon-ellipsis-v')).toMatch(/^url\(/);
+		expect(fallbackFor('--hub-table-dropdown-icon-ellipsis-v')).toMatch(/^url\(/);
 	});
 
 	it('exposes the ink and the size of its glyph as its own variables', () => {
-		expect(declared('--hub-table-dropdown-icon-color')).not.toBe('');
-		expect(declared('--hub-table-dropdown-icon-size')).not.toBe('');
+		expect(fallbackFor('--hub-table-dropdown-icon-color')).not.toBe('');
+		expect(fallbackFor('--hub-table-dropdown-icon-size')).not.toBe('');
 	});
 
 	it('still lets a consumer supply a glyph class of their own', () => {

@@ -1323,6 +1323,25 @@ En lugar de fijar los tokens `--hub-*` a mano, puedes tematizar la tabla o la li
 @use 'ng-hub-ui-paginable/styles/mixins/list-theme' as *;
 ```
 
+#### Dónde se pone un token
+
+Donde alcance al componente: en el elemento, en un contenedor, en una ruta o en `:root` para
+toda la aplicación. La librería no declara ningún valor por defecto — cada uno viaja como
+fallback del `var()` que lo lee —, así que lo que declares es la única declaración que existe y
+gana sin `!important` y sin un selector más específico.
+
+```scss
+:root {
+	--hub-table-border-radius: 0.5rem;
+	--hub-table-bottom-bar-padding-inline: 1rem;
+}
+```
+
+> Antes de 22.28.0 esto no hacía nada: los valores por defecto se declaraban sobre el propio
+> elemento `<hub-table>`, y una propiedad declarada en el elemento gana a la que heredaría de un
+> antepasado. Si arrastras un apaño `:root hub-table { … }` de entonces, sigue funcionando y ya
+> puedes deshacerlo.
+
 #### `hub-table-theme(…)` — tematiza `<hub-table>`
 
 Color (`$accent`, `$bg`, `$color`, `$border-color`, `$hover-bg`, `$hover-color`, `$selected-bg`, `$selected-color`, `$striped-bg`, `$striped-color`), borde (`$border-width`, `$border-radius`), densidad (`$cell-padding-x`, `$cell-padding-y`) y footer / barra inferior (`$footer-gap`, `$footer-justify`, `$footer-align`, `$footer-wrap`, `$footer-padding-block`, `$footer-padding-inline`, `$footer-spacing`).
