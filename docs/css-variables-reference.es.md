@@ -179,6 +179,13 @@ Defined on `.hub-paginator`. Control the appearance of pagination controls used 
 
 Defined on `.hub-list`. Control the appearance of the `<hub-ui-list>` component (hierarchical/tree lists).
 
+### Accent & Selection (List)
+
+| Variable                         | Default                                                                                 | Description                                            |
+| -------------------------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| `--hub-list-accent`              | `var(--hub-sys-color-primary, #0d6efd)`                                                 | Accent slot — drives item selection colors             |
+| `--hub-list-accent-subtle`       | `color-mix(in oklch, var(--hub-list-accent) 12%, var(--hub-sys-surface-page, #ffffff))` | Soft accent tint (derived)                             |
+
 ### Bottom Bar Layout (List)
 
 | Variable                                | Default                  | Description                                                          |
@@ -242,7 +249,7 @@ Estos tokens estilizan el paginador embebido desde el host de la lista:
 | `--hub-list-cards-padding-x`        | `var(--hub-list-item-padding-x)`                                   | Horizontal padding of a card                                               |
 | `--hub-list-cards-padding-y`        | `var(--hub-list-item-padding-y)`                                   | Vertical padding of a card                                                 |
 | `--hub-list-cards-border-color`     | `var(--hub-list-item-border-color)`                                | Border color of a card                                                     |
-| `--hub-list-cards-border-width`     | `var(--hub-list-item-border-width, 1px)`                           | Border width of a card                                                     |
+| `--hub-list-cards-border-width`     | `0`                           | Border width of a card                                                     |
 | `--hub-list-cards-border-radius`    | `var(--hub-list-item-border-radius)`                               | Border radius of a card                                                    |
 | `--hub-list-cards-shadow`           | `none`                                                             | Box shadow of a card (e.g. `var(--hub-sys-shadow-sm)`)                     |
 | `--hub-list-cards-hover-bg`         | `var(--hub-list-item-hover-bg)`                                    | Background color of a clickable card on hover                              |
@@ -256,7 +263,7 @@ Estos tokens estilizan el paginador embebido desde el host de la lista:
 | `--hub-list-item-color`         | `var(--hub-sys-text-primary)`         | Text color of list items                                                                                     |
 | `--hub-list-item-bg`            | `var(--hub-sys-surface-page)`         | Fondo de los ítems; por defecto el surface de la página, para que se lean sólidos como las filas de la tabla |
 | `--hub-list-item-border-color`  | `var(--hub-sys-border-color-default)` | Border color of list items                                                                                   |
-| `--hub-list-item-border-width`  | `1px`                                 | Border width of list items                                                                                   |
+| `--hub-list-item-border-width`  | `0`                                 | Border width of list items                                                                                   |
 | `--hub-list-item-border-radius` | `var(--hub-ref-radius-sm)`            | Border radius of list items                                                                                  |
 | `--hub-list-item-gap`           | `var(--hub-ref-space-2)`              | Internal gap within items                                                                                    |
 | `--hub-list-item-padding-x`     | `var(--hub-ref-space-3)`              | Horizontal padding of items                                                                                  |
@@ -278,7 +285,8 @@ Estos tokens estilizan el paginador embebido desde el host de la lista:
 | `--hub-list-empty-bg`           | `var(--hub-ref-surface-2)`            | Background when the list is empty |
 | `--hub-list-empty-border-color` | `var(--hub-sys-border-color-default)` | Border color of the empty state   |
 | `--hub-list-empty-color`        | `var(--hub-sys-text-muted)`           | Text color of the empty state     |
-| `--hub-list-empty-padding`      | `var(--hub-ref-space-3)`              | Padding of the empty state        |
+| `--hub-list-empty-padding-x`    | `var(--hub-ref-space-3, 1rem)`                 | Horizontal padding of the empty state |
+| `--hub-list-empty-padding-y`    | `var(--hub-ref-space-3, 1rem)`                 | Vertical padding of the empty state   |
 
 ### Search
 
@@ -348,7 +356,7 @@ La lista dibuja sus propios glifos y es dueña de las variables que hay detrás,
 | Variable                       | Default                         | Description                                                    |
 | ------------------------------ | ------------------------------- | -------------------------------------------------------------- |
 | `--hub-list-icon-color`        | `currentColor`                  | Color de relleno de los glifos de la lista                     |
-| `--hub-list-icon-size`         | `var(--hub-ref-icon-size, 1em)` | Tamaño de los glifos de la lista                               |
+| `--hub-list-icon-size`         | `2em` | Tamaño de los glifos de la lista                               |
 | `--hub-list-icon-chevron-up`   | `url("…")` (SVG)                | Glifo del disparador de un item padre desplegado               |
 | `--hub-list-icon-chevron-down` | `url("…")` (SVG)                | Glifo del disparador de un item padre plegado                  |
 | `--hub-list-icon-info`         | `url("…")` (SVG)                | Glifo delante de los mensajes de carga, error y sin resultados |
@@ -369,6 +377,15 @@ La lista dibuja sus propios glifos y es dueña de las variables que hay detrás,
 ## Table Variables
 
 Defined on `.hub-table`. Control the appearance of the `<hub-ui-table>` component.
+
+### Accent & Selection
+
+The table reads a single accent slot and derives its family locally (same generative rule as the `--hub-{component}-accent` convention in the design-system docs):
+
+| Variable                         | Default                                                                                  | Description                                                                                                                                        |
+| -------------------------------- | ---------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--hub-table-accent`             | `var(--hub-sys-color-primary, #0d6efd)`                                                  | Accent slot — drives selection tint and accent layers                                                                                              |
+| `--hub-table-accent-subtle`      | `color-mix(in oklch, var(--hub-table-accent) 12%, var(--hub-sys-surface-page, #ffffff))` | Soft accent tint (derived)                                                                                                                         |
 
 ### Bottom Bar Layout (Table)
 
@@ -415,11 +432,11 @@ Estos tokens estilizan el paginador embebido desde el host de la tabla:
 | `--hub-table-container-bg`             | `var(--hub-ref-color-white)`          | Background of the table container                                                                                                                                                                                                                                                      |
 | `--hub-table-container-color`          | `var(--hub-sys-text-primary)`         | Text color of the table container                                                                                                                                                                                                                                                      |
 | `--hub-table-border-color`             | `var(--hub-sys-border-color-default)` | Border color used in the table wrapper                                                                                                                                                                                                                                                 |
-| `--hub-table-border-radius`            | `var(--hub-ref-radius-md)`            | Border radius of the table container                                                                                                                                                                                                                                                   |
-| `--hub-table-border-width`             | `var(--hub-ref-border-width)`         | Border width of the table container                                                                                                                                                                                                                                                    |
+| `--hub-table-border-radius`            | `0`            | Border radius of the table container                                                                                                                                                                                                                                                   |
+| `--hub-table-border-width`             | `0`         | Border width of the table container                                                                                                                                                                                                                                                    |
 | `--hub-table-container-gap`            | `var(--hub-ref-space-3)`              | Separación entre la barra superior, la tabla y la barra inferior                                                                                                                                                                                                                       |
 | `--hub-table-container-max-block-size` | `none`                                | Altura máxima del cuerpo con scroll; con `options.scrollable`, fíjala para acotar el cuerpo y activar la cabecera fija                                                                                                                                                                 |
-| `--hub-table-container-overflow`       | `auto`                                | Comportamiento de scroll del contenedor propio. `[stickyHeader]` lo cambia a `visible` para que el contenedor **no** atrape la cabecera fija y esta se ancle al contenedor scrollable del propio consumidor (una caja `max-height` + `overflow:auto`). Puedes forzar un valor concreto |
+| `--hub-table-container-overflow`       | `visible`                                | Comportamiento de scroll del contenedor propio. `[stickyHeader]` lo cambia a `visible` para que el contenedor **no** atrape la cabecera fija y esta se ancle al contenedor scrollable del propio consumidor (una caja `max-height` + `overflow:auto`). Puedes forzar un valor concreto |
 | `--hub-table-head-sticky-top`          | `0`                                   | Desplazamiento de la cabecera fija mientras el cuerpo hace scroll (p. ej. para dejar hueco a una barra de herramientas)                                                                                                                                                                |
 
 ### Search (Table)
@@ -450,7 +467,7 @@ Estos tokens estilizan el paginador embebido desde el host de la tabla:
 | `--hub-table-bg`                    | `var(--hub-ref-color-white)`          | Background of the `<table>` element                                                                                                                                    |
 | `--hub-table-color`                 | `var(--hub-sys-text-primary)`         | Text color inside the table                                                                                                                                            |
 | `--hub-table-border-color`          | `var(--hub-sys-border-color-default)` | Border color of table rows and cells                                                                                                                                   |
-| `--hub-table-border-width`          | `var(--hub-ref-border-width)`         | Border width of table rows and cells                                                                                                                                   |
+| `--hub-table-border-width`          | `0`         | Border width of table rows and cells                                                                                                                                   |
 | `--hub-table-group-separator-color` | `var(--hub-sys-border-color-default)` | Color of the separator between thead and tbody                                                                                                                         |
 | `--hub-table-head-bg`               | `var(--hub-table-bg)`                 | Superficie de la cabecera (thead); se mantiene opaca para que la cabecera fija cubra el cuerpo al hacer scroll                                                         |
 | `--hub-table-head-color`            | `var(--hub-table-color)`              | Color del texto de la cabecera (thead)                                                                                                                                 |
@@ -490,11 +507,11 @@ These variables power the cascade pattern for row states (`striped`, `hover`, `a
 | ---------------------------- | ------------- | -------------------------------------------------------------------------------------------------------------------- |
 | `--hub-table-accent-bg`      | `transparent` | Base accent background                                                                                               |
 | `--hub-table-bg-type`        | `initial`     | Background set by variant type (striped)                                                                             |
-| `--hub-table-bg-state`       | `initial`     | Background set by interaction state (hover, active)                                                                  |
+| `--hub-table-bg-state`       | `var(--hub-table-active-bg, var(--hub-sys-state-active-bg, rgba(0, 0, 0, 0.1)))`     | Background set by interaction state (hover, active)                                                                  |
 | `--hub-table-color-type`     | `initial`     | Color set by variant type                                                                                            |
 | `--hub-table-color-state`    | `var(--hub-table-active-color, var(--hub-table-color, var(--hub-sys-text-primary, #212529)))`     | Color set by interaction state                                                                                       |
-| `--hub-table-cell-bar-width` | `0`           | Ancho de la barra de acento por celda (interno; la fila seleccionada lo fija desde `--hub-table-selected-bar-width`) |
-| `--hub-table-cell-bar-color` | `transparent` | Color de la barra de acento por celda (interno; se fija desde `--hub-table-selected-bar-color`)                      |
+| `--hub-table-cell-bar-width` | `var(--hub-table-selected-bar-width, 0)`           | Ancho de la barra de acento por celda (interno; la fila seleccionada lo fija desde `--hub-table-selected-bar-width`) |
+| `--hub-table-cell-bar-color` | `var(--hub-table-selected-bar-color, var(--hub-table-accent, var(--hub-sys-color-primary, #0d6efd)))` | Color de la barra de acento por celda (interno; se fija desde `--hub-table-selected-bar-color`)                      |
 
 ### Fila seleccionada (Table)
 
@@ -534,10 +551,10 @@ El tinte de selección se aplica tanto a la selección propia de la librería co
 | `--hub-table-filter-row-bg`                      | `var(--hub-table-head-bg)`                           | Fondo de la fila de filtros bajo la cabecera              |
 | `--hub-table-filter-cell-padding-x`              | `var(--hub-table-head-padding-x)`                    | Padding horizontal de una celda de filtro                 |
 | `--hub-table-filter-cell-padding-y`              | `var(--hub-table-head-padding-y)`                    | Padding vertical de una celda de filtro                   |
-| `--hub-table-filter-control-bg`                  | `var(--hub-table-container-bg)`                      | Fondo de un control de filtro                             |
+| `--hub-table-filter-control-bg`                  | `var(--hub-table-filter-control-active-bg, var(--hub-table-filter-button-active-bg, color-mix(in oklch, var(--hub-sys-color-success, #198754) 10%, transparent)))`                      | Fondo de un control de filtro                             |
 | `--hub-table-filter-control-color`               | `var(--hub-table-container-color)`                   | Color de texto de un control de filtro                    |
 | `--hub-table-filter-control-placeholder-color`   | `var(--hub-sys-text-muted)`                          | Color del placeholder y de las etiquetas del rango        |
-| `--hub-table-filter-control-border-color`        | `var(--hub-table-border-color)`                      | Color del borde de un control de filtro                   |
+| `--hub-table-filter-control-border-color`        | `var(--hub-table-filter-control-active-border-color, var(--hub-table-filter-button-active-border-color, var(--hub-sys-color-success, #198754)))`                      | Color del borde de un control de filtro                   |
 | `--hub-table-filter-control-border-width`        | `var(--hub-table-border-width)`                      | Grosor del borde de un control de filtro                  |
 | `--hub-table-filter-control-border-radius`       | `var(--hub-ref-radius-sm)`                           | Radio del borde de un control de filtro                   |
 | `--hub-table-filter-control-padding-x`           | `var(--hub-ref-space-2)`                             | Padding horizontal dentro del control                     |
@@ -561,13 +578,28 @@ El tinte de selección se aplica tanto a la selección propia de la librería co
 | `--hub-table-delete-filters-hover-color`         | `var(--hub-sys-color-danger)`                        | Color del texto y del icono en hover/foco                 |
 | `--hub-table-delete-filters-disabled-opacity`    | `0.5`                                                | Opacidad mientras hay una petición de filtrado en curso   |
 | `--hub-table-icon-color`                         | `currentColor`                                       | Color of table icons (sort, filter, etc.)                 |
-| `--hub-table-icon-size`                          | `1em`                                                | Base size of table icons                                  |
+| `--hub-table-icon-size`                          | `var(--hub-table-search-clear-icon-size, 0.75em)`                                                | Base size of table icons                                  |
 | `--hub-table-icon-sort`                          | `url("…")` (SVG)                                     | Glifo del indicador de orden (sin ordenar)                |
 | `--hub-table-icon-sort-up`                       | `url("…")` (SVG)                                     | Glifo del indicador de orden ascendente                   |
 | `--hub-table-icon-sort-down`                     | `url("…")` (SVG)                                     | Glifo del indicador de orden descendente                  |
 | `--hub-table-icon-caret-up`                      | `url("…")` (SVG)                                     | Glifo del expansor de fila (expandido)                    |
 | `--hub-table-icon-caret-down`                    | `url("…")` (SVG)                                     | Glifo del expansor de fila (colapsado)                    |
 | `--hub-table-icon-close`                         | `url("…")` (SVG)                                     | Glifo de cierre que usa el borrado del cuadro de búsqueda |
+| `--hub-table-icon-search`             | `url("…")` (SVG) | Table search icon (SVG, overridable via mask-image)                                                                                                                                                   |
+| `--hub-table-icon-filter`             | `url("…")` (SVG) | Table filter icon (SVG, overridable via mask-image)                                                                                                                                                   |
+| `--hub-table-icon-eraser`             | `url("…")` (SVG) | Table eraser icon (SVG, overridable via mask-image)                                                                                                                                                   |
+| `--hub-table-icon-info`               | `url("…")` (SVG) | Table info icon (SVG, overridable via mask-image)                                                                                                                                                     |
+| `--hub-table-icon-chevron-up`         | `url("…")` (SVG) | Declared for `.hub-table__icon--chevron-up`. Nothing in this package paints that class, and the rule is scoped to the table's own view, so overriding this variable changes nothing on screen         |
+| `--hub-table-icon-chevron-down`       | `url("…")` (SVG) | Declared for `.hub-table__icon--chevron-down`. Nothing in this package paints that class, and the rule is scoped to the table's own view, so overriding this variable changes nothing on screen       |
+| `--hub-table-icon-chevron-left`       | `url("…")` (SVG) | Declared for `.hub-table__icon--chevron-left`. Nothing in this package paints that class, and the rule is scoped to the table's own view, so overriding this variable changes nothing on screen       |
+| `--hub-table-icon-chevron-right`      | `url("…")` (SVG) | Declared for `.hub-table__icon--chevron-right`. Nothing in this package paints that class, and the rule is scoped to the table's own view, so overriding this variable changes nothing on screen      |
+| `--hub-table-icon-angle-left`         | `url("…")` (SVG) | Declared for `.hub-table__icon--angle-left`. Nothing in this package paints that class, and the rule is scoped to the table's own view, so overriding this variable changes nothing on screen         |
+| `--hub-table-icon-angle-right`        | `url("…")` (SVG) | Declared for `.hub-table__icon--angle-right`. Nothing in this package paints that class, and the rule is scoped to the table's own view, so overriding this variable changes nothing on screen        |
+| `--hub-table-icon-angle-double-left`  | `url("…")` (SVG) | Declared for `.hub-table__icon--angle-double-left`. Nothing in this package paints that class, and the rule is scoped to the table's own view, so overriding this variable changes nothing on screen  |
+| `--hub-table-icon-angle-double-right` | `url("…")` (SVG) | Declared for `.hub-table__icon--angle-double-right`. Nothing in this package paints that class, and the rule is scoped to the table's own view, so overriding this variable changes nothing on screen |
+| `--hub-table-icon-ellipsis-v`         | `url("…")` (SVG) | Declared for `.hub-table__icon--ellipsis-v`; nothing paints that class since 22.18.0 — theme `--hub-table-dropdown-icon-ellipsis-v` instead                                                           |
+| `--hub-table-icon-trash`              | `url("…")` (SVG) | Declared for `.hub-table__icon--trash`; nothing paints that class since 22.18.0 — theme `--hub-filter-icon-trash` instead                                                                             |
+| `--hub-table-icon-plus`               | `url("…")` (SVG) | Declared for `.hub-table__icon--plus`; nothing paints that class since 22.18.0 — theme `--hub-filter-icon-plus` instead                                                                               |
 
 ### Responsive Breakpoints
 

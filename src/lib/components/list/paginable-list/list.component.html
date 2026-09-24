@@ -14,7 +14,9 @@
 							@if (action.icon) {
 								<i class="{{ action.icon }}"></i>
 							}
-							{{ action.title }}
+							@if (batchActionLabel(action); as actionLabel) {
+								{{ actionLabel | unwrapAsync }}
+							}
 						</button>
 					}
 				}
@@ -269,7 +271,7 @@
 				(ngModelChange)="onPerPageChange($event)"
 				[ngModelOptions]="{ standalone: true }"
 			>
-				@for (option of perPageOptions(); track option) {
+				@for (option of resolvedPerPageOptions(); track option) {
 					<option [ngValue]="option" class="hub-paginator__select-option">
 						{{ option }}
 					</option>

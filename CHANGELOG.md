@@ -1,5 +1,22 @@
 # Changelog
 
+## [22.29.1] - 2026-09-24
+
+### Fixed
+
+- **A batch action declared with `label` came out as a button with no words in it.** The action
+  bar of the table and the one of the list read `title` and nothing else, while the interface says
+  — and the row actions have always drawn — that `label` is the visible text and `title` its
+  fallback. So the documented way of naming an action produced an empty button, and an action that
+  declared both showed the wrong one of the two. Both bars now read `label` first and fall back to
+  `title`. An action that only ever set `title` looks exactly as it did; one that set both now
+  shows its `label`, which is the text it asked to show.
+
+- **A list action whose text was an observable printed `[object Object]`.** The list bar
+  interpolated the value straight into the template, and both `label` and `title` are declared as
+  `string | Observable<string>` precisely so a translated action can be handed over unresolved. It
+  goes through `unwrapAsync` now, as the table's has all along.
+
 ## [22.29.0] - 2026-09-24
 
 ### Fixed

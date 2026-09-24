@@ -22,8 +22,8 @@
 							@if (button.icon) {
 								<i class="hub-table__batch-actions-btn-icon {{ button.icon }}"></i>
 							}
-							@if (button.title) {
-								<span class="hub-table__batch-actions-btn-title">{{ button.title | unwrapAsync }}</span>
+							@if (batchActionLabel(button); as actionLabel) {
+								<span class="hub-table__batch-actions-btn-title">{{ actionLabel | unwrapAsync }}</span>
 							}
 						</button>
 					}
@@ -389,7 +389,7 @@
 					(ngModelChange)="perPage.set($event)"
 					[ngModelOptions]="{ standalone: true }"
 				>
-					@for (option of perPageOptions(); track option) {
+					@for (option of resolvedPerPageOptions(); track option) {
 						<option [ngValue]="option" class="hub-paginator__select-option">
 							{{ option }}
 						</option>

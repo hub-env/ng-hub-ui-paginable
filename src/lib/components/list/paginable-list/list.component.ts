@@ -35,8 +35,10 @@ import {
 	HUB_TRANSLATION_PREFIX,
 	resolveHubAccent,
 	TranslatePipe,
-	UcfirstPipe
+	UcfirstPipe,
+	UnwrapAsyncPipe
 } from 'ng-hub-ui-utils';
+import { Observable } from 'rxjs';
 import { HubListDragPlaceholderDirective } from '../../../directives/list-drag-placeholder.directive';
 import { HubListDragPreviewDirective } from '../../../directives/list-drag-preview.directive';
 import { HubPaginableErrorDirective } from '../../../directives/paginable-error.directive';
@@ -130,6 +132,7 @@ const DEFAULT_LIST_OPTIONS: PaginableTableOptions = {
 		HubPaginatorComponent,
 		TranslatePipe,
 		UcfirstPipe,
+		UnwrapAsyncPipe,
 		NgTemplateOutlet,
 		NgClass,
 		HubPaginableStateOutlet
@@ -237,6 +240,21 @@ export class HubListComponent<T = any> implements OnChanges {
 	readonly page = model<number>(1);
 	readonly perPage = model<number>(this.#defaults.perPage ?? 10);
 	readonly perPageOptions = input<Array<number>>(this.#defaults.perPageOptions ?? [10, 20, 50]);
+
+	/**
+	 * The steps the picker offers, with the page size actually in use always among them.
+	 *
+	 * A consumer may set `perPage` to a value the offered steps do not contain — `3` against
+	 * the default `[10, 20, 50]`. Without merging it in, the control matches no option and the
+	 * browser renders it blank: a picker that shows nothing while the list below it is plainly
+	 * paginated. A control has to be able to say what it is currently set to.
+	 */
+	protected readonly resolvedPerPageOptions = computed<number[]>(() => {
+		const current = this.perPage();
+		const offered = this.perPageOptions() ?? [];
+		if (!current || offered.includes(current)) return [...offered];
+		return [...offered, current].sort((a, b) => a - b);
+	});
 	readonly totalItems = model<number>(0);
 
 	/**
@@ -659,6 +677,20 @@ export class HubListComponent<T = any> implements OnChanges {
 			return ['hub-list__batch-action-btn--default', ...normalized];
 		}
 		return normalized;
+	}
+
+	/**
+	 * Visible text of a batch action: its `label`, or its `title` when it has none.
+	 *
+	 * Same reading as the table's, and for the same reason: `label` is what the interface
+	 * calls the visible text, and a batch action is typed as the union with the dropdown,
+	 * which has no `label` for the template to reach.
+	 *
+	 * @param action Batch action button definition.
+	 * @returns The text to render, still wrapped when the consumer gave an observable.
+	 */
+	batchActionLabel(action: PaginableActionButton): string | Observable<string> | undefined {
+		return action.label ?? action.title;
 	}
 
 	buildForm(form: FormArray, items: ReadonlyArray<any>) {

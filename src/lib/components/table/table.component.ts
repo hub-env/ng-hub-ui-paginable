@@ -545,9 +545,24 @@ export class HubTableComponent<T = any> {
 	/** Available options for number of items per page */
 	readonly perPageOptions = input<Array<number>>(this.#defaults.perPageOptions ?? [10, 20, 50, 100]);
 
-	/** `perPageOptions` mapped to `{ value, label }` for the form-controls adapter. */
+	/**
+	 * The steps the picker offers, with the page size actually in use always among them.
+	 *
+	 * A consumer may set `perPage` to a value the offered steps do not contain — `3` against
+	 * the default `[10, 20, 50]`. Without merging it in, the control matches no option and the
+	 * browser renders it blank: a picker that shows nothing while the list below it is plainly
+	 * paginated. A control has to be able to say what it is currently set to.
+	 */
+	protected readonly resolvedPerPageOptions = computed<number[]>(() => {
+		const current = this.perPage();
+		const offered = this.perPageOptions() ?? [];
+		if (!current || offered.includes(current)) return [...offered];
+		return [...offered, current].sort((a, b) => a - b);
+	});
+
+	/** `resolvedPerPageOptions` mapped to `{ value, label }` for the form-controls adapter. */
 	protected readonly perPageControlOptions = computed<HubPaginableControlOption[]>(() =>
-		this.perPageOptions().map((option) => ({ value: option, label: String(option) }))
+		this.resolvedPerPageOptions().map((option) => ({ value: option, label: String(option) }))
 	);
 	/** Current page number (1-based) */
 	readonly page = model<number | null>(null);
@@ -1296,6 +1311,21 @@ export class HubTableComponent<T = any> {
 	 */
 	getBatchActionClassList(button: PaginableActionButton): Array<string> {
 		return this.withDefaultActionClass(button.classlist, 'hub-table__batch-actions-btn--default');
+	}
+
+	/**
+	 * Visible text of a batch action: its `label`, or its `title` when it has none.
+	 *
+	 * The same order the row actions draw, and the one the interface describes — `label` is
+	 * the visible text, `title` the fallback. Resolved here instead of in the template
+	 * because a batch action is typed as the union with the dropdown, which has no `label`,
+	 * and the template's own discrimination on `buttons` narrows nothing for the compiler.
+	 *
+	 * @param button Batch action button definition.
+	 * @returns The text to render, still wrapped when the consumer gave an observable.
+	 */
+	batchActionLabel(button: PaginableActionButton): string | Observable<string> | undefined {
+		return button.label ?? button.title;
 	}
 
 	/**
