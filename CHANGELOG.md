@@ -1,5 +1,43 @@
 # Changelog
 
+## [22.29.0] - 2026-09-24
+
+### Fixed
+
+- **A cell in no state painted itself black, whatever the table was told to be.** The cell rule
+  ended its chain at `initial` — `var(--hub-table-color-state, var(--hub-table-color-type,
+initial))` — and `initial` for `color` is black, so every ordinary cell threw away the colour it
+  had inherited from the table. Under a light theme that lands close enough to the default for
+  nobody to notice; under a dark one the whole grid came out black on a dark surface with
+  `--hub-table-color` set and reaching nothing. Measured in Chrome on a dark sample: `rgb(0, 0, 0)`
+  on `rgb(17, 24, 39)`, a contrast of 1.07:1. The chain now ends at `--hub-table-color`, and the
+  hover, active and selected colours fall back through it before the system layer, so a theme that
+  sets one colour gets it everywhere instead of only where it also named the state.
+
+- **The rows-per-page control was never wearing the skin written for it.** Its two rules were
+  nested under `.hub-paginator` and compiled to a descendant selector, and the control is a
+  SIBLING of `<hub-paginator>` in the table's bottom bar, not a child of it. The surface, the
+  border, the radius and the padding were all declared and not one of them ever matched the
+  element, so what the page showed was the operating system's own `<select>` — which is why a
+  table themed down to its border colour still ended with one control on screen that looked
+  untouched. The rules sit at the top level now and the system widget is off. The caret is the
+  library's own: `--hub-paginator-select-caret` swaps the glyph, `--hub-paginator-select-caret-size`
+  sizes it, and it moves to the other edge under RTL. It is a background image, so its colour is
+  baked into the glyph and cannot follow the text — a dark theme swaps the whole image.
+
+- **The paginator follows the table it paginates.** A table themed down to its corner radius ended
+  with a blue active page and a grey rows-per-page box sitting in its own bottom bar — the one part
+  of the screen that looked forgotten. The paginator's active link and its borders, and the native
+  page-size control's surface, border and text, now fall back to `--hub-table-accent`,
+  `--hub-table-border-color`, `--hub-table-bg` and `--hub-table-color` before they fall back to the
+  system layer. Every `--hub-paginator-*` token keeps its own name and still wins when it is set,
+  so anything themed on purpose stays where it was put.
+
+    The two faults compounded, and only the second one is visible from the code: the control had a
+    full `--hub-paginator-select-*` family of its own and no tie to the table around it, and the
+    rules that read that family reached nothing anyway. Fixing either alone would have left it
+    looking untouched.
+
 ## [22.28.0] - 2026-09-23
 
 ### Changed

@@ -492,7 +492,7 @@ These variables power the cascade pattern for row states (`striped`, `hover`, `a
 | `--hub-table-bg-type`        | `initial`     | Background set by variant type (striped)                                                                             |
 | `--hub-table-bg-state`       | `initial`     | Background set by interaction state (hover, active)                                                                  |
 | `--hub-table-color-type`     | `initial`     | Color set by variant type                                                                                            |
-| `--hub-table-color-state`    | `initial`     | Color set by interaction state                                                                                       |
+| `--hub-table-color-state`    | `var(--hub-table-active-color, var(--hub-table-color, var(--hub-sys-text-primary, #212529)))`     | Color set by interaction state                                                                                       |
 | `--hub-table-cell-bar-width` | `0`           | Ancho de la barra de acento por celda (interno; la fila seleccionada lo fija desde `--hub-table-selected-bar-width`) |
 | `--hub-table-cell-bar-color` | `transparent` | Color de la barra de acento por celda (interno; se fija desde `--hub-table-selected-bar-color`)                      |
 

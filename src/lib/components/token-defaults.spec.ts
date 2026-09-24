@@ -112,6 +112,40 @@ describe('token defaults are themeable from :root', () => {
 		);
 	});
 
+	/**
+	 * `initial` is not a neutral fallback: for `color` it is black, and for most properties it is
+	 * whatever the specification chose rather than whatever the component was told to be.
+	 *
+	 * The table's cell rule ended its chain there — `var(--hub-table-color-state,
+	 * var(--hub-table-color-type, initial))` — so a cell in no state and of no type threw away the
+	 * colour the table had inherited and painted itself black. Under a light theme that reads as
+	 * the default and nobody notices; under a dark one every cell came out black on a dark
+	 * surface, with `--hub-table-color` set and reaching nothing. Measured in Chrome on the
+	 * Midnight sample: `rgb(0, 0, 0)` on `rgb(17, 24, 39)`.
+	 *
+	 * A chain ends at the component's own token, which ends at the system layer, which ends at a
+	 * literal. Never at a keyword that means "forget what you were told".
+	 */
+	it('never ends a token chain at initial', () => {
+		const offenders: string[] = [];
+		for (const [name, component] of COMPONENTS) {
+			for (const sheet of stylesOf(component)) {
+				for (const match of sheet.matchAll(/[\w-]+:[^;{}]*,\s*initial\s*\)/g)) {
+					offenders.push(`${name}: ${match[0].trim()}`);
+				}
+			}
+		}
+
+		expect(offenders).toEqual([]);
+	});
+
+	/** And the chain that broke, in full, so the fallback cannot quietly be shortened again. */
+	it('falls back to the table colour in a cell that is in no state', () => {
+		const table = stylesOf(HubTableComponent).join('\n');
+
+		expect(table).toContain('var(--hub-table-color-state, var(--hub-table-color-type, var(--hub-table-color, inherit)))');
+	});
+
 	it('leaves the variant blocks declaring, since a variant is the component deciding about itself', () => {
 		const table = stylesOf(HubTableComponent).join('\n');
 		// `:host(.hub-table--flush)` reaches the test as `.hub-table--flush[_nghost-…]` and the

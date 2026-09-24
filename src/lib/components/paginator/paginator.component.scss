@@ -1,5 +1,9 @@
 @use '../../styles/mixins/icon' as icon;
 
+// The caret the native page-size control draws for itself once `appearance: none` takes the
+// system one away. Same family as the paginator's arrows, so a consumer swaps one glyph.
+$select-caret: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath fill='%23212529' d='M201.4 374.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 306.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z'/%3E%3C/svg%3E");
+
 // No token defaults are declared here: each one lives as the fallback of the `var()`
 // that reads it, so a consumer's `:root` declaration is the only declaration there is.
 // The reasoning, measured, is at the top of `table.component.scss`.
@@ -23,9 +27,18 @@
 		&--active {
 			.hub-paginator__link {
 				z-index: 3;
-				color: var(--hub-paginator-link-active-color, var(--hub-ref-color-white, #fff));
-				background-color: var(--hub-paginator-link-active-bg, var(--hub-sys-color-primary, #0d6efd));
-				border-color: var(--hub-paginator-link-active-border-color, var(--hub-sys-color-primary, #0d6efd));
+				color: var(
+					--hub-paginator-link-active-color,
+					var(--hub-table-accent-on, var(--hub-sys-color-primary-on, var(--hub-ref-color-white, #fff)))
+				);
+				background-color: var(
+					--hub-paginator-link-active-bg,
+					var(--hub-table-accent, var(--hub-sys-color-primary, #0d6efd))
+				);
+				border-color: var(
+					--hub-paginator-link-active-border-color,
+					var(--hub-table-accent, var(--hub-sys-color-primary, #0d6efd))
+				);
 			}
 		}
 
@@ -47,7 +60,7 @@
 		color: var(--hub-paginator-link-color, var(--hub-sys-color-primary, #0d6efd));
 		background-color: var(--hub-paginator-link-bg, var(--hub-sys-surface-page, #ffffff));
 		border: var(--hub-paginator-link-border-width, 1px) solid
-			var(--hub-paginator-link-border-color, var(--hub-sys-border-color-default, #dee2e6));
+			var(--hub-paginator-link-border-color, var(--hub-table-border-color, var(--hub-sys-border-color-default, #dee2e6)));
 		border-radius: var(--hub-paginator-link-border-radius, var(--hub-ref-radius-sm, 0.25rem));
 		transition: var(
 			--hub-paginator-transition,
@@ -84,36 +97,6 @@
 	&__label {
 		color: var(--hub-paginator-label-color, var(--hub-sys-text-muted, #6c757d));
 		margin-bottom: 0;
-	}
-
-	/*
-	 * The native control's own skin — and only the native control's.
-	 *
-	 * This stylesheet is `encapsulation: None`, so the rule is global. Written as a bare
-	 * class it also landed on the HOST of the `<hub-select>` that
-	 * `provideHubPaginableFormControls` renders, drawing a second border and a second
-	 * padding around a control that already draws its own: the page-size picker came out
-	 * boxed twice. Naming the element confines it to the fallback it was written for.
-	 */
-	select#{&}__select {
-		background-color: var(--hub-paginator-select-bg, var(--hub-sys-surface-page, #ffffff));
-		border: var(--hub-paginator-select-border-width, 1px) solid
-			var(--hub-paginator-select-border-color, var(--hub-sys-border-color-default, #dee2e6));
-		border-radius: var(--hub-paginator-select-border-radius, var(--hub-ref-radius-sm, 0.25rem));
-		color: var(--hub-paginator-select-color, var(--hub-sys-text-primary, #212529));
-		padding: var(--hub-paginator-select-padding-y, var(--hub-ref-space-1, 0.25rem))
-			var(--hub-paginator-select-padding-x, var(--hub-ref-space-2, 0.5rem));
-	}
-
-	/*
-	 * The adapter's control is a component, and its host is a wrapper: whatever box the
-	 * host draws frames the control's own skin a second time. So the host draws none, and
-	 * the field inside is left to be a field.
-	 */
-	hub-select#{&}__select {
-		padding: 0;
-		border: 0;
-		background: transparent;
 	}
 
 	&__info {
@@ -165,6 +148,76 @@
 	}
 }
 
+/*
+ * THE PICKER IS NOT INSIDE THE PAGINATOR.
+ *
+ * `<hub-paginator>` and the rows-per-page control are SIBLINGS in the table's bottom bar — the
+ * control carries a `hub-paginator__*` name because it belongs to the same piece of furniture,
+ * not because it lives inside the element. Nested under `.hub-paginator` these two rules compiled
+ * to a descendant selector that matched nothing at all, so the native control shipped with the
+ * whole of its skin unapplied: not only the system widget, but the surface, the border, the radius
+ * and the padding underneath it. Everything was declared and none of it ever reached the page.
+ *
+ * They stay at the top level for that reason. Both still name their element, because the class is
+ * on the native control AND on the host of the component an adapter builds.
+ */
+/*
+ * The native control's own skin — and only the native control's.
+ *
+ * This stylesheet is `encapsulation: None`, so the rule is global. Written as a bare
+ * class it also landed on the HOST of the `<hub-select>` that
+ * `provideHubPaginableFormControls` renders, drawing a second border and a second
+ * padding around a control that already draws its own: the page-size picker came out
+ * boxed twice. Naming the element confines it to the fallback it was written for.
+ */
+select.hub-paginator__select {
+	/*
+	 * Without this the browser draws the control itself and ignores most of what is below:
+	 * on macOS a `<select>` left at `appearance: auto` keeps the system box, the system
+	 * corner radius and the system caret, so a table themed down to its border colour ended
+	 * with the one control on screen that still looked like the operating system. Every
+	 * token underneath was being set and none of it was reaching the pixels.
+	 */
+	appearance: none;
+	background-color: var(--hub-paginator-select-bg, var(--hub-table-bg, var(--hub-sys-surface-page, #ffffff)));
+	border: var(--hub-paginator-select-border-width, 1px) solid
+		var(--hub-paginator-select-border-color, var(--hub-table-border-color, var(--hub-sys-border-color-default, #dee2e6)));
+	border-radius: var(--hub-paginator-select-border-radius, var(--hub-ref-radius-sm, 0.25rem));
+	color: var(--hub-paginator-select-color, var(--hub-table-color, var(--hub-sys-text-primary, #212529)));
+	padding: var(--hub-paginator-select-padding-y, var(--hub-ref-space-1, 0.25rem))
+		var(--hub-paginator-select-padding-x, var(--hub-ref-space-2, 0.5rem));
+
+	/*
+	 * The caret replaces the system one, and it is a background image rather than a mask
+	 * because a mask over a `<select>` would take the label with it. So its colour is baked
+	 * into the glyph and does not follow the text: a table themed dark swaps the whole image
+	 * through `--hub-paginator-select-caret`, which is why the token exists.
+	 *
+	 * The inline-end padding leaves the glyph its room and must stay BELOW the `padding`
+	 * shorthand above — the shorthand resets it, and with the two the other way round the
+	 * caret sat on top of the text.
+	 */
+	background-image: var(--hub-paginator-select-caret, $select-caret);
+	background-repeat: no-repeat;
+	background-position: right var(--hub-paginator-select-padding-x, var(--hub-ref-space-2, 0.5rem)) center;
+	background-size: var(--hub-paginator-select-caret-size, 0.65em);
+	padding-inline-end: calc(
+		var(--hub-paginator-select-padding-x, var(--hub-ref-space-2, 0.5rem)) * 2 +
+			var(--hub-paginator-select-caret-size, 0.65em)
+	);
+}
+
+/*
+ * The adapter's control is a component, and its host is a wrapper: whatever box the
+ * host draws frames the control's own skin a second time. So the host draws none, and
+ * the field inside is left to be a field.
+ */
+hub-select.hub-paginator__select {
+	padding: 0;
+	border: 0;
+	background: transparent;
+}
+
 /* Mirrors paginator navigation in RTL containers while preserving semantic controls. */
 :where(.hub-table--rtl, .hub-list--rtl, [dir='rtl']) .hub-paginator {
 	flex-direction: row-reverse;
@@ -181,4 +234,9 @@
 :where(.hub-table--rtl, .hub-list--rtl, [dir='rtl']) .hub-paginator__select {
 	direction: rtl;
 	text-align: right;
+}
+
+/* `background-position` has no logical form, so the caret is moved by hand under RTL. */
+:where(.hub-table--rtl, .hub-list--rtl, [dir='rtl']) select.hub-paginator__select {
+	background-position: left var(--hub-paginator-select-padding-x, var(--hub-ref-space-2, 0.5rem)) center;
 }

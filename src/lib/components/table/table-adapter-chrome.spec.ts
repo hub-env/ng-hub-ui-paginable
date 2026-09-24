@@ -105,6 +105,68 @@ describe('adapter-rendered chrome', () => {
 			expect(painted.length).toBeGreaterThan(0);
 		});
 
+		/**
+		 * The rule has to REACH the control, which is a different question from whether it exists.
+		 *
+		 * Every case above reads the stylesheet and none of them reads the element, so all of them
+		 * stayed green while the skin reached nothing at all: the two picker rules were nested under
+		 * `.hub-paginator` and compiled to a descendant selector, and the control is a SIBLING of
+		 * `<hub-paginator>` in the table's bottom bar, not a descendant of it. Declared, correct,
+		 * and never applied — for the surface, the border, the radius and the padding alike.
+		 *
+		 * So this one renders a table and asks the element.
+		 */
+		it('reaches the control the table actually renders', () => {
+			const fixture = TestBed.createComponent(HubTableComponent);
+			fixture.componentRef.setInput('data', [{ id: 1 }, { id: 2 }]);
+			fixture.componentRef.setInput('headers', ['id']);
+			fixture.componentRef.setInput('perPage', 1);
+			fixture.detectChanges();
+
+			const picker = fixture.nativeElement.querySelector('select.hub-paginator__select') as HTMLElement;
+
+			const computed = getComputedStyle(picker);
+
+			expect(picker, 'the native page-size control').toBeTruthy();
+			expect(computed.appearance, 'the system widget is off').toBe('none');
+			expect(computed.backgroundImage, 'the caret it draws in its place').toContain('svg');
+		});
+
+		/**
+		 * Order inside the rule, which the cascade will not rescue.
+		 *
+		 * The caret is a background image and the room for it is `padding-inline-end`. The
+		 * `padding` shorthand resets that longhand, so declared above it the room survives and
+		 * declared below it the room is gone — same rule, same specificity, and the caret ends
+		 * up printed over the last digit of the page size.
+		 */
+		it('keeps the caret its room after the padding shorthand', () => {
+			const [rule] = rulesMatching((s) => s.trim() === 'select.hub-paginator__select');
+			const order = [...(rule.style as unknown as string[])];
+
+			expect(order).toContain('padding-inline-end');
+			expect(order.indexOf('padding-inline-end')).toBeGreaterThan(order.lastIndexOf('padding'));
+		});
+
+		/**
+		 * The one declaration that decides whether any of the others reach the pixels.
+		 *
+		 * Left at `appearance: auto`, a `<select>` on macOS draws the system box, the system
+		 * corner radius and the system caret, and ignores most of what the stylesheet says. Every
+		 * `--hub-paginator-select-*` token was being set, and a table themed down to its border
+		 * colour still ended with the one control on screen that looked like the operating system.
+		 * Nothing in the cascade reports that, which is why it is pinned here.
+		 */
+		it('takes the system widget off the native control, and draws the caret itself', () => {
+			const native = rulesMatching((s) => s.includes('hub-paginator__select') && s.includes('select.'));
+
+			expect(native.map(({ style }) => style.getPropertyValue('appearance'))).toContain('none');
+			expect(
+				native.some(({ style }) => (style.getPropertyValue('background-image') || '').includes('svg')),
+				'a caret of our own, since the system one went with the widget'
+			).toBe(true);
+		});
+
 		/** And the component's host draws no box, because the control inside draws one. */
 		it('strips the box from the adapter host', () => {
 			const host = rulesMatching((s) => s.includes('hub-select.hub-paginator__select'));

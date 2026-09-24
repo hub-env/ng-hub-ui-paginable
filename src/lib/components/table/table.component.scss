@@ -981,7 +981,13 @@
 				var(--hub-table-cell-padding-x, var(--hub-ref-space-3, 1rem));
 			vertical-align: var(--hub-table-cell-vertical-align, middle);
 			// Following the cascade pattern: https://codepen.io/miriamsuzanne/full/vYNgodb
-			color: var(--hub-table-color-state, var(--hub-table-color-type, initial));
+			//
+			// The last fallback has to be the table's own colour. It used to be `initial`, which
+			// for `color` is black — so a cell in no state and of no type dropped whatever the
+			// table had inherited and painted itself black. Under a light theme that is close
+			// enough to the default to go unnoticed; under a dark one every cell came out black
+			// on a dark surface, unreadable, with `--hub-table-color` set and doing nothing.
+			color: var(--hub-table-color-state, var(--hub-table-color-type, var(--hub-table-color, inherit)));
 			background-color: var(--hub-table-bg, var(--hub-sys-surface-page, #fff));
 			border-bottom-style: solid;
 			border-bottom-color: var(
@@ -1135,14 +1141,14 @@
 
 	// Active table
 	.hub-table__active {
-		--hub-table-color-state: var(--hub-table-active-color, var(--hub-sys-text-primary, #212529));
+		--hub-table-color-state: var(--hub-table-active-color, var(--hub-table-color, var(--hub-sys-text-primary, #212529)));
 		--hub-table-bg-state: var(--hub-table-active-bg, var(--hub-sys-state-active-bg, rgba(0, 0, 0, 0.1)));
 	}
 
 	// Hover effect
 	.hub-table__hover {
 		> tbody > tr:hover > * {
-			--hub-table-color-state: var(--hub-table-hover-color, var(--hub-sys-text-primary, #212529));
+			--hub-table-color-state: var(--hub-table-hover-color, var(--hub-table-color, var(--hub-sys-text-primary, #212529)));
 			--hub-table-bg-state: var(--hub-table-hover-bg, var(--hub-sys-state-hover-bg, rgba(0, 0, 0, 0.075)));
 		}
 	}
@@ -1155,7 +1161,7 @@
 	.hub-table__row--selected > *,
 	.hub-table__hover > tbody > tr.hub-table__body-row--selected:hover > *,
 	.hub-table__hover > tbody > tr.hub-table__row--selected:hover > * {
-		--hub-table-color-state: var(--hub-table-selected-color, var(--hub-sys-text-primary, #212529));
+		--hub-table-color-state: var(--hub-table-selected-color, var(--hub-table-color, var(--hub-sys-text-primary, #212529)));
 		--hub-table-bg-state: var(
 			--hub-table-selected-bg,
 			var(
