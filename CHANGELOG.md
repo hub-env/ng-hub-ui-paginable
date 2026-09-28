@@ -1,5 +1,12 @@
 # Changelog
 
+## [22.29.2] - 2026-09-28
+
+### Changed
+
+- **The family list in both READMEs names `ng-hub-ui-spreadsheet`.** The sheet joined the family
+  and the other lists had not caught up. Documentation only: no code, types or styles change.
+
 ## [22.29.1] - 2026-09-24
 
 ### Fixed
