@@ -276,6 +276,26 @@ describe('HubTableComponent', () => {
 			expect(component.numberOfPages()).toBeNull();
 		});
 
+		it('floors the page count at one for an empty client-side table', () => {
+			component.perPage.set(10);
+			component.totalItems.set(null);
+			fixture.componentRef.setInput('data', []);
+			fixture.detectChanges();
+
+			expect(component.clientMode()).toBe(true);
+			expect(component.numberOfPages()).toBe(1);
+		});
+
+		it('treats a server-side total of zero as a single, known page', () => {
+			component.perPage.set(10);
+			component.totalItems.set(0);
+			fixture.componentRef.setInput('data', []);
+			fixture.detectChanges();
+
+			expect(component.clientMode()).toBe(false);
+			expect(component.numberOfPages()).toBe(1);
+		});
+
 		it('should render the initial per-page value in the selector', async () => {
 			component.page.set(1);
 			component.perPage.set(50);

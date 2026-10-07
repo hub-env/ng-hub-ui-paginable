@@ -1,5 +1,20 @@
 # Changelog
 
+## [22.29.3] - 2026-10-07
+
+### Fixed
+
+- **An empty table showed a “next” that never stopped.** With no rows, `HubTableComponent.numberOfPages` came out `0` in client mode and
+  `null` in server mode (a falsy `totalItems = 0` fell through to the unknown branch). Both read downstream as “page count unknown”, so the
+  paginator drew its unbounded branch: a lone “next”, no “last”, and no disabled state. Each click moved to a page that did not exist, and in
+  server mode asked the API for data past the end. The count now floors at one, so an empty collection is a single empty page with its controls
+  disabled. Reported in `hub-env/hub-ui#15` by `@devorgpl`.
+
+- **A disabled paginator control was only disabled for the mouse.** The first, previous, next and last controls are anchors, and “disabled” was
+  a CSS class carrying `pointer-events: none`. They stayed in the tab order and their `(click)` handler still ran, so pressing Enter on a
+  control that looked disabled still moved the page. They now carry `aria-disabled`, leave the tab order, and the jump itself refuses to run
+  while the control is disabled.
+
 ## [22.29.2] - 2026-09-28
 
 ### Changed

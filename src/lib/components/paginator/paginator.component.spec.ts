@@ -188,6 +188,51 @@ describe('HubPaginatorComponent', () => {
 		});
 	});
 
+	describe('Disabled controls', () => {
+		/**
+		 * A control greyed out only with `pointer-events: none` still took focus and still ran its
+		 * handler on Enter. A single page is the shape the empty-table bug produced, and there every
+		 * control is disabled: none may navigate, and none may stay tabbable.
+		 */
+		it('marks every control disabled and out of the tab order on a single page', () => {
+			component.page.set(1);
+			fixture.componentRef.setInput('numberOfPages', 1);
+			fixture.detectChanges();
+
+			const anchors = Array.from(
+				fixture.nativeElement.querySelectorAll('.hub-paginator__item--disabled a')
+			) as HTMLAnchorElement[];
+
+			expect(anchors.length).toBe(4);
+			anchors.forEach((anchor) => {
+				expect(anchor.getAttribute('aria-disabled')).toBe('true');
+				expect(anchor.getAttribute('tabindex')).toBe('-1');
+			});
+		});
+
+		it('refuses to advance when the next control is disabled', () => {
+			component.page.set(1);
+			fixture.componentRef.setInput('numberOfPages', 1);
+			fixture.detectChanges();
+
+			component.goToNext();
+			fixture.detectChanges();
+
+			expect(component.page()).toBe(1);
+		});
+
+		it('still advances when the last page is unknown', () => {
+			component.page.set(1);
+			fixture.componentRef.setInput('numberOfPages', null);
+			fixture.detectChanges();
+
+			component.goToNext();
+			fixture.detectChanges();
+
+			expect(component.page()).toBe(2);
+		});
+	});
+
 	describe('Signal Reactivity', () => {
 		it('should react to page signal changes', () => {
 			const initialPage = component.page();

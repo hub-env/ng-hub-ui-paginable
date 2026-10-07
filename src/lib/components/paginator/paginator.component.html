@@ -6,7 +6,9 @@
 				class="hub-paginator__link"
 				href="javascript:{}"
 				[attr.aria-label]="'FIRST' | translate | ucfirst"
-				(click)="page.set(getFirstControlTarget())"
+				[attr.aria-disabled]="isFirstControlDisabled() ? 'true' : null"
+				[attr.tabindex]="isFirstControlDisabled() ? -1 : null"
+				(click)="goToFirst()"
 			>
 				<i class="hub-paginator__icon hub-paginator__icon--angle-double-left"></i>
 			</a>
@@ -17,7 +19,9 @@
 				class="hub-paginator__link"
 				href="javascript:{}"
 				[attr.aria-label]="'PREVIOUS' | translate | ucfirst"
-				(click)="page.set(getPreviousControlTarget())"
+				[attr.aria-disabled]="isPreviousControlDisabled() ? 'true' : null"
+				[attr.tabindex]="isPreviousControlDisabled() ? -1 : null"
+				(click)="goToPrevious()"
 			>
 				<span class="hub-paginator__icon-wrapper" aria-hidden="true">
 					<i class="hub-paginator__icon hub-paginator__icon--angle-left"></i>
@@ -58,7 +62,9 @@
 					class="hub-paginator__link"
 					href="javascript:{}"
 					[attr.aria-label]="'NEXT' | translate | ucfirst"
-					(click)="page.set(getNextControlTarget())"
+					[attr.aria-disabled]="isNextControlDisabled() ? 'true' : null"
+					[attr.tabindex]="isNextControlDisabled() ? -1 : null"
+					(click)="goToNext()"
 				>
 					<span class="hub-paginator__icon-wrapper" aria-hidden="true">
 						<i class="hub-paginator__icon hub-paginator__icon--angle-right"></i>
@@ -71,7 +77,9 @@
 					class="hub-paginator__link"
 					href="javascript:{}"
 					[attr.aria-label]="'LAST' | translate | ucfirst"
-					(click)="page.set(getLastControlTarget())"
+					[attr.aria-disabled]="isLastControlDisabled() ? 'true' : null"
+					[attr.tabindex]="isLastControlDisabled() ? -1 : null"
+					(click)="goToLast()"
 				>
 					<i class="hub-paginator__icon hub-paginator__icon--angle-double-right"></i>
 				</a>
@@ -83,7 +91,7 @@
 					class="hub-paginator__link"
 					href="javascript:{}"
 					[attr.aria-label]="'NEXT' | translate | ucfirst"
-					(click)="page.set(getNextControlTarget())"
+					(click)="goToNext()"
 				>
 					<span class="hub-paginator__icon-wrapper" aria-hidden="true">
 						<i class="hub-paginator__icon hub-paginator__icon--angle-right"></i>

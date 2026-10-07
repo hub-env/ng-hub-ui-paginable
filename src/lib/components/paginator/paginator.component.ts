@@ -182,4 +182,51 @@ export class HubPaginatorComponent {
 		}
 		return this.hasKnownLastPage() ? this.page() >= (this.numberOfPages() ?? this.page()) : false;
 	}
+
+	/**
+	 * Jumps to the first page, unless that control is disabled.
+	 *
+	 * The handlers below exist so the guard lives in one place. The controls are anchors, and
+	 * a disabled one used to be disabled only by CSS (`pointer-events: none`): it kept its
+	 * `href` and its `(click)`, so it stayed in the tab order and Enter still ran the handler.
+	 * The template now also marks them `aria-disabled` and takes them out of the tab order;
+	 * these methods refuse the jump so the outcome is the same however the control is reached.
+	 */
+	goToFirst(): void {
+		if (this.isFirstControlDisabled()) {
+			return;
+		}
+		this.page.set(this.getFirstControlTarget());
+	}
+
+	/**
+	 * Steps back one page, unless that control is disabled.
+	 */
+	goToPrevious(): void {
+		if (this.isPreviousControlDisabled()) {
+			return;
+		}
+		this.page.set(this.getPreviousControlTarget());
+	}
+
+	/**
+	 * Steps forward one page, unless that control is disabled. With no known last page the
+	 * control is never disabled, so this also carries the unbounded “load more” case.
+	 */
+	goToNext(): void {
+		if (this.isNextControlDisabled()) {
+			return;
+		}
+		this.page.set(this.getNextControlTarget());
+	}
+
+	/**
+	 * Jumps to the last page, unless that control is disabled.
+	 */
+	goToLast(): void {
+		if (this.isLastControlDisabled()) {
+			return;
+		}
+		this.page.set(this.getLastControlTarget());
+	}
 }

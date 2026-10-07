@@ -575,7 +575,14 @@ export class HubTableComponent<T = any> {
 	 * Computed total number of pages.
 	 *
 	 * In client mode it is derived from the filtered (pre-slice) row count; otherwise
-	 * it uses the consumer-provided `totalItems` exactly as before.
+	 * it uses the consumer-provided `totalItems`.
+	 *
+	 * The count floors at **one**: an empty collection is a single empty page, not zero
+	 * pages. Returning `0` (client) or falling through a falsy `totalItems = 0` to `null`
+	 * (server) used to read as "page count unknown" downstream, which left the paginator
+	 * showing a trailing “next” that never stopped. `null` is reserved here for a total
+	 * that is genuinely unknown, which only happens in server mode with no `totalItems`
+	 * bound at all — never for a total the consumer has told us is zero.
 	 */
 	readonly numberOfPages = computed((): number | null => {
 		const perPage = this.perPage();
@@ -583,10 +590,10 @@ export class HubTableComponent<T = any> {
 			return null;
 		}
 		if (this.clientMode()) {
-			return Math.ceil(this.clientFilteredRows().length / perPage);
+			return Math.max(1, Math.ceil(this.clientFilteredRows().length / perPage));
 		}
-		if (this.totalItems()) {
-			return Math.ceil(this.totalItems()! / perPage);
+		if (this.totalItems() != null) {
+			return Math.max(1, Math.ceil(this.totalItems()! / perPage));
 		}
 		return null;
 	});
