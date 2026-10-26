@@ -1,5 +1,24 @@
 # Changelog
 
+## [22.31.0] - 2026-10-26
+
+### Added
+
+- **`canDropInto` keeps the levels of a tree apart.** `HubListComponent` takes a predicate
+  `(item, parentItem, depth) => boolean` that decides whether a dragged item may land in a
+  collection. A refused collection shows no placeholder and does not take the drop, so a course
+  outline can keep lessons inside modules and modules at the root. Without it, a lesson could be
+  dropped among the modules and the consumer had to undo the move afterwards. The default allows
+  every drop, as before. An empty collection the rule refuses keeps its drop slot closed during the
+  drag (it gets `hub-list__items--refused`), so it never invites a drop it will not take.
+
+### Fixed
+
+- **An outer collection could cancel a drop into a nested one.** A `dragover` inside a nested
+  collection bubbles through the outer ones. An outer collection that refused the dragged item
+  reset the drop effect the inner one had granted, and the browser cancelled the drop. A
+  collection now handles only the hovers over its own box.
+
 ## [22.30.0] - 2026-10-26
 
 ### Added

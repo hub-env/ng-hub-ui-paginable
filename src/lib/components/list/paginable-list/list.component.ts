@@ -296,6 +296,14 @@ export class HubListComponent<T = any> implements OnChanges {
 	readonly sortDisabled = input<(item: T) => boolean>(() => false);
 
 	/**
+	 * Predicate deciding whether a dragged item may land in a collection, given the item that
+	 * owns that collection (`null` for the root) and its depth. It keeps the levels of a tree
+	 * apart, such as lessons inside modules and modules at the root. A refused collection shows
+	 * no placeholder and takes no drop.
+	 */
+	readonly canDropInto = input<(item: T, parentItem: T | null, depth: number) => boolean>(() => true);
+
+	/**
 	 * Enables keyboard reordering on the focusable row: `Space`/`Enter` to pick up and drop,
 	 * arrow keys to move, `Escape` to cancel. Opt-in for accessibility.
 	 */
@@ -1332,18 +1340,32 @@ export class HubListComponent<T = any> implements OnChanges {
 	}
 
 	/**
-	 * Returns whether dropping into the given container is forbidden (own subtree cycle or a
-	 * group mismatch).
+	 * Returns whether dropping into the given container is forbidden: into the dragged item's
+	 * own subtree, or where `canDropInto` refuses it.
 	 *
 	 * @param container Candidate destination container.
 	 * @returns `true` when the drop must be rejected.
 	 */
 	#forbidsDrop(container: ListDragContainerRef): boolean {
+		return this.refusesDrop(container);
+	}
+
+	/**
+	 * Whether the row being dragged may not land in this collection. Read by the template, so an
+	 * empty collection the rule refuses keeps its drop slot closed instead of promising a drop.
+	 *
+	 * @param container The collection to check.
+	 * @returns `true` while a drag is under way and the collection must not take it.
+	 */
+	protected refusesDrop(container: ListDragContainerRef): boolean {
 		const active = this.dragService.active();
 		if (!active) {
 			return true;
 		}
-		return containsNode(active.item, container.parentItem, this.bindChildren());
+		return (
+			containsNode(active.item, container.parentItem, this.bindChildren()) ||
+			!this.canDropInto()(active.item, container.parentItem, container.depth)
+		);
 	}
 
 	/**
@@ -1397,6 +1419,8 @@ export class HubListComponent<T = any> implements OnChanges {
 			if (event.dataTransfer) {
 				event.dataTransfer.dropEffect = 'none';
 			}
+			// Drop the slot left by the last allowed hover, so no placeholder promises a drop here.
+			this.dragService.setTarget(null);
 			return;
 		}
 		event.preventDefault();
@@ -1417,13 +1441,20 @@ export class HubListComponent<T = any> implements OnChanges {
 	 * @param container Hovered container.
 	 */
 	onContainerDragOver(event: DragEvent, container: ListDragContainerRef): void {
-		if (!this.dragService.isDragging()) {
+		// A hover inside a nested collection bubbles up through every outer one, and belongs to
+		// the innermost: an outer collection that refused the item would otherwise reset the drop
+		// effect the inner one granted, and the browser would cancel the drop.
+		if (
+			!this.dragService.isDragging() ||
+			(event.target as HTMLElement).closest('.hub-list__items') !== event.currentTarget
+		) {
 			return;
 		}
 		if (!this.dragService.canDrop(this._listId) || this.#forbidsDrop(container)) {
 			if (event.dataTransfer) {
 				event.dataTransfer.dropEffect = 'none';
 			}
+			this.dragService.setTarget(null);
 			return;
 		}
 		// Allow dropping anywhere over the collection — including the gaps and the placeholder

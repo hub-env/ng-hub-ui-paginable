@@ -121,6 +121,7 @@
 		[class.hub-list__items--root]="isRoot"
 		[class.hub-list__items--cards]="isRoot && isCardsDisplay()"
 		[class.hub-list__items--connected]="isRoot && connected()"
+		[class.hub-list__items--refused]="dragService.isDragging() && refusesDrop(containerRef)"
 		[attr.data-hub-container-key]="containerRef.key"
 		(dragover)="onContainerDragOver($event, containerRef)"
 		(drop)="onContainerDrop($event)"

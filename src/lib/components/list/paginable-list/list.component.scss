@@ -591,8 +591,9 @@
 		}
 	}
 
-	// While a drag is under way, an empty nested collection opens to a slot the pointer can reach.
-	:host(.hub-list--dragging) &__items &__items:empty {
+	// While a drag is under way, an empty nested collection opens to a slot the pointer can reach,
+	// unless `canDropInto` refuses the dragged row there.
+	:host(.hub-list--dragging) &__items &__items:empty:not(.hub-list__items--refused) {
 		min-height: var(--hub-list-placeholder-min-height, 2.5rem);
 		margin-top: var(--hub-list-children-gap, var(--hub-list-item-padding-y, var(--hub-ref-space-2, 0.5rem)));
 	}

@@ -104,6 +104,76 @@ describe('list nested drag', () => {
 		expect(dragService().target().container.depth).toBe(1);
 	});
 
+	it('refuses a lesson among the modules when canDropInto keeps the levels apart', () => {
+		fixture.componentRef.setInput(
+			'canDropInto',
+			(item: Node, parent: Node | null) => 'lessons' in item === (parent === null)
+		);
+		fixture.detectChanges();
+		pickUp('Lesson B');
+		fire(rowOf('Lesson A'), 'dragover');
+		expect(dragService().target().container.depth).toBe(1);
+		const unitTwo = rowOf('Unit two').querySelector('.hub-list__item-content')!;
+		fire(unitTwo, 'dragover');
+		fire(unitTwo, 'drop');
+
+		expect(dragService().target()).toBeNull();
+		fixture.detectChanges();
+		expect(root().querySelectorAll('.hub-list__placeholder').length).toBe(0);
+		expect(sorted.length).toBe(0);
+	});
+
+	it('lets an outer collection that refuses the item leave a nested drop alone', () => {
+		fixture.componentRef.setInput(
+			'canDropInto',
+			(item: Node, parent: Node | null) => 'lessons' in item === (parent === null)
+		);
+		fixture.detectChanges();
+		pickUp('Lesson B');
+		const over = new Event('dragover', { bubbles: true, cancelable: true });
+		const dataTransfer = { dropEffect: 'none' };
+		Object.assign(over, { clientX: 0, clientY: 0, dataTransfer });
+		rowOf('Lesson A').dispatchEvent(over);
+
+		expect(over.defaultPrevented).toBe(true);
+		expect(dataTransfer.dropEffect).toBe('move');
+		expect(dragService().target().container.depth).toBe(1);
+	});
+
+	it('still takes the lesson into another module under the same rule', () => {
+		fixture.componentRef.setInput(
+			'canDropInto',
+			(item: Node, parent: Node | null) => 'lessons' in item === (parent === null)
+		);
+		fixture.detectChanges();
+		pickUp('Lesson A');
+		fixture.detectChanges();
+		const empty = nestedLists()[1];
+		fire(empty, 'dragover');
+		fire(empty, 'drop');
+
+		expect(sorted.length).toBe(1);
+		expect(sorted[0].parentItem.label).toBe('Unit two');
+	});
+
+	it('keeps the drop slot of an empty module closed while a module is dragged', () => {
+		fixture.componentRef.setInput(
+			'canDropInto',
+			(item: Node, parent: Node | null) => 'lessons' in item === (parent === null)
+		);
+		fixture.detectChanges();
+
+		pickUp('Unit one');
+		fixture.detectChanges();
+		expect(nestedLists()[1].classList).toContain('hub-list__items--refused');
+		fire(rowOf('Unit one'), 'dragend');
+		fixture.detectChanges();
+
+		pickUp('Lesson A');
+		fixture.detectChanges();
+		expect(nestedLists()[1].classList).not.toContain('hub-list__items--refused');
+	});
+
 	it('drops a lesson into a module that has none', () => {
 		pickUp('Lesson A');
 		fixture.detectChanges();

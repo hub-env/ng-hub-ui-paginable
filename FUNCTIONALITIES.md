@@ -84,6 +84,7 @@ This table lists the functionalities of the `ng-hub-ui-paginable` library:
 | Cards layout                                         |     ✅      |   ✅    |
 | Nested / tree lists                                  |     ✅      |   ✅    |
 | Drag & drop reordering (incl. cross-list & keyboard) |     ✅      |   ✅    |
+| Drop rules per tree level (`canDropInto`)            |     ✅      |   ✅    |
 | Batch actions                                        |     ✅      |   ✅    |
 | Loading / error / empty states                       |     ✅      |   ✅    |
 | Signal resource as the source (`resource`)           |     ✅      |   ✅    |
