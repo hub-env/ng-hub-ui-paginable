@@ -106,7 +106,7 @@ $select-caret: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'
 
 	&__icon {
 		@include icon.hub-icon-box(
-			var(--hub-paginator-icon-color, var(--hub-sys-text-primary, #212529)),
+			var(--hub-paginator-icon-color, var(--hub-sys-text-body, #212529)),
 			var(--hub-paginator-icon-size, 1em)
 		);
 
@@ -183,7 +183,7 @@ select.hub-paginator__select {
 	border: var(--hub-paginator-select-border-width, 1px) solid
 		var(--hub-paginator-select-border-color, var(--hub-table-border-color, var(--hub-sys-border-color-default, #dee2e6)));
 	border-radius: var(--hub-paginator-select-border-radius, var(--hub-ref-radius-sm, 0.25rem));
-	color: var(--hub-paginator-select-color, var(--hub-table-color, var(--hub-sys-text-primary, #212529)));
+	color: var(--hub-paginator-select-color, var(--hub-table-color, var(--hub-sys-text-body, #212529)));
 	padding: var(--hub-paginator-select-padding-y, var(--hub-ref-space-1, 0.25rem))
 		var(--hub-paginator-select-padding-x, var(--hub-ref-space-2, 0.5rem));
 

@@ -17,7 +17,7 @@
 	display: flex;
 	flex-direction: column;
 	inline-size: 100%;
-	color: var(--hub-table-filter-control-color, var(--hub-table-container-color, var(--hub-sys-text-primary, #212529)));
+	color: var(--hub-table-filter-control-color, var(--hub-table-container-color, var(--hub-sys-text-body, #212529)));
 	background-color: var(--hub-table-filter-control-bg, var(--hub-table-container-bg, var(--hub-sys-surface-page, #fff)));
 	background-clip: padding-box;
 	border: var(--hub-table-filter-control-border-width, var(--hub-table-border-width, var(--hub-ref-border-width, 1px))) solid

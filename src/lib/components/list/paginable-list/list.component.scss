@@ -72,7 +72,7 @@
 		justify-content: center;
 		gap: 0.35rem;
 		padding: var(--hub-list-action-btn-padding-y, 0.375rem) var(--hub-list-action-btn-padding-x, 0.75rem);
-		color: var(--hub-list-action-btn-color, var(--hub-list-item-color, var(--hub-sys-text-primary, #212529)));
+		color: var(--hub-list-action-btn-color, var(--hub-list-item-color, var(--hub-sys-text-body, #212529)));
 		background-color: var(--hub-list-action-btn-bg, var(--hub-sys-surface-page, #ffffff));
 		border: var(--hub-ref-border-width, 1px) solid
 			var(
@@ -237,7 +237,7 @@
 				--hub-list-search-border-color,
 				var(--hub-list-search-input-border-color, var(--hub-sys-border-color-default, #dee2e6))
 			) !important;
-			color: var(--hub-list-search-input-color, var(--hub-sys-text-primary, #212529));
+			color: var(--hub-list-search-input-color, var(--hub-sys-text-body, #212529));
 			border: var(--hub-list-search-border-width, 1px) solid
 				var(
 					--hub-list-search-border-color,
@@ -261,7 +261,7 @@
 			min-width: var(--hub-list-search-button-min-width, 2.75rem);
 			padding: var(--hub-list-search-input-padding-y, 0.375rem) var(--hub-list-search-input-padding-x, 0.75rem);
 			background-color: var(--hub-list-search-btn-bg, var(--hub-sys-surface-elevated, #f8f9fa)) !important;
-			color: var(--hub-list-search-btn-color, var(--hub-sys-text-primary, #212529)) !important;
+			color: var(--hub-list-search-btn-color, var(--hub-sys-text-body, #212529)) !important;
 			border-color: var(
 				--hub-list-search-border-color,
 				var(--hub-list-search-input-border-color, var(--hub-sys-border-color-default, #dee2e6))
@@ -304,7 +304,7 @@
 		padding: var(--hub-list-item-padding-y, var(--hub-ref-space-2, 0.5rem))
 			var(--hub-list-item-padding-x, var(--hub-ref-space-3, 1rem));
 		background-color: var(--hub-list-item-bg, var(--hub-sys-surface-page, #ffffff));
-		color: var(--hub-list-item-color, var(--hub-sys-text-primary, #212529));
+		color: var(--hub-list-item-color, var(--hub-sys-text-body, #212529));
 		border-radius: var(--hub-list-item-border-radius, var(--hub-ref-radius-sm, 0.25rem));
 		transition: background-color 0.15s ease-in-out;
 		position: relative;
@@ -390,7 +390,7 @@
 		> .hub-list__item {
 			height: 100%;
 			background-color: var(--hub-list-cards-bg, var(--hub-list-item-bg, var(--hub-sys-surface-page, #ffffff)));
-			color: var(--hub-list-cards-color, var(--hub-list-item-color, var(--hub-sys-text-primary, #212529)));
+			color: var(--hub-list-cards-color, var(--hub-list-item-color, var(--hub-sys-text-body, #212529)));
 			padding: var(--hub-list-cards-padding-y, var(--hub-list-item-padding-y, var(--hub-ref-space-2, 0.5rem)))
 				var(--hub-list-cards-padding-x, var(--hub-list-item-padding-x, var(--hub-ref-space-3, 1rem)));
 			border: var(--hub-list-cards-border-width, var(--hub-list-item-border-width, 1px)) solid

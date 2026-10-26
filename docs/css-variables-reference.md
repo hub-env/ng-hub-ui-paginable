@@ -80,7 +80,7 @@ Provided by `ng-hub-ui-ds` at `:root`. These are the **sensible defaults** the w
 | `--hub-sys-surface-page`         | `#ffffff`              | Main background color for pages and containers  |
 | `--hub-sys-border-color-default` | `#dee2e6`              | Default border color used across all components |
 | `--hub-sys-color-primary`        | `#0d6efd`              | Primary brand/action color                      |
-| `--hub-sys-text-primary`         | `#212529`              | Primary text color                              |
+| `--hub-sys-text-body`         | `#212529`              | Primary text color                              |
 | `--hub-sys-text-muted`           | `#6c757d`              | Secondary/muted text color                      |
 | `--hub-sys-state-active-bg`      | `rgba(0, 0, 0, 0.1)`   | Background for active state (table rows)        |
 | `--hub-sys-state-hover-bg`       | `rgba(0, 0, 0, 0.075)` | Background for hover state (table rows)         |
@@ -154,7 +154,7 @@ Defined on `.hub-paginator`. Control the appearance of pagination controls used 
 
 | Variable                               | Default                                        | Description                          |
 | -------------------------------------- | ---------------------------------------------- | ------------------------------------ |
-| `--hub-paginator-select-color`         | `var(--hub-sys-text-primary, #212529)`         | Text color of the per-page select    |
+| `--hub-paginator-select-color`         | `var(--hub-sys-text-body, #212529)`         | Text color of the per-page select    |
 | `--hub-paginator-select-bg`            | `var(--hub-sys-surface-page, #ffffff)`         | Background of the per-page select    |
 | `--hub-paginator-select-border-color`  | `var(--hub-sys-border-color-default, #dee2e6)` | Border of the per-page select        |
 | `--hub-paginator-select-border-width`  | `1px`                                          | Border width of the per-page select  |
@@ -166,7 +166,7 @@ Defined on `.hub-paginator`. Control the appearance of pagination controls used 
 
 | Variable                                  | Default                                | Description                                              |
 | ----------------------------------------- | -------------------------------------- | -------------------------------------------------------- |
-| `--hub-paginator-icon-color`              | `var(--hub-sys-text-primary, #212529)` | Color of navigation icons (arrows)                       |
+| `--hub-paginator-icon-color`              | `var(--hub-sys-text-body, #212529)` | Color of navigation icons (arrows)                       |
 | `--hub-paginator-icon-size`               | `1em`                                  | Size of navigation icons                                 |
 | `--hub-paginator-info-color`              | `var(--hub-sys-text-muted, #6c757d)`   | Color of pagination info text ("Showing 1 to 10 of 100") |
 | `--hub-paginator-label-color`             | `var(--hub-sys-text-muted, #6c757d)`   | Color of labels (e.g., "Items per page")                 |
@@ -252,7 +252,7 @@ Defined on `.hub-list`. Control the appearance of the `<hub-ui-list>` component 
 
 | Variable                        | Default                                        | Description                                                                                   |
 | ------------------------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| `--hub-list-item-color`         | `var(--hub-sys-text-primary, #212529)`         | Text color of list items                                                                      |
+| `--hub-list-item-color`         | `var(--hub-sys-text-body, #212529)`         | Text color of list items                                                                      |
 | `--hub-list-item-bg`            | `var(--hub-sys-surface-page, #ffffff)`         | Background of list items; defaults to the page surface so items read as solid like table rows |
 | `--hub-list-item-border-color`  | `var(--hub-sys-border-color-default, #dee2e6)` | Border color of list items                                                                    |
 | `--hub-list-item-border-width`  | `0`                                          | Border width of list items                                                                    |
@@ -287,9 +287,9 @@ Defined on `.hub-list`. Control the appearance of the `<hub-ui-list>` component 
 | `--hub-list-search-input-bg`            | `var(--hub-sys-surface-page, #ffffff)`         | Background of the search input               |
 | `--hub-list-search-input-border-color`  | `var(--hub-sys-border-color-default, #dee2e6)` | Border color of the search input             |
 | `--hub-list-search-input-border-radius` | `var(--hub-ref-radius-sm, 0.25rem)`            | Border radius of the search input            |
-| `--hub-list-search-input-color`         | `var(--hub-sys-text-primary, #212529)`         | Text color of the search input               |
+| `--hub-list-search-input-color`         | `var(--hub-sys-text-body, #212529)`         | Text color of the search input               |
 | `--hub-list-search-btn-bg`              | `var(--hub-sys-surface-elevated, #f8f9fa)`     | Background of the search button              |
-| `--hub-list-search-btn-color`           | `var(--hub-sys-text-primary, #212529)`         | Text/icon color of the search button         |
+| `--hub-list-search-btn-color`           | `var(--hub-sys-text-body, #212529)`         | Text/icon color of the search button         |
 | `--hub-list-search-button-min-width`    | `2.75rem`                                      | Minimum width of the search button           |
 | `--hub-list-search-border-color`        | `var(--hub-list-search-input-border-color)`    | Shared border color for search input/button  |
 | `--hub-list-search-border-width`        | `1px`                                          | Shared border width for search input/button  |
@@ -379,7 +379,7 @@ The table reads a single accent slot and derives its family locally (same genera
 | `--hub-table-accent`             | `var(--hub-sys-color-primary, #0d6efd)`                                                  | Accent slot — drives selection tint and accent layers                                                                                              |
 | `--hub-table-accent-subtle`      | `color-mix(in oklch, var(--hub-table-accent) 12%, var(--hub-sys-surface-page, #ffffff))` | Soft accent tint (derived)                                                                                                                         |
 | `--hub-table-selected-bg`        | `var(--hub-table-accent-subtle)`                                                         | Selected row background. Applies to the built-in selection **and** a consumer-set `hub-table__row--selected` class (via `[rowClass]`)              |
-| `--hub-table-selected-color`     | `var(--hub-sys-text-primary, #212529)`                                                   | Selected row text color                                                                                                                            |
+| `--hub-table-selected-color`     | `var(--hub-sys-text-body, #212529)`                                                   | Selected row text color                                                                                                                            |
 | `--hub-table-selected-bar-width` | `0`                                                                                      | Width of the accent bar on the selected row's leading edge (master-detail "active row"). `0` = off (no visual change); set e.g. `3px` to reveal it |
 | `--hub-table-selected-bar-color` | `var(--hub-table-accent)`                                                                | Colour of the selected-row accent bar                                                                                                              |
 
@@ -414,7 +414,7 @@ The table reads a single accent slot and derives its family locally (same genera
 | Variable                               | Default                                        | Description                                                                                                                                                                                                                                                                  |
 | -------------------------------------- | ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `--hub-table-container-bg`             | `var(--hub-ref-color-white, #fff)`             | Background of the table container                                                                                                                                                                                                                                            |
-| `--hub-table-container-color`          | `var(--hub-sys-text-primary, #212529)`         | Text color of the table container                                                                                                                                                                                                                                            |
+| `--hub-table-container-color`          | `var(--hub-sys-text-body, #212529)`         | Text color of the table container                                                                                                                                                                                                                                            |
 | `--hub-table-border-color`             | `var(--hub-sys-border-color-default, #dee2e6)` | Border color used in the table wrapper                                                                                                                                                                                                                                       |
 | `--hub-table-border-radius`            | `0`           | Border radius of the table container                                                                                                                                                                                                                                         |
 | `--hub-table-border-width`             | `0`             | Border width of the table container                                                                                                                                                                                                                                          |
@@ -429,18 +429,18 @@ The table reads a single accent slot and derives its family locally (same genera
 | ---------------------------------------- | ------------------------------------------------------------------------ | -------------------------------------------------------------------- |
 | `--hub-table-search-input-bg`            | `var(--hub-table-container-bg, var(--hub-sys-surface-page, #fff))`       | Background of the search input                                       |
 | `--hub-table-search-input-border-color`  | `var(--hub-table-border-color)`                                          | Border color of the search input                                     |
-| `--hub-table-search-input-color`         | `var(--hub-table-container-color, var(--hub-sys-text-primary, #212529))` | Text color of the search input                                       |
+| `--hub-table-search-input-color`         | `var(--hub-table-container-color, var(--hub-sys-text-body, #212529))` | Text color of the search input                                       |
 | `--hub-table-search-input-padding-x`     | `0.75rem`                                                                | Horizontal padding of the search input                               |
 | `--hub-table-search-input-padding-y`     | `0.375rem`                                                               | Vertical padding of the search input                                 |
 | `--hub-table-search-input-font-size`     | `1rem`                                                                   | Font size of the search input                                        |
 | `--hub-table-search-button-bg`           | `var(--hub-table-container-bg, var(--hub-sys-surface-page, #fff))`       | Background of the search button                                      |
 | `--hub-table-search-button-border-color` | `var(--hub-table-border-color)`                                          | Border color of the search button                                    |
-| `--hub-table-search-button-color`        | `var(--hub-table-container-color, var(--hub-sys-text-primary, #212529))` | Text/icon color of the search button                                 |
+| `--hub-table-search-button-color`        | `var(--hub-table-container-color, var(--hub-sys-text-body, #212529))` | Text/icon color of the search button                                 |
 | `--hub-table-search-button-min-width`    | `2.75rem`                                                                | Minimum width of the search button                                   |
 | `--hub-table-search-border-width`        | `var(--hub-table-border-width)`                                          | Shared border width for search input/button                          |
 | `--hub-table-search-border-radius`       | `var(--hub-table-border-radius)`                                         | Shared border radius for search input/button                         |
 | `--hub-table-search-clear-color`         | `var(--hub-sys-text-muted, #6c757d)`                                     | Colour of the clear (×) affordance, shown while the box holds a term |
-| `--hub-table-search-clear-hover-color`   | `var(--hub-table-container-color, var(--hub-sys-text-primary, #212529))` | Colour of the clear affordance on hover/focus                        |
+| `--hub-table-search-clear-hover-color`   | `var(--hub-table-container-color, var(--hub-sys-text-body, #212529))` | Colour of the clear affordance on hover/focus                        |
 | `--hub-table-search-clear-icon-size`     | `0.75em`                                                                 | Size of the clear affordance's glyph                                 |
 | `--hub-table-search-clear-padding-x`     | `var(--hub-ref-space-2, 0.5rem)`                                         | Horizontal padding of the clear affordance                           |
 
@@ -449,12 +449,12 @@ The table reads a single accent slot and derives its family locally (same genera
 | Variable                            | Default                                                        | Description                                                                                                               |
 | ----------------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
 | `--hub-table-bg`                    | `var(--hub-ref-color-white, #fff)`                             | Background of the `<table>` element                                                                                       |
-| `--hub-table-color`                 | `var(--hub-sys-text-primary, #212529)`                         | Text color inside the table                                                                                               |
+| `--hub-table-color`                 | `var(--hub-sys-text-body, #212529)`                         | Text color inside the table                                                                                               |
 | `--hub-table-border-color`          | `var(--hub-sys-border-color-default, #dee2e6)`                 | Border color of table rows and cells                                                                                      |
 | `--hub-table-border-width`          | `0`                             | Border width of table rows and cells                                                                                      |
 | `--hub-table-group-separator-color` | `var(--hub-sys-border-color-default, #dee2e6)`                 | Color of the separator between thead and tbody                                                                            |
 | `--hub-table-head-bg`               | `var(--hub-table-bg, var(--hub-sys-surface-page, #fff))`       | Header (thead) surface; kept opaque so a sticky header covers the scrolling body                                          |
-| `--hub-table-head-color`            | `var(--hub-table-color, var(--hub-sys-text-primary, #212529))` | Header (thead) text color                                                                                                 |
+| `--hub-table-head-color`            | `var(--hub-table-color, var(--hub-sys-text-body, #212529))` | Header (thead) text color                                                                                                 |
 | `--hub-table-head-font-size`        | `inherit`                                                      | Header (thead) cell font size                                                                                             |
 | `--hub-table-head-font-weight`      | `bold`                                                         | Header (thead) cell font weight (browser `th` default; set to `var(--hub-ref-font-weight-semibold, 600)` for the DS look) |
 | `--hub-table-head-padding-x`        | `var(--hub-table-cell-padding-x)`                              | Header (thead) cell horizontal padding                                                                                    |
@@ -477,11 +477,11 @@ The table reads a single accent slot and derives its family locally (same genera
 | Variable                    | Default                                                | Description                 |
 | --------------------------- | ------------------------------------------------------ | --------------------------- |
 | `--hub-table-hover-bg`      | `var(--hub-sys-state-hover-bg, rgba(0, 0, 0, 0.075))`  | Background on row hover     |
-| `--hub-table-hover-color`   | `var(--hub-sys-text-primary, #212529)`                 | Text color on row hover     |
+| `--hub-table-hover-color`   | `var(--hub-sys-text-body, #212529)`                 | Text color on row hover     |
 | `--hub-table-active-bg`     | `var(--hub-sys-state-active-bg, rgba(0, 0, 0, 0.1))`   | Background for active rows  |
-| `--hub-table-active-color`  | `var(--hub-sys-text-primary, #212529)`                 | Text color for active rows  |
+| `--hub-table-active-color`  | `var(--hub-sys-text-body, #212529)`                 | Text color for active rows  |
 | `--hub-table-striped-bg`    | `var(--hub-sys-state-striped-bg, rgba(0, 0, 0, 0.05))` | Background for striped rows |
-| `--hub-table-striped-color` | `var(--hub-sys-text-primary, #212529)`                 | Text color for striped rows |
+| `--hub-table-striped-color` | `var(--hub-sys-text-body, #212529)`                 | Text color for striped rows |
 
 ### Accent Layer (Advanced)
 
@@ -493,7 +493,7 @@ These variables power the cascade pattern for row states (`striped`, `hover`, `a
 | `--hub-table-bg-type`        | `initial`                                                      | Background set by variant type (striped)                                                                     |
 | `--hub-table-bg-state`       | `var(--hub-table-active-bg, var(--hub-sys-state-active-bg, rgba(0, 0, 0, 0.1)))`                                                      | Background set by interaction state (hover, active)                                                          |
 | `--hub-table-color-type`     | `initial`                                                      | Color set by variant type                                                                                    |
-| `--hub-table-color-state`    | `var(--hub-table-active-color, var(--hub-table-color, var(--hub-sys-text-primary, #212529)))`                                                      | Color set by interaction state                                                                               |
+| `--hub-table-color-state`    | `var(--hub-table-active-color, var(--hub-table-color, var(--hub-sys-text-body, #212529)))`                                                      | Color set by interaction state                                                                               |
 | `--hub-table-cell-bar-width` | `var(--hub-table-selected-bar-width, 0)`                          | Per-cell leading accent-bar width (internal; the selected row sets it from `--hub-table-selected-bar-width`) |
 | `--hub-table-cell-bar-color` | `var(--hub-table-selected-bar-color, var(--hub-table-accent, var(--hub-sys-color-primary, #0d6efd)))` | Per-cell leading accent-bar colour (internal; set from `--hub-table-selected-bar-color`)                     |
 
@@ -534,7 +534,7 @@ including the two-ended range field. A cell whose filter currently holds a value
 | `--hub-table-filter-cell-padding-x`              | `var(--hub-table-head-padding-x)`                                            | Horizontal padding of a filter cell        |
 | `--hub-table-filter-cell-padding-y`              | `var(--hub-table-head-padding-y)`                                            | Vertical padding of a filter cell          |
 | `--hub-table-filter-control-bg`                  | `var(--hub-table-filter-control-active-bg, var(--hub-table-filter-button-active-bg, color-mix(in oklch, var(--hub-sys-color-success, #198754) 10%, transparent)))`           | Background of a filter control             |
-| `--hub-table-filter-control-color`               | `var(--hub-table-container-color, var(--hub-sys-text-primary, #212529))`     | Text color of a filter control             |
+| `--hub-table-filter-control-color`               | `var(--hub-table-container-color, var(--hub-sys-text-body, #212529))`     | Text color of a filter control             |
 | `--hub-table-filter-control-placeholder-color`   | `var(--hub-sys-text-muted, #6c757d)`                                         | Placeholder and range-label color          |
 | `--hub-table-filter-control-border-color`        | `var(--hub-table-filter-control-active-border-color, var(--hub-table-filter-button-active-border-color, var(--hub-sys-color-success, #198754)))`                                              | Border color of a filter control           |
 | `--hub-table-filter-control-border-width`        | `var(--hub-table-border-width)`                                              | Border width of a filter control           |
@@ -552,7 +552,7 @@ including the two-ended range field. A cell whose filter currently holds a value
 | Variable                                        | Default                                                                      | Description                                    |
 | ----------------------------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------- |
 | `--hub-table-delete-filters-bg`                 | `var(--hub-table-container-bg, var(--hub-sys-surface-page, #fff))`           | Background of the button                       |
-| `--hub-table-delete-filters-color`              | `var(--hub-table-container-color, var(--hub-sys-text-primary, #212529))`     | Text and icon color                            |
+| `--hub-table-delete-filters-color`              | `var(--hub-table-container-color, var(--hub-sys-text-body, #212529))`     | Text and icon color                            |
 | `--hub-table-delete-filters-border-color`       | `var(--hub-table-border-color)`                                              | Border color                                   |
 | `--hub-table-delete-filters-border-width`       | `var(--hub-table-border-width)`                                              | Border width                                   |
 | `--hub-table-delete-filters-border-radius`      | `var(--hub-table-border-radius)`                                             | Border radius                                  |
@@ -645,7 +645,7 @@ Override the system-level tokens to switch all three components to dark mode at 
 [data-theme='dark'],
 .dark-theme {
 	--hub-sys-surface-page: #121212;
-	--hub-sys-text-primary: #f8f9fa;
+	--hub-sys-text-body: #f8f9fa;
 	--hub-sys-text-muted: #adb5bd;
 	--hub-sys-border-color-default: #343a40;
 	--hub-sys-color-primary: #6ea8fe;
@@ -705,7 +705,7 @@ If you use Bootstrap 5, you can bridge Bootstrap tokens into the hub system:
 ```scss
 :root {
 	--hub-sys-surface-page: var(--bs-body-bg);
-	--hub-sys-text-primary: var(--bs-body-color);
+	--hub-sys-text-body: var(--bs-body-color);
 	--hub-sys-border-color-default: var(--bs-border-color);
 	--hub-sys-color-primary: var(--bs-primary);
 	--hub-ref-radius-sm: var(--bs-border-radius-sm);
@@ -772,7 +772,7 @@ Wrap a specific table in a class to override its styles without affecting others
 ┌─────────────────────────────────────────────────────┐
 │  component layer                                    │
 │  --hub-paginator-link-bg: var(--hub-sys-surface-page)│
-│  --hub-table-color: var(--hub-sys-text-primary)│
+│  --hub-table-color: var(--hub-sys-text-body)│
 │  --hub-list-item-hover-bg: var(--hub-ref-surface-2)  │
 └─────────────────────────────────────────────────────┘
 ```

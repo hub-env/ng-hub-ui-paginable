@@ -80,7 +80,7 @@ Provided by `ng-hub-ui-ds` at `:root`. These are the **sensible defaults** the w
 | `--hub-sys-surface-page`         | `#ffffff`              | Main background color for pages and containers  |
 | `--hub-sys-border-color-default` | `#dee2e6`              | Default border color used across all components |
 | `--hub-sys-color-primary`        | `#0d6efd`              | Primary brand/action color                      |
-| `--hub-sys-text-primary`         | `#212529`              | Primary text color                              |
+| `--hub-sys-text-body`         | `#212529`              | Primary text color                              |
 | `--hub-sys-text-muted`           | `#6c757d`              | Secondary/muted text color                      |
 | `--hub-sys-state-active-bg`      | `rgba(0, 0, 0, 0.1)`   | Background for active state (table rows)        |
 | `--hub-sys-state-hover-bg`       | `rgba(0, 0, 0, 0.075)` | Background for hover state (table rows)         |
@@ -152,7 +152,7 @@ Defined on `.hub-paginator`. Control the appearance of pagination controls used 
 
 | Variable                               | Default                               | Description                          |
 | -------------------------------------- | ------------------------------------- | ------------------------------------ |
-| `--hub-paginator-select-color`         | `var(--hub-sys-text-primary)`         | Text color of the per-page select    |
+| `--hub-paginator-select-color`         | `var(--hub-sys-text-body)`         | Text color of the per-page select    |
 | `--hub-paginator-select-bg`            | `var(--hub-sys-surface-page)`         | Background of the per-page select    |
 | `--hub-paginator-select-border-color`  | `var(--hub-sys-border-color-default)` | Border of the per-page select        |
 | `--hub-paginator-select-border-width`  | `1px`                                 | Border width of the per-page select  |
@@ -164,7 +164,7 @@ Defined on `.hub-paginator`. Control the appearance of pagination controls used 
 
 | Variable                                  | Default                       | Description                                              |
 | ----------------------------------------- | ----------------------------- | -------------------------------------------------------- |
-| `--hub-paginator-icon-color`              | `var(--hub-sys-text-primary)` | Color of navigation icons (arrows)                       |
+| `--hub-paginator-icon-color`              | `var(--hub-sys-text-body)` | Color of navigation icons (arrows)                       |
 | `--hub-paginator-icon-size`               | `1em`                         | Size of navigation icons                                 |
 | `--hub-paginator-info-color`              | `var(--hub-sys-text-muted)`   | Color of pagination info text ("Showing 1 to 10 of 100") |
 | `--hub-paginator-label-color`             | `var(--hub-sys-text-muted)`   | Color of labels (e.g., "Items per page")                 |
@@ -260,7 +260,7 @@ Estos tokens estilizan el paginador embebido desde el host de la lista:
 
 | Variable                        | Default                               | Description                                                                                                  |
 | ------------------------------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| `--hub-list-item-color`         | `var(--hub-sys-text-primary)`         | Text color of list items                                                                                     |
+| `--hub-list-item-color`         | `var(--hub-sys-text-body)`         | Text color of list items                                                                                     |
 | `--hub-list-item-bg`            | `var(--hub-sys-surface-page)`         | Fondo de los ítems; por defecto el surface de la página, para que se lean sólidos como las filas de la tabla |
 | `--hub-list-item-border-color`  | `var(--hub-sys-border-color-default)` | Border color of list items                                                                                   |
 | `--hub-list-item-border-width`  | `0`                                 | Border width of list items                                                                                   |
@@ -295,9 +295,9 @@ Estos tokens estilizan el paginador embebido desde el host de la lista:
 | `--hub-list-search-input-bg`            | `var(--hub-sys-surface-page)`                | Background of the search input                          |
 | `--hub-list-search-input-border-color`  | `var(--hub-sys-border-color-default)`        | Border color of the search input                        |
 | `--hub-list-search-input-border-radius` | `var(--hub-ref-radius-sm)`                   | Border radius of the search input                       |
-| `--hub-list-search-input-color`         | `var(--hub-sys-text-primary)`                | Text color of the search input                          |
+| `--hub-list-search-input-color`         | `var(--hub-sys-text-body)`                | Text color of the search input                          |
 | `--hub-list-search-btn-bg`              | `var(--hub-ref-surface-2)`                   | Background of the search button                         |
-| `--hub-list-search-btn-color`           | `var(--hub-sys-text-primary)`                | Text/icon color of the search button                    |
+| `--hub-list-search-btn-color`           | `var(--hub-sys-text-body)`                | Text/icon color of the search button                    |
 | `--hub-list-search-button-min-width`    | `2.75rem`                                    | Anchura mínima del botón de búsqueda                    |
 | `--hub-list-search-border-color`        | `var(--hub-list-search-input-border-color)`  | Color de borde compartido para input/botón de búsqueda  |
 | `--hub-list-search-border-width`        | `1px`                                        | Grosor de borde compartido para input/botón de búsqueda |
@@ -430,7 +430,7 @@ Estos tokens estilizan el paginador embebido desde el host de la tabla:
 | Variable                               | Default                               | Description                                                                                                                                                                                                                                                                            |
 | -------------------------------------- | ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `--hub-table-container-bg`             | `var(--hub-ref-color-white)`          | Background of the table container                                                                                                                                                                                                                                                      |
-| `--hub-table-container-color`          | `var(--hub-sys-text-primary)`         | Text color of the table container                                                                                                                                                                                                                                                      |
+| `--hub-table-container-color`          | `var(--hub-sys-text-body)`         | Text color of the table container                                                                                                                                                                                                                                                      |
 | `--hub-table-border-color`             | `var(--hub-sys-border-color-default)` | Border color used in the table wrapper                                                                                                                                                                                                                                                 |
 | `--hub-table-border-radius`            | `0`            | Border radius of the table container                                                                                                                                                                                                                                                   |
 | `--hub-table-border-width`             | `0`         | Border width of the table container                                                                                                                                                                                                                                                    |
@@ -465,7 +465,7 @@ Estos tokens estilizan el paginador embebido desde el host de la tabla:
 | Variable                            | Default                               | Description                                                                                                                                                            |
 | ----------------------------------- | ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `--hub-table-bg`                    | `var(--hub-ref-color-white)`          | Background of the `<table>` element                                                                                                                                    |
-| `--hub-table-color`                 | `var(--hub-sys-text-primary)`         | Text color inside the table                                                                                                                                            |
+| `--hub-table-color`                 | `var(--hub-sys-text-body)`         | Text color inside the table                                                                                                                                            |
 | `--hub-table-border-color`          | `var(--hub-sys-border-color-default)` | Border color of table rows and cells                                                                                                                                   |
 | `--hub-table-border-width`          | `0`         | Border width of table rows and cells                                                                                                                                   |
 | `--hub-table-group-separator-color` | `var(--hub-sys-border-color-default)` | Color of the separator between thead and tbody                                                                                                                         |
@@ -493,11 +493,11 @@ Estos tokens estilizan el paginador embebido desde el host de la tabla:
 | Variable                    | Default                           | Description                 |
 | --------------------------- | --------------------------------- | --------------------------- |
 | `--hub-table-hover-bg`      | `var(--hub-sys-state-hover-bg)`   | Background on row hover     |
-| `--hub-table-hover-color`   | `var(--hub-sys-text-primary)`     | Text color on row hover     |
+| `--hub-table-hover-color`   | `var(--hub-sys-text-body)`     | Text color on row hover     |
 | `--hub-table-active-bg`     | `var(--hub-sys-state-active-bg)`  | Background for active rows  |
-| `--hub-table-active-color`  | `var(--hub-sys-text-primary)`     | Text color for active rows  |
+| `--hub-table-active-color`  | `var(--hub-sys-text-body)`     | Text color for active rows  |
 | `--hub-table-striped-bg`    | `var(--hub-sys-state-striped-bg)` | Background for striped rows |
-| `--hub-table-striped-color` | `var(--hub-sys-text-primary)`     | Text color for striped rows |
+| `--hub-table-striped-color` | `var(--hub-sys-text-body)`     | Text color for striped rows |
 
 ### Accent Layer (Advanced)
 
@@ -509,7 +509,7 @@ These variables power the cascade pattern for row states (`striped`, `hover`, `a
 | `--hub-table-bg-type`        | `initial`     | Background set by variant type (striped)                                                                             |
 | `--hub-table-bg-state`       | `var(--hub-table-active-bg, var(--hub-sys-state-active-bg, rgba(0, 0, 0, 0.1)))`     | Background set by interaction state (hover, active)                                                                  |
 | `--hub-table-color-type`     | `initial`     | Color set by variant type                                                                                            |
-| `--hub-table-color-state`    | `var(--hub-table-active-color, var(--hub-table-color, var(--hub-sys-text-primary, #212529)))`     | Color set by interaction state                                                                                       |
+| `--hub-table-color-state`    | `var(--hub-table-active-color, var(--hub-table-color, var(--hub-sys-text-body, #212529)))`     | Color set by interaction state                                                                                       |
 | `--hub-table-cell-bar-width` | `var(--hub-table-selected-bar-width, 0)`           | Ancho de la barra de acento por celda (interno; la fila seleccionada lo fija desde `--hub-table-selected-bar-width`) |
 | `--hub-table-cell-bar-color` | `var(--hub-table-selected-bar-color, var(--hub-table-accent, var(--hub-sys-color-primary, #0d6efd)))` | Color de la barra de acento por celda (interno; se fija desde `--hub-table-selected-bar-color`)                      |
 
@@ -520,7 +520,7 @@ El tinte de selección se aplica tanto a la selección propia de la librería co
 | Variable                         | Default                          | Description                                                                                                                                                                   |
 | -------------------------------- | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `--hub-table-selected-bg`        | `var(--hub-table-accent-subtle)` | Fondo de la fila seleccionada                                                                                                                                                 |
-| `--hub-table-selected-color`     | `var(--hub-sys-text-primary)`    | Color de texto de la fila seleccionada                                                                                                                                        |
+| `--hub-table-selected-color`     | `var(--hub-sys-text-body)`    | Color de texto de la fila seleccionada                                                                                                                                        |
 | `--hub-table-selected-bar-width` | `0`                              | Ancho de la barra de acento en el borde inicial de la fila seleccionada («fila activa» master-detail). `0` = desactivada (sin cambio visual); pon p. ej. `3px` para mostrarla |
 | `--hub-table-selected-bar-color` | `var(--hub-table-accent)`        | Color de la barra de acento de la fila seleccionada                                                                                                                           |
 
@@ -653,7 +653,7 @@ Override the system-level tokens to switch all three components to dark mode at 
 [data-theme='dark'],
 .dark-theme {
 	--hub-sys-surface-page: #121212;
-	--hub-sys-text-primary: #f8f9fa;
+	--hub-sys-text-body: #f8f9fa;
 	--hub-sys-text-muted: #adb5bd;
 	--hub-sys-border-color-default: #343a40;
 	--hub-sys-color-primary: #6ea8fe;
@@ -713,7 +713,7 @@ If you use Bootstrap 5, you can bridge Bootstrap tokens into the hub system:
 ```scss
 :root {
 	--hub-sys-surface-page: var(--bs-body-bg);
-	--hub-sys-text-primary: var(--bs-body-color);
+	--hub-sys-text-body: var(--bs-body-color);
 	--hub-sys-border-color-default: var(--bs-border-color);
 	--hub-sys-color-primary: var(--bs-primary);
 	--hub-ref-radius-sm: var(--bs-border-radius-sm);
@@ -780,7 +780,7 @@ Wrap a specific table in a class to override its styles without affecting others
 ┌─────────────────────────────────────────────────────┐
 │  component layer                                    │
 │  --hub-paginator-link-bg: var(--hub-sys-surface-page)│
-│  --hub-table-color: var(--hub-sys-text-primary)│
+│  --hub-table-color: var(--hub-sys-text-body)│
 │  --hub-list-item-hover-bg: var(--hub-ref-surface-2)  │
 └─────────────────────────────────────────────────────┘
 ```

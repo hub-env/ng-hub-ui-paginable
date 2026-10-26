@@ -101,7 +101,7 @@
 	flex-direction: column;
 	gap: var(--hub-table-container-gap, var(--hub-ref-space-3, 1rem));
 	min-width: 0;
-	color: var(--hub-table-container-color, var(--hub-sys-text-primary, #212529));
+	color: var(--hub-table-container-color, var(--hub-sys-text-body, #212529));
 
 	// Top bar (actions and filters)
 	.hub-table__top-bar {
@@ -339,7 +339,7 @@
 			font-size: var(--hub-table-search-input-font-size, 1rem);
 			font-weight: var(--hub-ref-font-weight-base, 400);
 			line-height: var(--hub-ref-line-height-base, 1.5);
-			color: var(--hub-table-search-input-color, var(--hub-table-container-color, var(--hub-sys-text-primary, #212529)));
+			color: var(--hub-table-search-input-color, var(--hub-table-container-color, var(--hub-sys-text-body, #212529)));
 			appearance: none;
 			background-color: var(
 				--hub-table-search-input-bg,
@@ -395,7 +395,7 @@
 			&:focus-visible {
 				color: var(
 					--hub-table-search-clear-hover-color,
-					var(--hub-table-container-color, var(--hub-sys-text-primary, #212529))
+					var(--hub-table-container-color, var(--hub-sys-text-body, #212529))
 				);
 			}
 		}
@@ -409,7 +409,7 @@
 			align-items: center;
 			justify-content: center;
 			min-width: var(--hub-table-search-button-min-width, 2.75rem);
-			color: var(--hub-table-search-button-color, var(--hub-table-container-color, var(--hub-sys-text-primary, #212529)));
+			color: var(--hub-table-search-button-color, var(--hub-table-container-color, var(--hub-sys-text-body, #212529)));
 			background-color: var(
 				--hub-table-search-button-bg,
 				var(--hub-table-container-bg, var(--hub-sys-surface-page, #fff))
@@ -569,7 +569,7 @@
 		font-size: var(--hub-table-filter-control-font-size, var(--hub-ref-font-size-sm, 0.875rem));
 		font-weight: var(--hub-ref-font-weight-base, 400);
 		line-height: var(--hub-ref-line-height-base, 1.5);
-		color: var(--hub-table-filter-control-color, var(--hub-table-container-color, var(--hub-sys-text-primary, #212529)));
+		color: var(--hub-table-filter-control-color, var(--hub-table-container-color, var(--hub-sys-text-body, #212529)));
 		background-color: var(--hub-table-filter-control-bg, var(--hub-table-container-bg, var(--hub-sys-surface-page, #fff)));
 		background-clip: padding-box;
 		border: var(--hub-table-filter-control-border-width, var(--hub-table-border-width, var(--hub-ref-border-width, 1px)))
@@ -640,7 +640,7 @@
 		font-family: inherit;
 		font-size: var(--hub-table-delete-filters-font-size, var(--hub-table-search-input-font-size, 1rem));
 		line-height: var(--hub-ref-line-height-base, 1.5);
-		color: var(--hub-table-delete-filters-color, var(--hub-table-container-color, var(--hub-sys-text-primary, #212529)));
+		color: var(--hub-table-delete-filters-color, var(--hub-table-container-color, var(--hub-sys-text-body, #212529)));
 		background-color: var(--hub-table-delete-filters-bg, var(--hub-table-container-bg, var(--hub-sys-surface-page, #fff)));
 		border: var(--hub-table-delete-filters-border-width, var(--hub-table-border-width, var(--hub-ref-border-width, 1px)))
 			solid
@@ -684,7 +684,7 @@
 			var(--hub-table-no-data-border-color, var(--hub-sys-color-info-border-subtle, #b6effb));
 		border-radius: var(--hub-table-no-data-border-radius, var(--hub-ref-radius-md, 0.375rem));
 		background-color: var(--hub-table-no-data-bg, var(--hub-sys-color-info-subtle, #cff4fc));
-		color: var(--hub-table-no-data-color, var(--hub-sys-text-primary, #212529));
+		color: var(--hub-table-no-data-color, var(--hub-sys-text-body, #212529));
 	}
 
 	// Header icon spacing
@@ -938,7 +938,7 @@
 		border: var(--hub-table-border-width, var(--hub-ref-border-width, 1px)) solid
 			var(--hub-table-border-color, var(--hub-sys-border-color-default, #dee2e6));
 		border-radius: var(--hub-table-border-radius, var(--hub-ref-radius-md, 0.375rem));
-		color: var(--hub-table-container-color, var(--hub-sys-text-primary, #212529));
+		color: var(--hub-table-container-color, var(--hub-sys-text-body, #212529));
 	}
 
 	// Table element
@@ -950,7 +950,7 @@
 		vertical-align: var(--hub-table-cell-vertical-align, middle);
 		border-color: var(--hub-table-border-color, var(--hub-sys-border-color-default, #dee2e6));
 		background-color: var(--hub-table-bg, var(--hub-sys-surface-page, #fff));
-		color: var(--hub-table-color, var(--hub-sys-text-primary, #212529));
+		color: var(--hub-table-color, var(--hub-sys-text-body, #212529));
 
 		// Sticky columns
 		.sticky-start {
@@ -1015,7 +1015,7 @@
 			// body. Defaults match the table surface (no visual change until set).
 			> tr > * {
 				background-color: var(--hub-table-head-bg, var(--hub-table-bg, var(--hub-sys-surface-page, #fff)));
-				color: var(--hub-table-head-color, var(--hub-table-color, var(--hub-sys-text-primary, #212529)));
+				color: var(--hub-table-head-color, var(--hub-table-color, var(--hub-sys-text-body, #212529)));
 				border-bottom-width: var(
 					--hub-table-head-border-width,
 					var(--hub-table-border-width, var(--hub-ref-border-width, 1px))
@@ -1110,7 +1110,7 @@
 	// Striped rows (odd)
 	.hub-table__striped-odd {
 		> tbody > tr:nth-of-type(odd) > * {
-			color: var(--hub-table-striped-color, var(--hub-sys-text-primary, #212529));
+			color: var(--hub-table-striped-color, var(--hub-sys-text-body, #212529));
 			background-color: var(--hub-table-striped-bg, var(--hub-sys-state-striped-bg, rgba(0, 0, 0, 0.05)));
 		}
 	}
@@ -1118,7 +1118,7 @@
 	// Striped rows (even)
 	.hub-table__striped-even {
 		> tbody > tr:nth-of-type(even) > * {
-			color: var(--hub-table-striped-color, var(--hub-sys-text-primary, #212529));
+			color: var(--hub-table-striped-color, var(--hub-sys-text-body, #212529));
 			background-color: var(--hub-table-striped-bg, var(--hub-sys-state-striped-bg, rgba(0, 0, 0, 0.05)));
 		}
 	}
@@ -1126,7 +1126,7 @@
 	// Striped columns (odd)
 	.hub-table__striped-columns-odd {
 		> :not(caption) > tr > :nth-child(odd) {
-			color: var(--hub-table-striped-color, var(--hub-sys-text-primary, #212529));
+			color: var(--hub-table-striped-color, var(--hub-sys-text-body, #212529));
 			background-color: var(--hub-table-striped-bg, var(--hub-sys-state-striped-bg, rgba(0, 0, 0, 0.05)));
 		}
 	}
@@ -1134,21 +1134,21 @@
 	// Striped columns (even)
 	.hub-table__striped-columns-even {
 		> :not(caption) > tr > :nth-child(even) {
-			color: var(--hub-table-striped-color, var(--hub-sys-text-primary, #212529));
+			color: var(--hub-table-striped-color, var(--hub-sys-text-body, #212529));
 			background-color: var(--hub-table-striped-bg, var(--hub-sys-state-striped-bg, rgba(0, 0, 0, 0.05)));
 		}
 	}
 
 	// Active table
 	.hub-table__active {
-		--hub-table-color-state: var(--hub-table-active-color, var(--hub-table-color, var(--hub-sys-text-primary, #212529)));
+		--hub-table-color-state: var(--hub-table-active-color, var(--hub-table-color, var(--hub-sys-text-body, #212529)));
 		--hub-table-bg-state: var(--hub-table-active-bg, var(--hub-sys-state-active-bg, rgba(0, 0, 0, 0.1)));
 	}
 
 	// Hover effect
 	.hub-table__hover {
 		> tbody > tr:hover > * {
-			--hub-table-color-state: var(--hub-table-hover-color, var(--hub-table-color, var(--hub-sys-text-primary, #212529)));
+			--hub-table-color-state: var(--hub-table-hover-color, var(--hub-table-color, var(--hub-sys-text-body, #212529)));
 			--hub-table-bg-state: var(--hub-table-hover-bg, var(--hub-sys-state-hover-bg, rgba(0, 0, 0, 0.075)));
 		}
 	}
@@ -1161,7 +1161,7 @@
 	.hub-table__row--selected > *,
 	.hub-table__hover > tbody > tr.hub-table__body-row--selected:hover > *,
 	.hub-table__hover > tbody > tr.hub-table__row--selected:hover > * {
-		--hub-table-color-state: var(--hub-table-selected-color, var(--hub-table-color, var(--hub-sys-text-primary, #212529)));
+		--hub-table-color-state: var(--hub-table-selected-color, var(--hub-table-color, var(--hub-sys-text-body, #212529)));
 		--hub-table-bg-state: var(
 			--hub-table-selected-bg,
 			var(
