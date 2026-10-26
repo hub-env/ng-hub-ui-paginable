@@ -57,6 +57,7 @@ export const locale = {
 		CLEAR: 'Limpiar',
 		CLEAR_SEARCH: 'Limpiar búsqueda',
 		SORT_BY: 'Ordenar por {{ column }}',
+		RESIZE_COLUMN: 'Cambiar el ancho de {{ column }}',
 		FILTER_BY: 'Filtrar por {{ column }}',
 		SELECT_ALL_ROWS: 'Seleccionar todas las filas',
 		SELECT_ROW: 'Seleccionar la fila',

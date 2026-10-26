@@ -524,19 +524,23 @@ const headers: PaginableTableHeader[] = [
 
 ### Referencia de propiedades de cabecera
 
-| Propiedad     | Tipo                                                     | Descripción                                                   | Por defecto         | Ejemplo                                                                    |
-| ------------- | -------------------------------------------------------- | ------------------------------------------------------------- | ------------------- | -------------------------------------------------------------------------- |
-| `property`    | `string`                                                 | **Obligatoria.** Propiedad del dato a mostrar en esta columna | -                   | `'name'`, `'user.email'`                                                   |
-| `title`       | `string \| Observable<string>`                           | Título de cabecera. Puede ser estático o reactivo             | valor de `property` | `'User Name'`, `this.translate.get('user.name')`                           |
-| `icon`        | `string \| Icon`                                         | Icono a mostrar en la cabecera                                | -                   | `'fa-user'`, `{ type: 'material', value: 'person' }`                       |
-| `align`       | `'start' \| 'end' \| 'center'`                           | Alineación de texto de la columna                             | `'start'`           | `'center'` para números                                                    |
-| `sortable`    | `boolean`                                                | Habilita la ordenación en esta columna                        | `false`             | `true`                                                                     |
-| `wrapping`    | `'wrap' \| 'nowrap'`                                     | Comportamiento de salto de línea                              | `'wrap'`            | `'nowrap'` para IDs                                                        |
-| `sticky`      | `'start' \| 'end'`                                       | Fija la columna durante el scroll                             | -                   | `'end'` para acciones                                                      |
-| `buttons`     | `Array<PaginableActionButton \| PaginableTableDropdown>` | Botones de acción en esta columna                             | -                   | Ver [Botones de acción](#botones-de-accion)                                |
-| `filter`      | `InputFilter \| DropdownFilter \| BooleanFilter`         | Configuración del filtro                                      | -                   | Ver [Filtros de columna](#filtros-de-columna)                              |
-| `onlyButtons` | `boolean`                                                | Optimiza el layout para columnas solo de botones              | `false`             | `true` para columnas de acción                                             |
-| `hidden`      | `boolean \| Function`                                    | Controla la visibilidad de la columna                         | `false`             | Ver [Visibilidad de columnas](#control-de-visibilidad-de-columnas-hidden-) |
+| Propiedad     | Tipo                                                     | Descripción                                                             | Por defecto         | Ejemplo                                                                    |
+| ------------- | -------------------------------------------------------- | ----------------------------------------------------------------------- | ------------------- | -------------------------------------------------------------------------- |
+| `property`    | `string`                                                 | **Obligatoria.** Propiedad del dato a mostrar en esta columna           | -                   | `'name'`, `'user.email'`                                                   |
+| `title`       | `string \| Observable<string>`                           | Título de cabecera. Puede ser estático o reactivo                       | valor de `property` | `'User Name'`, `this.translate.get('user.name')`                           |
+| `icon`        | `string \| Icon`                                         | Icono a mostrar en la cabecera                                          | -                   | `'fa-user'`, `{ type: 'material', value: 'person' }`                       |
+| `align`       | `'start' \| 'end' \| 'center'`                           | Alineación de texto de la columna                                       | `'start'`           | `'center'` para números                                                    |
+| `sortable`    | `boolean`                                                | Habilita la ordenación en esta columna                                  | `false`             | `true`                                                                     |
+| `wrapping`    | `'wrap' \| 'nowrap'`                                     | Comportamiento de salto de línea                                        | `'wrap'`            | `'nowrap'` para IDs                                                        |
+| `sticky`      | `'start' \| 'end'`                                       | Fija la columna durante el scroll                                       | -                   | `'end'` para acciones                                                      |
+| `buttons`     | `Array<PaginableActionButton \| PaginableTableDropdown>` | Botones de acción en esta columna                                       | -                   | Ver [Botones de acción](#botones-de-accion)                                |
+| `filter`      | `InputFilter \| DropdownFilter \| BooleanFilter`         | Configuración del filtro                                                | -                   | Ver [Filtros de columna](#filtros-de-columna)                              |
+| `onlyButtons` | `boolean`                                                | Optimiza el layout para columnas solo de botones                        | `false`             | `true` para columnas de acción                                             |
+| `hidden`      | `boolean \| Function`                                    | Controla la visibilidad de la columna                                   | `false`             | Ver [Visibilidad de columnas](#control-de-visibilidad-de-columnas-hidden-) |
+| `width`       | `number \| string`                                       | Ancho de la columna: un número son px, un string cualquier longitud CSS | -                   | `160`, `'20%'`, `'12rem'`                                                  |
+| `minWidth`    | `number`                                                 | Ancho mínimo (px) al redimensionar                                      | `48`                | `80`                                                                       |
+| `maxWidth`    | `number`                                                 | Ancho máximo (px) al redimensionar                                      | -                   | `400`                                                                      |
+| `resizable`   | `boolean`                                                | Anula `resizableColumns` para esta columna                              | input de la tabla   | `false` para fijar una columna                                             |
 
 ### Control de visibilidad de columnas (`hidden`) 🆕
 
@@ -693,25 +697,30 @@ export class DynamicColumnsComponent {
 
 ## 🔧 Columnas redimensionables
 
-**`<hub-table>` no redimensiona sus columnas.** Las dos piezas de abajo vienen en el paquete y
-se exportan, pero la tabla no las importa, así que arrastrar el borde de una columna dentro de un
-`<hub-table>` no hace nada. Tampoco existe una propiedad `resizable` en las cabeceras.
+Activa `resizableColumns` (o `resizableColumns: true` en `providePaginable({ defaults })`) y cada columna de datos recibe un
+asa en su borde de final de línea. Las columnas que solo llevan botones y la de selección nunca se redimensionan; una cabecera
+puede excluirse o incluirse con `resizable`.
 
-Son piezas para quien construya su propia tabla:
-
-```typescript
-import { HubResizableComponent, HubResizableDirective } from 'ng-hub-ui-paginable';
-
-// HubResizableComponent casa con `th[resizable]` y es dueño del ancho de la columna;
-// HubResizableDirective casa con `[resizable]` y emite el ancho mientras se arrastra el asa.
-@Component({
-	imports: [HubResizableComponent, HubResizableDirective]
-})
-export class MyGrid {}
+```html
+<hub-ui-table [(headers)]="headers" [data]="rows" resizableColumns (columnResize)="onResize($event)" />
 ```
 
-Conectarlas a `<hub-table>`, con activación por columna y un ancho que sobreviva a una recarga,
-está por hacer.
+```typescript
+headers: PaginableTableHeader[] = [
+	{ property: 'name', title: 'Nombre', width: 220, minWidth: 120, maxWidth: 400 },
+	{ property: 'email', title: 'Email', width: '30%' },
+	{ property: 'role', title: 'Rol' } // ocupa lo que sobra
+];
+```
+
+- **Los anchos viven en la definición de la columna.** Al terminar un redimensionado, la tabla escribe el nuevo ancho en px en
+  `headers` (una cabecera dada como string pasa a `{ title, property, width }`), así que `[(headers)]` lo refleja siempre y
+  puedes persistirlo. `columnResize` se emite una vez por gesto terminado y una por paso de teclado, nunca mientras se arrastra.
+- **Cambiar un ancho en ejecución** es darle a la cabecera un `width` nuevo (un array `headers` nuevo); gana a cualquier
+  redimensionado anterior.
+- **Teclado:** el asa es un `role="separator"` enfocable. Las flechas izquierda/derecha la mueven 10 px (Mayús: 50 px),
+  Inicio/Fin saltan a `minWidth` / `maxWidth`. En RTL las flechas se invierten.
+- Cualquier ancho en cualquier columna pasa la tabla a `table-layout: fixed`; una tabla más ancha que su contenedor hace scroll dentro de él.
 
 ## 🎪 Componentes adicionales
 
@@ -1038,6 +1047,7 @@ filters = signal({
 | `selectable`           | `SelectionTypes \| boolean \| null`                      | `null`              | Modo de selección. `'single'` / `true` elige una fila (radio), `'multiple'` varias (checkbox), `false` / `null` la desactiva.                                                                                                                                                                                                                                                                                  |
 | `multiple`             | `boolean`                                                | `false`             | Si se permite la selección múltiple.                                                                                                                                                                                                                                                                                                                                                                           |
 | `selectWhileSelecting` | `boolean`                                                | `false`             | Con al menos una fila marcada, el clic en una fila la marca en vez de ejecutar `clickFn`. Apagado por defecto; es el patrón táctil para marcar varias filas sin perderlas al navegar. Es solo un atajo de ratón: el teclado marca la fila desde su propia casilla, que ya es una parada de tabulación, así que la fila solo recibe una parada propia cuando `clickFn` la convierte en un control por sí misma. |
+| `resizableColumns`     | `boolean`                                                | `false`             | Muestra un asa de redimensionado en cada columna de datos. Valor por defecto en `providePaginable({ defaults: { resizableColumns } })`. Ver [Columnas redimensionables](#-columnas-redimensionables).                                                                                                                                                                                                          |
 | `flush`                | `boolean`                                                | `false`             | Quita el borde exterior, el radio, la regla de cabecera y el padding de celda, y deja la separación entre filas. Para una tabla de opciones dentro de un diálogo, donde la superficie ya dibujó el marco.                                                                                                                                                                                                      |
 | `bindValue`            | `string`                                                 | `null`              | Propiedad para identificar de forma única los elementos seleccionados.                                                                                                                                                                                                                                                                                                                                         |
 | `ordination`           | `PaginableTableOrdination`                               | `null`              | Configuración actual de ordenación (señal model).                                                                                                                                                                                                                                                                                                                                                              |

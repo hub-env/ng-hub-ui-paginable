@@ -8,6 +8,7 @@ import {
 	OnChanges,
 	SimpleChanges,
 	TemplateRef,
+	afterRenderEffect,
 	booleanAttribute,
 	computed,
 	contentChild,
@@ -87,6 +88,24 @@ interface KeyboardDragState {
 }
 
 /** The options every list starts from, folded back in on every `options` assignment. */
+/** Id of the row slide animation, so a new measure cancels only its own. */
+const ROW_SLIDE = 'hub-list-row-slide';
+
+/** Whether the user asked the system for less motion. */
+function prefersReducedMotion(): boolean {
+	return typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+/** Reads a CSS time (`200ms`, `0.2s`) as milliseconds, or the fallback when it is not one. */
+function toMilliseconds(value: string, fallback: number): number {
+	const time = value.trim();
+	const amount = parseFloat(time);
+	if (Number.isNaN(amount)) {
+		return fallback;
+	}
+	return time.endsWith('ms') ? amount : time.endsWith('s') ? amount * 1000 : fallback;
+}
+
 const DEFAULT_LIST_OPTIONS: PaginableTableOptions = {
 	display: 'list',
 	rtl: false,
@@ -116,7 +135,9 @@ const DEFAULT_LIST_OPTIONS: PaginableTableOptions = {
 		'[class.hub-list--flush]': 'flush()',
 		'[attr.data-variant]': 'options().variant ?? null',
 		'[style.--hub-list-accent]': 'accentVar()',
-		'[attr.data-hub-drag-owner]': '_listId'
+		'[attr.data-hub-drag-owner]': '_listId',
+		// Only a list that can take the dragged row opens its empty drop slots; an unrelated drag leaves it still.
+		'[class.hub-list--dragging]': 'dragService.canDrop(_listId)'
 	},
 	providers: [
 		{ provide: HUB_TRANSLATION_PREFIX, useValue: 'HUBUI.PAGINABLE' },
@@ -583,6 +604,10 @@ export class HubListComponent<T = any> implements OnChanges {
 	readonly #announcement = signal<{ key: string; params?: Record<string, unknown> } | null>(null);
 	/** Read-only announcement signal for the template `aria-live` region. */
 	readonly announcement = this.#announcement.asReadonly();
+	/** Where each row sat at the last render, relative to its own collection, for the drag slide. */
+	readonly #rowBoxes = new WeakMap<HTMLElement, { x: number; y: number }>();
+	/** Whether the previous render belonged to a drag; the first render of a drag only measures. */
+	#slidesNext = false;
 
 	constructor() {
 		this.dragService.register({
@@ -596,6 +621,59 @@ export class HubListComponent<T = any> implements OnChanges {
 			this.#pointerSession?.destroy();
 			this.dragService.unregister(this._listId);
 		});
+
+		// Re-measure after every render a drag causes: the drop target moving, the drag starting or
+		// ending, and each keyboard step (which always announces).
+		afterRenderEffect({
+			read: () => {
+				this.dragService.target();
+				this.dragService.active();
+				this.announcement();
+				untracked(() => this.#slideRows());
+			}
+		});
+	}
+
+	/**
+	 * Slides the rows a drag has just rearranged from where they were to where they are, so the
+	 * opening slot pushes its neighbours instead of making them jump. Only renders that belong to a
+	 * drag animate: paging, filtering or a data refresh keep moving rows instantly. With reduced
+	 * motion the rows are still measured but never animated.
+	 */
+	#slideRows(): void {
+		const dragging = this.dragService.isDragging() || this.#keyboardDrag !== null;
+		const host = this.#host.nativeElement as HTMLElement;
+		const slides = this.#slidesNext && typeof host.animate === 'function' && !prefersReducedMotion();
+		this.#slidesNext = dragging;
+
+		const style = getComputedStyle(host);
+		const duration = toMilliseconds(style.getPropertyValue('--hub-list-drag-duration'), 200);
+		const easing = style.getPropertyValue('--hub-list-drag-easing').trim() || 'cubic-bezier(0.2, 0, 0, 1)';
+
+		for (const row of Array.from(host.querySelectorAll<HTMLElement>('.hub-list__item'))) {
+			const collection = row.parentElement;
+			if (!collection) {
+				continue;
+			}
+			// A slide still running would skew the measure; the new one starts from the old box.
+			row.getAnimations?.().forEach((animation) => animation.id === ROW_SLIDE && animation.cancel());
+
+			const rowBox = row.getBoundingClientRect();
+			const collectionBox = collection.getBoundingClientRect();
+			const box = { x: rowBox.left - collectionBox.left, y: rowBox.top - collectionBox.top };
+			const previous = this.#rowBoxes.get(row);
+			this.#rowBoxes.set(row, box);
+
+			const [dx, dy] = previous ? [previous.x - box.x, previous.y - box.y] : [0, 0];
+			if (!slides || (Math.abs(dx) < 1 && Math.abs(dy) < 1)) {
+				continue;
+			}
+			row.animate([{ transform: `translate(${dx}px, ${dy}px)` }, { transform: 'none' }], {
+				duration,
+				easing,
+				id: ROW_SLIDE
+			});
+		}
 	}
 
 	// NOTE: Batch actions
@@ -1099,6 +1177,19 @@ export class HubListComponent<T = any> implements OnChanges {
 	}
 
 	/**
+	 * Whether a row draws its nested collection. A row with children always does. A sortable row
+	 * whose children property is an empty array does too, so a dragged row can still be dropped
+	 * into it; a row with no children array at all is a leaf and never does.
+	 *
+	 * @param item The row item.
+	 * @returns `true` when the nested `<ul>` is rendered.
+	 */
+	protected drawsChildren(item: any): boolean {
+		const children = item?.[this.bindChildren()];
+		return Array.isArray(children) && (children.length > 0 || this.sortable());
+	}
+
+	/**
 	 * Returns whether reordering is enabled for a row.
 	 *
 	 * @param item The row item.
@@ -1214,7 +1305,11 @@ export class HubListComponent<T = any> implements OnChanges {
 	 * @returns `true` when the event's closest item is exactly this row.
 	 */
 	#isEventForRow(event: Event, li: HTMLElement): boolean {
-		return (event.target as HTMLElement).closest('.hub-list__item') === li;
+		const target = event.target as HTMLElement;
+		// A hover over a nested collection's own box (its gaps, or the drop placeholder, which lets
+		// pointer events through) has the parent row as its closest item; it belongs to that
+		// collection, so the parent row must not take it.
+		return target.closest('.hub-list__item') === li && target.closest('.hub-list__items') === li.parentElement;
 	}
 
 	/**

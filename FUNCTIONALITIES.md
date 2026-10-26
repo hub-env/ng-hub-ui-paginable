@@ -53,7 +53,8 @@ This table lists the functionalities of the `ng-hub-ui-paginable` library:
 |                             | Sticky actions (`stickyActions`)                                                                                   |     ✅      |   ❌    |
 |                             | Column visibility (`hidden`)                                                                                       |     ✅      |   ✅    |
 |                             | Responsive layouts & breakpoints                                                                                   |     ✅      |   ✅    |
-|                             | Resizable columns (`HubResizableComponent`/`Directive` exported, but `<hub-table>` does not wire them)             |     ❌      |   ❌    |
+|                             | Resizable columns (`resizableColumns`, per-column `resizable`, `columnResize`, written back to `headers`)          |     ✅      |   ❌    |
+|                             | Column widths (`width` / `minWidth` / `maxWidth` on the header, changeable at runtime)                             |     ✅      |   ❌    |
 |                             | Loading / empty / no-data states                                                                                   |     ✅      |   ✅    |
 |                             | Error state (`error`)                                                                                              |     ✅      |   ✅    |
 | **Templates & Directives**  | Custom cell templates (`cellTpt` / `paginableTableCell`)                                                           |     ✅      |   ✅    |

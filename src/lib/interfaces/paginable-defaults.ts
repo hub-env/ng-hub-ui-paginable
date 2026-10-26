@@ -42,4 +42,7 @@ export interface PaginableDefaults {
 
 	/** Debounce in milliseconds for the table's search / filter changes (`debounce`). */
 	debounce?: number;
+
+	/** Whether the table's columns can be resized by default (`resizableColumns`). */
+	resizableColumns?: boolean;
 }

@@ -1,5 +1,43 @@
 # Changelog
 
+## [22.30.0] - 2026-10-26
+
+### Added
+
+- **Resizable columns and column widths.** `PaginableTableHeader` gains `width` (number = px, string = any CSS
+  length), `minWidth`, `maxWidth` and `resizable`. The table gains the `resizableColumns` input (default from
+  `providePaginable({ defaults: { resizableColumns } })`) and the `columnResize` output, which emits a
+  `PaginableColumnResizeEvent` once per finished gesture or keyboard step. A finished resize is written back
+  into the `headers` model, and giving a header a new `width` applies it even after the user resized it. The handle
+  is a focusable `role="separator"` driven by pointer or arrow keys (Shift for bigger steps, Home/End for the
+  limits), RTL aware, and named through the new `RESIZE_COLUMN` label. Declared widths switch the table to
+  `table-layout: fixed`, so a table wider than its container scrolls inside it. New tokens:
+  `--hub-table-resize-handle-width`, `-color`, `-active-color` and `--hub-table-utility-col-width`.
+- **Rows slide while a drag rearranges a list.** When the drop slot opens or moves, the rows it
+  pushes slide to their new place instead of jumping, the slot fades in, and the slot of an empty
+  nested collection grows open. Only renders a drag causes are animated (pointer or keyboard), so
+  paging, filtering and data refreshes still move rows at once, and reduced motion keeps only the
+  fade. New tokens: `--hub-list-drag-duration` (200ms) and `--hub-list-drag-easing`.
+
+### Fixed
+
+- **A list whose children sit under another key drew only the parents.** With `bindChildren` set
+  to anything but `children`, `HubListComponent` built the nested rows but tested the literal
+  `children` key when deciding whether to draw them, their collapse chevron and the single-select
+  radio. All three now read the key `bindChildren` names.
+- **A drag inside a nested list ended up one level higher.** The drop placeholder lets pointer
+  events through, so a hover over it, or over the gaps of a nested collection, reached that
+  collection's `<ul>` and bubbled to the parent row. The parent row read itself as the target and
+  moved the drop to its own level: a lesson dragged within its module was dropped among the
+  modules. A row now takes a native `dragover` only when the event comes from its own content, not
+  from a collection nested inside it.
+- **A sortable parent with no children could not receive a drop.** It drew no nested collection,
+  so there was nothing to drop onto. While the list is `sortable`, a row whose children property is
+  an empty array keeps an empty collection. It takes no room at rest and opens to a drop slot
+  (`--hub-list-placeholder-min-height`) only in a list that can take the row being dragged, the
+  same list or one in its drag group, so an unrelated drag elsewhere on the page leaves it still. A
+  row without a children array is still a leaf.
+
 ## [22.29.4] - 2026-10-26
 
 ### Changed

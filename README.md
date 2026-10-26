@@ -772,25 +772,29 @@ export class DynamicTableComponent {
 
 ## 🔧 Resizable Columns
 
-**`<hub-table>` does not resize its own columns.** The two pieces below ship with the package
-and are exported, but the table does not import them, so dragging a column border inside a
-`<hub-table>` does nothing. A `resizable` header property does not exist either.
+Set `resizableColumns` (or `resizableColumns: true` in `providePaginable({ defaults })`) and every data column gets a
+handle on its inline-end edge. Columns that hold only buttons, and the selection column, are never resizable; a header can
+opt out or in with `resizable`.
 
-They are parts for a table you assemble yourself:
-
-```typescript
-import { HubResizableComponent, HubResizableDirective } from 'ng-hub-ui-paginable';
-
-// HubResizableComponent matches `th[resizable]` and owns the column width;
-// HubResizableDirective matches `[resizable]` and emits the width while the grip is dragged.
-@Component({
-	imports: [HubResizableComponent, HubResizableDirective]
-})
-export class MyGrid {}
+```html
+<hub-ui-table [(headers)]="headers" [data]="rows" resizableColumns (columnResize)="onResize($event)" />
 ```
 
-Wiring them into `<hub-table>`, with a per-column opt-in and a width that survives a reload, is
-open work.
+```typescript
+headers: PaginableTableHeader[] = [
+	{ property: 'name', title: 'Name', width: 220, minWidth: 120, maxWidth: 400 },
+	{ property: 'email', title: 'Email', width: '30%' },
+	{ property: 'role', title: 'Role' } // takes what is left
+];
+```
+
+- **Widths live on the column definition.** When a resize finishes, the table writes the new pixel width into `headers`
+  (a plain string header is turned into `{ title, property, width }`), so `[(headers)]` always reflects it and you can
+  persist it. `columnResize` fires once per finished gesture and once per keyboard step, never while dragging.
+- **Changing a width at runtime** is giving the header a new `width` (a new `headers` array); it wins over any earlier resize.
+- **Keyboard:** the handle is a focusable `role="separator"`. Left/Right arrows move it by 10 px (Shift: 50 px), Home/End
+  jump to `minWidth` / `maxWidth`. In RTL the arrows are mirrored.
+- Any width on any column switches the table to `table-layout: fixed`; a table wider than its container scrolls inside it.
 
 ## 🎪 Additional Components
 
@@ -1122,6 +1126,7 @@ filters = signal({
 | `selectable`           | `SelectionTypes \| boolean \| null`                      | `null`              | Selection mode. `'single'` / `true` picks one row and draws a radio, `'multiple'` picks many and draws a checkbox, `false` / `null` disables selection.                                                                                                                                                                                                                                                 |
 | `multiple`             | `boolean`                                                | `false`             | Whether multiple row selection is allowed.                                                                                                                                                                                                                                                                                                                                                              |
 | `selectWhileSelecting` | `boolean`                                                | `false`             | While at least one row is selected, a row click marks it instead of running `clickFn`. Off by default; the touch pattern for picking several rows without losing them to a navigation. It is a pointer shortcut only: the keyboard marks a row through the row's own checkbox, which is a tab stop already, so the row is given one of its own only when `clickFn` makes it a control in its own right. |
+| `resizableColumns`     | `boolean`                                                | `false`             | Shows a resize handle on every data column. Default from `providePaginable({ defaults: { resizableColumns } })`. See [Resizable Columns](#-resizable-columns).                                                                                                                                                                                                                                          |
 | `flush`                | `boolean`                                                | `false`             | Drops the outer border, the radius, the head rule and the cell padding, keeping the row divider. For a table of choices inside a dialog, where the surface already drew the frame.                                                                                                                                                                                                                      |
 | `bindValue`            | `string`                                                 | `null`              | Property used to uniquely identify selected items.                                                                                                                                                                                                                                                                                                                                                      |
 | `ordination`           | `PaginableTableOrdination`                               | `null`              | Current sorting configuration (model signal).                                                                                                                                                                                                                                                                                                                                                           |
@@ -1157,6 +1162,17 @@ The table component implements `ControlValueAccessor`, enabling two-way binding 
 
 <!-- Row click events -->
 <hub-ui-table [clickFn]="handleRowClick"> </hub-ui-table>
+```
+
+**Column Resize Event (`columnResize`, `PaginableColumnResizeEvent`):**
+
+```typescript
+interface PaginableColumnResizeEvent {
+	property: string; // Resized column
+	width: number; // New width in px
+	previousWidth: number; // Width before the gesture in px
+	header: PaginableTableHeader; // Definition as written back into `headers`
+}
 ```
 
 **Row Click Event (`TableRowEvent<T>`):**

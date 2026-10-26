@@ -57,6 +57,7 @@ export const locale = {
 		CLEAR: 'garbitu',
 		CLEAR_SEARCH: 'Garbitu bilaketa',
 		SORT_BY: '{{ column }} arabera ordenatu',
+		RESIZE_COLUMN: 'Aldatu {{ column }} zutabearen zabalera',
 		FILTER_BY: '{{ column }} arabera iragazi',
 		SELECT_ALL_ROWS: 'Hautatu errenkada guztiak',
 		SELECT_ROW: 'Hautatu errenkada',

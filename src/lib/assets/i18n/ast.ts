@@ -57,6 +57,7 @@ export const locale = {
 		CLEAR: 'llimpiar',
 		CLEAR_SEARCH: 'Llimpiar la gueta',
 		SORT_BY: 'Ordenar por {{ column }}',
+		RESIZE_COLUMN: "Cambiar l'anchor de {{ column }}",
 		FILTER_BY: 'Filtrar por {{ column }}',
 		SELECT_ALL_ROWS: 'Seleicionar toles fileres',
 		SELECT_ROW: 'Seleicionar la filera',

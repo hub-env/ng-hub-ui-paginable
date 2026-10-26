@@ -57,6 +57,7 @@ export const locale = {
 		CLEAR: '清除',
 		CLEAR_SEARCH: '清除搜索',
 		SORT_BY: '按 {{ column }} 排序',
+		RESIZE_COLUMN: '调整 {{ column }} 列宽',
 		FILTER_BY: '按 {{ column }} 筛选',
 		SELECT_ALL_ROWS: '选择所有行',
 		SELECT_ROW: '选择该行',

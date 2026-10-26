@@ -223,6 +223,50 @@ export interface PaginableTableHeader {
 	 * ```
 	 */
 	hidden?: boolean | (() => boolean) | (() => Promise<boolean>) | (() => Observable<boolean>);
+
+	/**
+	 * Width of the column. A number is read as pixels; a string is any CSS length (`'20%'`, `'12rem'`).
+	 * Columns without a width share the space left over. Setting a new value on the header (a new
+	 * `headers` array) applies it even when the user had already resized the column, and a finished
+	 * resize writes the new width back here as a pixel number.
+	 *
+	 * @example
+	 * ```typescript
+	 * width: 160
+	 * width: '20%'
+	 * ```
+	 */
+	width?: number | string;
+
+	/** Smallest width in pixels the user can drag or key the column down to. Defaults to 48. */
+	minWidth?: number;
+
+	/** Largest width in pixels the user can drag or key the column up to. Unbounded by default. */
+	maxWidth?: number;
+
+	/**
+	 * Per-column override of the table's `resizableColumns`. Columns that hold only buttons are never
+	 * resizable, whatever this says.
+	 */
+	resizable?: boolean;
+}
+
+/**
+ * Emitted by the table's `columnResize` output once a resize is finished: when the pointer is
+ * released, or on each keyboard step. It is not emitted while dragging.
+ */
+export interface PaginableColumnResizeEvent {
+	/** The `property` of the resized column. */
+	property: string;
+
+	/** The new width in pixels. */
+	width: number;
+
+	/** The width in pixels before the gesture. */
+	previousWidth: number;
+
+	/** The column definition as written back into `headers`, already carrying the new width. */
+	header: PaginableTableHeader;
 }
 
 /**

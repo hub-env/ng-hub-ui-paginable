@@ -967,6 +967,68 @@
 			z-index: 9;
 		}
 
+		// Fixed layout: declared widths (and dragged ones) bind. The table still grows past 100% when
+		// the columns add up to more, and the container scrolls it.
+		&.hub-table__element--fixed-layout {
+			table-layout: fixed;
+
+			> :not(caption) > * > * {
+				overflow-wrap: anywhere;
+			}
+		}
+
+		// Selection and expander columns are not part of the data, so they get a fixed slot instead of
+		// an equal share of what the sized columns leave over.
+		.hub-table__col--utility {
+			width: var(--hub-table-utility-col-width, 3rem);
+		}
+
+		// Anchors the handle; sticky columns are already positioned and keep their own `position`.
+		.hub-table__header-cell:not(.sticky-start):not(.sticky-end) {
+			position: relative;
+		}
+
+		// The hit area straddles nothing: it sits inside the cell's inline-end edge, with the visible
+		// line drawn by `::after` so a wide target does not read as a wide divider.
+		.hub-table__resize-handle {
+			position: absolute;
+			inset-block: 0;
+			inset-inline-end: 0;
+			inline-size: var(--hub-table-resize-handle-width, 0.5rem);
+			cursor: col-resize;
+			touch-action: none;
+			user-select: none;
+			z-index: 1;
+
+			&::after {
+				content: '';
+				position: absolute;
+				inset-block: 25%;
+				inset-inline-end: 0;
+				inline-size: var(--hub-ref-border-width, 1px);
+				background-color: var(
+					--hub-table-resize-handle-color,
+					var(--hub-table-border-color, var(--hub-sys-border-color-default, #dee2e6))
+				);
+			}
+
+			&:hover::after,
+			&--active::after {
+				inline-size: calc(var(--hub-ref-border-width, 1px) * 2);
+				background-color: var(--hub-table-resize-handle-active-color, var(--hub-sys-color-primary, #0d6efd));
+			}
+
+			&:focus-visible {
+				outline: var(--hub-sys-focus-ring-width, 0.125rem) solid var(--hub-sys-focus-ring-color, #0a58ca);
+				outline-offset: calc(var(--hub-sys-focus-ring-width, 0.125rem) * -1);
+			}
+		}
+
+		// No text selection anywhere while a handle is being dragged.
+		.hub-table__resize-handle--active {
+			user-select: none;
+		}
+
 		// Row click affordance
 		.clickable-item {
 			cursor: pointer;

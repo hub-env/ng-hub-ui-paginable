@@ -80,7 +80,7 @@ Provided by `ng-hub-ui-ds` at `:root`. These are the **sensible defaults** the w
 | `--hub-sys-surface-page`         | `#ffffff`              | Main background color for pages and containers  |
 | `--hub-sys-border-color-default` | `#dee2e6`              | Default border color used across all components |
 | `--hub-sys-color-primary`        | `#0d6efd`              | Primary brand/action color                      |
-| `--hub-sys-text-body`         | `#212529`              | Primary text color                              |
+| `--hub-sys-text-body`            | `#212529`              | Primary text color                              |
 | `--hub-sys-text-muted`           | `#6c757d`              | Secondary/muted text color                      |
 | `--hub-sys-state-active-bg`      | `rgba(0, 0, 0, 0.1)`   | Background for active state (table rows)        |
 | `--hub-sys-state-hover-bg`       | `rgba(0, 0, 0, 0.075)` | Background for hover state (table rows)         |
@@ -154,7 +154,7 @@ Defined on `.hub-paginator`. Control the appearance of pagination controls used 
 
 | Variable                               | Default                                        | Description                          |
 | -------------------------------------- | ---------------------------------------------- | ------------------------------------ |
-| `--hub-paginator-select-color`         | `var(--hub-sys-text-body, #212529)`         | Text color of the per-page select    |
+| `--hub-paginator-select-color`         | `var(--hub-sys-text-body, #212529)`            | Text color of the per-page select    |
 | `--hub-paginator-select-bg`            | `var(--hub-sys-surface-page, #ffffff)`         | Background of the per-page select    |
 | `--hub-paginator-select-border-color`  | `var(--hub-sys-border-color-default, #dee2e6)` | Border of the per-page select        |
 | `--hub-paginator-select-border-width`  | `1px`                                          | Border width of the per-page select  |
@@ -164,16 +164,16 @@ Defined on `.hub-paginator`. Control the appearance of pagination controls used 
 
 ### Misc
 
-| Variable                                  | Default                                | Description                                              |
-| ----------------------------------------- | -------------------------------------- | -------------------------------------------------------- |
-| `--hub-paginator-icon-color`              | `var(--hub-sys-text-body, #212529)` | Color of navigation icons (arrows)                       |
-| `--hub-paginator-icon-size`               | `1em`                                  | Size of navigation icons                                 |
-| `--hub-paginator-info-color`              | `var(--hub-sys-text-muted, #6c757d)`   | Color of pagination info text ("Showing 1 to 10 of 100") |
-| `--hub-paginator-label-color`             | `var(--hub-sys-text-muted, #6c757d)`   | Color of labels (e.g., "Items per page")                 |
-| `--hub-paginator-icon-angle-left`         | `url("…")` (SVG)                       | Glyph for the previous-page arrow                        |
-| `--hub-paginator-icon-angle-right`        | `url("…")` (SVG)                       | Glyph for the next-page arrow                            |
-| `--hub-paginator-icon-angle-double-left`  | `url("…")` (SVG)                       | Glyph for the first-page arrow                           |
-| `--hub-paginator-icon-angle-double-right` | `url("…")` (SVG)                       | Glyph for the last-page arrow                            |
+| Variable                                  | Default                              | Description                                              |
+| ----------------------------------------- | ------------------------------------ | -------------------------------------------------------- |
+| `--hub-paginator-icon-color`              | `var(--hub-sys-text-body, #212529)`  | Color of navigation icons (arrows)                       |
+| `--hub-paginator-icon-size`               | `1em`                                | Size of navigation icons                                 |
+| `--hub-paginator-info-color`              | `var(--hub-sys-text-muted, #6c757d)` | Color of pagination info text ("Showing 1 to 10 of 100") |
+| `--hub-paginator-label-color`             | `var(--hub-sys-text-muted, #6c757d)` | Color of labels (e.g., "Items per page")                 |
+| `--hub-paginator-icon-angle-left`         | `url("…")` (SVG)                     | Glyph for the previous-page arrow                        |
+| `--hub-paginator-icon-angle-right`        | `url("…")` (SVG)                     | Glyph for the next-page arrow                            |
+| `--hub-paginator-icon-angle-double-left`  | `url("…")` (SVG)                     | Glyph for the first-page arrow                           |
+| `--hub-paginator-icon-angle-double-right` | `url("…")` (SVG)                     | Glyph for the last-page arrow                            |
 
 ---
 
@@ -241,7 +241,7 @@ Defined on `.hub-list`. Control the appearance of the `<hub-ui-list>` component 
 | `--hub-list-cards-padding-x`        | `var(--hub-list-item-padding-x)`                                   | Horizontal padding of a card                                               |
 | `--hub-list-cards-padding-y`        | `var(--hub-list-item-padding-y)`                                   | Vertical padding of a card                                                 |
 | `--hub-list-cards-border-color`     | `var(--hub-list-item-border-color)`                                | Border color of a card                                                     |
-| `--hub-list-cards-border-width`     | `0`                           | Border width of a card                                                     |
+| `--hub-list-cards-border-width`     | `0`                                                                | Border width of a card                                                     |
 | `--hub-list-cards-border-radius`    | `var(--hub-list-item-border-radius)`                               | Border radius of a card                                                    |
 | `--hub-list-cards-shadow`           | `none`                                                             | Box shadow of a card (e.g. `var(--hub-sys-shadow-sm)`)                     |
 | `--hub-list-cards-hover-bg`         | `var(--hub-list-item-hover-bg)`                                    | Background color of a clickable card on hover                              |
@@ -252,10 +252,10 @@ Defined on `.hub-list`. Control the appearance of the `<hub-ui-list>` component 
 
 | Variable                        | Default                                        | Description                                                                                   |
 | ------------------------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| `--hub-list-item-color`         | `var(--hub-sys-text-body, #212529)`         | Text color of list items                                                                      |
+| `--hub-list-item-color`         | `var(--hub-sys-text-body, #212529)`            | Text color of list items                                                                      |
 | `--hub-list-item-bg`            | `var(--hub-sys-surface-page, #ffffff)`         | Background of list items; defaults to the page surface so items read as solid like table rows |
 | `--hub-list-item-border-color`  | `var(--hub-sys-border-color-default, #dee2e6)` | Border color of list items                                                                    |
-| `--hub-list-item-border-width`  | `0`                                          | Border width of list items                                                                    |
+| `--hub-list-item-border-width`  | `0`                                            | Border width of list items                                                                    |
 | `--hub-list-item-border-radius` | `var(--hub-ref-radius-sm, 0.25rem)`            | Border radius of list items                                                                   |
 | `--hub-list-item-gap`           | `var(--hub-ref-space-2, 0.5rem)`               | Internal gap within items                                                                     |
 | `--hub-list-item-padding-x`     | `var(--hub-ref-space-3, 1rem)`                 | Horizontal padding of items                                                                   |
@@ -287,9 +287,9 @@ Defined on `.hub-list`. Control the appearance of the `<hub-ui-list>` component 
 | `--hub-list-search-input-bg`            | `var(--hub-sys-surface-page, #ffffff)`         | Background of the search input               |
 | `--hub-list-search-input-border-color`  | `var(--hub-sys-border-color-default, #dee2e6)` | Border color of the search input             |
 | `--hub-list-search-input-border-radius` | `var(--hub-ref-radius-sm, 0.25rem)`            | Border radius of the search input            |
-| `--hub-list-search-input-color`         | `var(--hub-sys-text-body, #212529)`         | Text color of the search input               |
+| `--hub-list-search-input-color`         | `var(--hub-sys-text-body, #212529)`            | Text color of the search input               |
 | `--hub-list-search-btn-bg`              | `var(--hub-sys-surface-elevated, #f8f9fa)`     | Background of the search button              |
-| `--hub-list-search-btn-color`           | `var(--hub-sys-text-body, #212529)`         | Text/icon color of the search button         |
+| `--hub-list-search-btn-color`           | `var(--hub-sys-text-body, #212529)`            | Text/icon color of the search button         |
 | `--hub-list-search-button-min-width`    | `2.75rem`                                      | Minimum width of the search button           |
 | `--hub-list-search-border-color`        | `var(--hub-list-search-input-border-color)`    | Shared border color for search input/button  |
 | `--hub-list-search-border-width`        | `1px`                                          | Shared border width for search input/button  |
@@ -312,23 +312,25 @@ Defined on `.hub-list`. Control the appearance of the `<hub-ui-list>` component 
 
 ### Drag & Drop (List)
 
-| Variable                               | Default                                    | Description                                 |
-| -------------------------------------- | ------------------------------------------ | ------------------------------------------- |
-| `--hub-list-drag-handle-color`         | `var(--hub-sys-text-muted, #6c757d)`       | Color of the drag handle                    |
-| `--hub-list-drag-handle-cursor`        | `grab`                                     | Cursor shown over the drag handle           |
-| `--hub-list-drag-handle-size`          | `var(--hub-ref-icon-size, 1em)`            | Font size of the drag handle                |
-| `--hub-list-item-dragging-opacity`     | `0.5`                                      | Opacity of the row being dragged            |
-| `--hub-list-item-dragging-cursor`      | `grabbing`                                 | Cursor while a row is being dragged         |
-| `--hub-list-drop-target-outline-color` | `var(--hub-list-accent)`                   | Outline color of the hovered drop target    |
-| `--hub-list-drop-target-outline-width` | `2px`                                      | Outline width of the hovered drop target    |
-| `--hub-list-placeholder-bg`            | `var(--hub-sys-surface-elevated, #f8f9fa)` | Background of the drop placeholder          |
-| `--hub-list-placeholder-border-color`  | `var(--hub-list-accent)`                   | Border color of the drop placeholder        |
-| `--hub-list-placeholder-border-width`  | `2px`                                      | Border width of the drop placeholder        |
-| `--hub-list-placeholder-border-style`  | `dashed`                                   | Border style of the drop placeholder        |
-| `--hub-list-placeholder-border-radius` | `var(--hub-list-item-border-radius)`       | Border radius of the drop placeholder       |
-| `--hub-list-placeholder-min-height`    | `2.5rem`                                   | Minimum height of the drop placeholder      |
-| `--hub-list-ghost-opacity`             | `0.85`                                     | Opacity of the floating touch drag ghost    |
-| `--hub-list-ghost-shadow`              | `0 0.5rem 1rem rgba(0, 0, 0, 0.15)`        | Box shadow of the floating touch drag ghost |
+| Variable                               | Default                                    | Description                                               |
+| -------------------------------------- | ------------------------------------------ | --------------------------------------------------------- |
+| `--hub-list-drag-handle-color`         | `var(--hub-sys-text-muted, #6c757d)`       | Color of the drag handle                                  |
+| `--hub-list-drag-handle-cursor`        | `grab`                                     | Cursor shown over the drag handle                         |
+| `--hub-list-drag-handle-size`          | `var(--hub-ref-icon-size, 1em)`            | Font size of the drag handle                              |
+| `--hub-list-item-dragging-opacity`     | `0.5`                                      | Opacity of the row being dragged                          |
+| `--hub-list-item-dragging-cursor`      | `grabbing`                                 | Cursor while a row is being dragged                       |
+| `--hub-list-drop-target-outline-color` | `var(--hub-list-accent)`                   | Outline color of the hovered drop target                  |
+| `--hub-list-drop-target-outline-width` | `2px`                                      | Outline width of the hovered drop target                  |
+| `--hub-list-placeholder-bg`            | `var(--hub-sys-surface-elevated, #f8f9fa)` | Background of the drop placeholder                        |
+| `--hub-list-placeholder-border-color`  | `var(--hub-list-accent)`                   | Border color of the drop placeholder                      |
+| `--hub-list-placeholder-border-width`  | `2px`                                      | Border width of the drop placeholder                      |
+| `--hub-list-placeholder-border-style`  | `dashed`                                   | Border style of the drop placeholder                      |
+| `--hub-list-placeholder-border-radius` | `var(--hub-list-item-border-radius)`       | Border radius of the drop placeholder                     |
+| `--hub-list-placeholder-min-height`    | `2.5rem`                                   | Minimum height of the drop placeholder                    |
+| `--hub-list-drag-duration`             | `200ms`                                    | How long rows slide and the drop slot opens during a drag |
+| `--hub-list-drag-easing`               | `cubic-bezier(0.2, 0, 0, 1)`               | Easing of the drag motion                                 |
+| `--hub-list-ghost-opacity`             | `0.85`                                     | Opacity of the floating touch drag ghost                  |
+| `--hub-list-ghost-shadow`              | `0 0.5rem 1rem rgba(0, 0, 0, 0.15)`        | Box shadow of the floating touch drag ghost               |
 
 ### Connector (List)
 
@@ -345,14 +347,14 @@ Opt-in via the `connected` input — draws a vertical line between consecutive i
 
 The list draws its own glyphs and owns the variables behind them, so changing the chevron here leaves the table's alone.
 
-| Variable                       | Default                         | Description                                                  |
-| ------------------------------ | ------------------------------- | ------------------------------------------------------------ |
-| `--hub-list-icon-color`        | `currentColor`                  | Fill colour of the list's glyphs                             |
-| `--hub-list-icon-size`         | `2em` | Size of the list's glyphs                                    |
-| `--hub-list-icon-chevron-up`   | `url("…")` (SVG)                | Glyph on the trigger of an expanded parent item              |
-| `--hub-list-icon-chevron-down` | `url("…")` (SVG)                | Glyph on the trigger of a collapsed parent item              |
-| `--hub-list-icon-info`         | `url("…")` (SVG)                | Glyph in front of the loading, error and no-results messages |
-| `--hub-list-icon-search`       | `url("…")` (SVG)                | Glyph on the search button                                   |
+| Variable                       | Default          | Description                                                  |
+| ------------------------------ | ---------------- | ------------------------------------------------------------ |
+| `--hub-list-icon-color`        | `currentColor`   | Fill colour of the list's glyphs                             |
+| `--hub-list-icon-size`         | `2em`            | Size of the list's glyphs                                    |
+| `--hub-list-icon-chevron-up`   | `url("…")` (SVG) | Glyph on the trigger of an expanded parent item              |
+| `--hub-list-icon-chevron-down` | `url("…")` (SVG) | Glyph on the trigger of a collapsed parent item              |
+| `--hub-list-icon-info`         | `url("…")` (SVG) | Glyph in front of the loading, error and no-results messages |
+| `--hub-list-icon-search`       | `url("…")` (SVG) | Glyph on the search button                                   |
 
 ### Misc
 
@@ -379,7 +381,7 @@ The table reads a single accent slot and derives its family locally (same genera
 | `--hub-table-accent`             | `var(--hub-sys-color-primary, #0d6efd)`                                                  | Accent slot — drives selection tint and accent layers                                                                                              |
 | `--hub-table-accent-subtle`      | `color-mix(in oklch, var(--hub-table-accent) 12%, var(--hub-sys-surface-page, #ffffff))` | Soft accent tint (derived)                                                                                                                         |
 | `--hub-table-selected-bg`        | `var(--hub-table-accent-subtle)`                                                         | Selected row background. Applies to the built-in selection **and** a consumer-set `hub-table__row--selected` class (via `[rowClass]`)              |
-| `--hub-table-selected-color`     | `var(--hub-sys-text-body, #212529)`                                                   | Selected row text color                                                                                                                            |
+| `--hub-table-selected-color`     | `var(--hub-sys-text-body, #212529)`                                                      | Selected row text color                                                                                                                            |
 | `--hub-table-selected-bar-width` | `0`                                                                                      | Width of the accent bar on the selected row's leading edge (master-detail "active row"). `0` = off (no visual change); set e.g. `3px` to reveal it |
 | `--hub-table-selected-bar-color` | `var(--hub-table-accent)`                                                                | Colour of the selected-row accent bar                                                                                                              |
 
@@ -414,53 +416,57 @@ The table reads a single accent slot and derives its family locally (same genera
 | Variable                               | Default                                        | Description                                                                                                                                                                                                                                                                  |
 | -------------------------------------- | ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `--hub-table-container-bg`             | `var(--hub-ref-color-white, #fff)`             | Background of the table container                                                                                                                                                                                                                                            |
-| `--hub-table-container-color`          | `var(--hub-sys-text-body, #212529)`         | Text color of the table container                                                                                                                                                                                                                                            |
+| `--hub-table-container-color`          | `var(--hub-sys-text-body, #212529)`            | Text color of the table container                                                                                                                                                                                                                                            |
 | `--hub-table-border-color`             | `var(--hub-sys-border-color-default, #dee2e6)` | Border color used in the table wrapper                                                                                                                                                                                                                                       |
-| `--hub-table-border-radius`            | `0`           | Border radius of the table container                                                                                                                                                                                                                                         |
-| `--hub-table-border-width`             | `0`             | Border width of the table container                                                                                                                                                                                                                                          |
+| `--hub-table-border-radius`            | `0`                                            | Border radius of the table container                                                                                                                                                                                                                                         |
+| `--hub-table-border-width`             | `0`                                            | Border width of the table container                                                                                                                                                                                                                                          |
 | `--hub-table-container-gap`            | `var(--hub-ref-space-3, 1rem)`                 | Gap between the top bar, table and bottom bar                                                                                                                                                                                                                                |
 | `--hub-table-container-max-block-size` | `none`                                         | Max height of the scroll body; with `options.scrollable`, set it to cap the body height and engage the sticky header                                                                                                                                                         |
-| `--hub-table-container-overflow`       | `visible`                                         | Scroll behaviour of the built-in container. `[stickyHeader]` flips it to `visible` so the container does **not** trap the sticky header, letting it pin to the consumer's own scroll ancestor (a `max-height` + `overflow:auto` box). Override to force a specific behaviour |
+| `--hub-table-container-overflow`       | `visible`                                      | Scroll behaviour of the built-in container. `[stickyHeader]` flips it to `visible` so the container does **not** trap the sticky header, letting it pin to the consumer's own scroll ancestor (a `max-height` + `overflow:auto` box). Override to force a specific behaviour |
 | `--hub-table-head-sticky-top`          | `0`                                            | Sticky offset of the header while the body scrolls (e.g. to clear a toolbar)                                                                                                                                                                                                 |
 
 ### Search (Table)
 
-| Variable                                 | Default                                                                  | Description                                                          |
-| ---------------------------------------- | ------------------------------------------------------------------------ | -------------------------------------------------------------------- |
-| `--hub-table-search-input-bg`            | `var(--hub-table-container-bg, var(--hub-sys-surface-page, #fff))`       | Background of the search input                                       |
-| `--hub-table-search-input-border-color`  | `var(--hub-table-border-color)`                                          | Border color of the search input                                     |
+| Variable                                 | Default                                                               | Description                                                          |
+| ---------------------------------------- | --------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| `--hub-table-search-input-bg`            | `var(--hub-table-container-bg, var(--hub-sys-surface-page, #fff))`    | Background of the search input                                       |
+| `--hub-table-search-input-border-color`  | `var(--hub-table-border-color)`                                       | Border color of the search input                                     |
 | `--hub-table-search-input-color`         | `var(--hub-table-container-color, var(--hub-sys-text-body, #212529))` | Text color of the search input                                       |
-| `--hub-table-search-input-padding-x`     | `0.75rem`                                                                | Horizontal padding of the search input                               |
-| `--hub-table-search-input-padding-y`     | `0.375rem`                                                               | Vertical padding of the search input                                 |
-| `--hub-table-search-input-font-size`     | `1rem`                                                                   | Font size of the search input                                        |
-| `--hub-table-search-button-bg`           | `var(--hub-table-container-bg, var(--hub-sys-surface-page, #fff))`       | Background of the search button                                      |
-| `--hub-table-search-button-border-color` | `var(--hub-table-border-color)`                                          | Border color of the search button                                    |
+| `--hub-table-search-input-padding-x`     | `0.75rem`                                                             | Horizontal padding of the search input                               |
+| `--hub-table-search-input-padding-y`     | `0.375rem`                                                            | Vertical padding of the search input                                 |
+| `--hub-table-search-input-font-size`     | `1rem`                                                                | Font size of the search input                                        |
+| `--hub-table-search-button-bg`           | `var(--hub-table-container-bg, var(--hub-sys-surface-page, #fff))`    | Background of the search button                                      |
+| `--hub-table-search-button-border-color` | `var(--hub-table-border-color)`                                       | Border color of the search button                                    |
 | `--hub-table-search-button-color`        | `var(--hub-table-container-color, var(--hub-sys-text-body, #212529))` | Text/icon color of the search button                                 |
-| `--hub-table-search-button-min-width`    | `2.75rem`                                                                | Minimum width of the search button                                   |
-| `--hub-table-search-border-width`        | `var(--hub-table-border-width)`                                          | Shared border width for search input/button                          |
-| `--hub-table-search-border-radius`       | `var(--hub-table-border-radius)`                                         | Shared border radius for search input/button                         |
-| `--hub-table-search-clear-color`         | `var(--hub-sys-text-muted, #6c757d)`                                     | Colour of the clear (×) affordance, shown while the box holds a term |
+| `--hub-table-search-button-min-width`    | `2.75rem`                                                             | Minimum width of the search button                                   |
+| `--hub-table-search-border-width`        | `var(--hub-table-border-width)`                                       | Shared border width for search input/button                          |
+| `--hub-table-search-border-radius`       | `var(--hub-table-border-radius)`                                      | Shared border radius for search input/button                         |
+| `--hub-table-search-clear-color`         | `var(--hub-sys-text-muted, #6c757d)`                                  | Colour of the clear (×) affordance, shown while the box holds a term |
 | `--hub-table-search-clear-hover-color`   | `var(--hub-table-container-color, var(--hub-sys-text-body, #212529))` | Colour of the clear affordance on hover/focus                        |
-| `--hub-table-search-clear-icon-size`     | `0.75em`                                                                 | Size of the clear affordance's glyph                                 |
-| `--hub-table-search-clear-padding-x`     | `var(--hub-ref-space-2, 0.5rem)`                                         | Horizontal padding of the clear affordance                           |
+| `--hub-table-search-clear-icon-size`     | `0.75em`                                                              | Size of the clear affordance's glyph                                 |
+| `--hub-table-search-clear-padding-x`     | `var(--hub-ref-space-2, 0.5rem)`                                      | Horizontal padding of the clear affordance                           |
 
 ### Table Element
 
-| Variable                            | Default                                                        | Description                                                                                                               |
-| ----------------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `--hub-table-bg`                    | `var(--hub-ref-color-white, #fff)`                             | Background of the `<table>` element                                                                                       |
-| `--hub-table-color`                 | `var(--hub-sys-text-body, #212529)`                         | Text color inside the table                                                                                               |
-| `--hub-table-border-color`          | `var(--hub-sys-border-color-default, #dee2e6)`                 | Border color of table rows and cells                                                                                      |
-| `--hub-table-border-width`          | `0`                             | Border width of table rows and cells                                                                                      |
-| `--hub-table-group-separator-color` | `var(--hub-sys-border-color-default, #dee2e6)`                 | Color of the separator between thead and tbody                                                                            |
-| `--hub-table-head-bg`               | `var(--hub-table-bg, var(--hub-sys-surface-page, #fff))`       | Header (thead) surface; kept opaque so a sticky header covers the scrolling body                                          |
-| `--hub-table-head-color`            | `var(--hub-table-color, var(--hub-sys-text-body, #212529))` | Header (thead) text color                                                                                                 |
-| `--hub-table-head-font-size`        | `inherit`                                                      | Header (thead) cell font size                                                                                             |
-| `--hub-table-head-font-weight`      | `bold`                                                         | Header (thead) cell font weight (browser `th` default; set to `var(--hub-ref-font-weight-semibold, 600)` for the DS look) |
-| `--hub-table-head-padding-x`        | `var(--hub-table-cell-padding-x)`                              | Header (thead) cell horizontal padding                                                                                    |
-| `--hub-table-head-padding-y`        | `var(--hub-table-cell-padding-y)`                              | Header (thead) cell vertical padding                                                                                      |
-| `--hub-table-head-position`         | `sticky`                                                       | CSS `position` of the header when `[stickyHeader]` is set; override to `static` to opt a table out                        |
-| `--hub-table-row-divider-color`     | `var(--hub-table-border-color)`                                | Color of the divider between body rows (independent of the frame and vertical borders)                                    |
+| Variable                                 | Default                                                                       | Description                                                                                                               |
+| ---------------------------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `--hub-table-bg`                         | `var(--hub-ref-color-white, #fff)`                                            | Background of the `<table>` element                                                                                       |
+| `--hub-table-color`                      | `var(--hub-sys-text-body, #212529)`                                           | Text color inside the table                                                                                               |
+| `--hub-table-border-color`               | `var(--hub-sys-border-color-default, #dee2e6)`                                | Border color of table rows and cells                                                                                      |
+| `--hub-table-border-width`               | `0`                                                                           | Border width of table rows and cells                                                                                      |
+| `--hub-table-group-separator-color`      | `var(--hub-sys-border-color-default, #dee2e6)`                                | Color of the separator between thead and tbody                                                                            |
+| `--hub-table-head-bg`                    | `var(--hub-table-bg, var(--hub-sys-surface-page, #fff))`                      | Header (thead) surface; kept opaque so a sticky header covers the scrolling body                                          |
+| `--hub-table-head-color`                 | `var(--hub-table-color, var(--hub-sys-text-body, #212529))`                   | Header (thead) text color                                                                                                 |
+| `--hub-table-head-font-size`             | `inherit`                                                                     | Header (thead) cell font size                                                                                             |
+| `--hub-table-head-font-weight`           | `bold`                                                                        | Header (thead) cell font weight (browser `th` default; set to `var(--hub-ref-font-weight-semibold, 600)` for the DS look) |
+| `--hub-table-head-padding-x`             | `var(--hub-table-cell-padding-x)`                                             | Header (thead) cell horizontal padding                                                                                    |
+| `--hub-table-head-padding-y`             | `var(--hub-table-cell-padding-y)`                                             | Header (thead) cell vertical padding                                                                                      |
+| `--hub-table-head-position`              | `sticky`                                                                      | CSS `position` of the header when `[stickyHeader]` is set; override to `static` to opt a table out                        |
+| `--hub-table-row-divider-color`          | `var(--hub-table-border-color)`                                               | Color of the divider between body rows (independent of the frame and vertical borders)                                    |
+| `--hub-table-resize-handle-width`        | `0.5rem`                                                                      | Width of the hit area of the column resize handle                                                                         |
+| `--hub-table-resize-handle-color`        | `var(--hub-table-border-color, var(--hub-sys-border-color-default, #dee2e6))` | Colour of the line drawn by a column resize handle                                                                        |
+| `--hub-table-resize-handle-active-color` | `var(--hub-sys-color-primary, #0d6efd)`                                       | Colour of the resize handle line on hover and while dragging                                                              |
+| `--hub-table-utility-col-width`          | `3rem`                                                                        | Width of the selection and expander columns when the table uses a fixed layout (declared widths or resizable columns)     |
 
 ### Cell Spacing
 
@@ -477,24 +483,24 @@ The table reads a single accent slot and derives its family locally (same genera
 | Variable                    | Default                                                | Description                 |
 | --------------------------- | ------------------------------------------------------ | --------------------------- |
 | `--hub-table-hover-bg`      | `var(--hub-sys-state-hover-bg, rgba(0, 0, 0, 0.075))`  | Background on row hover     |
-| `--hub-table-hover-color`   | `var(--hub-sys-text-body, #212529)`                 | Text color on row hover     |
+| `--hub-table-hover-color`   | `var(--hub-sys-text-body, #212529)`                    | Text color on row hover     |
 | `--hub-table-active-bg`     | `var(--hub-sys-state-active-bg, rgba(0, 0, 0, 0.1))`   | Background for active rows  |
-| `--hub-table-active-color`  | `var(--hub-sys-text-body, #212529)`                 | Text color for active rows  |
+| `--hub-table-active-color`  | `var(--hub-sys-text-body, #212529)`                    | Text color for active rows  |
 | `--hub-table-striped-bg`    | `var(--hub-sys-state-striped-bg, rgba(0, 0, 0, 0.05))` | Background for striped rows |
-| `--hub-table-striped-color` | `var(--hub-sys-text-body, #212529)`                 | Text color for striped rows |
+| `--hub-table-striped-color` | `var(--hub-sys-text-body, #212529)`                    | Text color for striped rows |
 
 ### Accent Layer (Advanced)
 
 These variables power the cascade pattern for row states (`striped`, `hover`, `active`). They are set internally and generally should not be overridden directly.
 
-| Variable                     | Default                                                        | Description                                                                                                  |
-| ---------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| `--hub-table-accent-bg`      | `transparent`                                                  | Base accent background                                                                                       |
-| `--hub-table-bg-type`        | `initial`                                                      | Background set by variant type (striped)                                                                     |
-| `--hub-table-bg-state`       | `var(--hub-table-active-bg, var(--hub-sys-state-active-bg, rgba(0, 0, 0, 0.1)))`                                                      | Background set by interaction state (hover, active)                                                          |
-| `--hub-table-color-type`     | `initial`                                                      | Color set by variant type                                                                                    |
-| `--hub-table-color-state`    | `var(--hub-table-active-color, var(--hub-table-color, var(--hub-sys-text-body, #212529)))`                                                      | Color set by interaction state                                                                               |
-| `--hub-table-cell-bar-width` | `var(--hub-table-selected-bar-width, 0)`                          | Per-cell leading accent-bar width (internal; the selected row sets it from `--hub-table-selected-bar-width`) |
+| Variable                     | Default                                                                                               | Description                                                                                                  |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `--hub-table-accent-bg`      | `transparent`                                                                                         | Base accent background                                                                                       |
+| `--hub-table-bg-type`        | `initial`                                                                                             | Background set by variant type (striped)                                                                     |
+| `--hub-table-bg-state`       | `var(--hub-table-active-bg, var(--hub-sys-state-active-bg, rgba(0, 0, 0, 0.1)))`                      | Background set by interaction state (hover, active)                                                          |
+| `--hub-table-color-type`     | `initial`                                                                                             | Color set by variant type                                                                                    |
+| `--hub-table-color-state`    | `var(--hub-table-active-color, var(--hub-table-color, var(--hub-sys-text-body, #212529)))`            | Color set by interaction state                                                                               |
+| `--hub-table-cell-bar-width` | `var(--hub-table-selected-bar-width, 0)`                                                              | Per-cell leading accent-bar width (internal; the selected row sets it from `--hub-table-selected-bar-width`) |
 | `--hub-table-cell-bar-color` | `var(--hub-table-selected-bar-color, var(--hub-table-accent, var(--hub-sys-color-primary, #0d6efd)))` | Per-cell leading accent-bar colour (internal; set from `--hub-table-selected-bar-color`)                     |
 
 ### Filter Button & Count Badge
@@ -528,31 +534,31 @@ The inline filter controls the table draws under the header (`filter.mode` other
 including the two-ended range field. A cell whose filter currently holds a value takes the
 `--active` state, so the row shows both which columns can be filtered and which of them are.
 
-| Variable                                         | Default                                                                      | Description                                |
-| ------------------------------------------------ | ---------------------------------------------------------------------------- | ------------------------------------------ |
-| `--hub-table-filter-row-bg`                      | `var(--hub-table-head-bg)`                                                   | Background of the filter row               |
-| `--hub-table-filter-cell-padding-x`              | `var(--hub-table-head-padding-x)`                                            | Horizontal padding of a filter cell        |
-| `--hub-table-filter-cell-padding-y`              | `var(--hub-table-head-padding-y)`                                            | Vertical padding of a filter cell          |
-| `--hub-table-filter-control-bg`                  | `var(--hub-table-filter-control-active-bg, var(--hub-table-filter-button-active-bg, color-mix(in oklch, var(--hub-sys-color-success, #198754) 10%, transparent)))`           | Background of a filter control             |
-| `--hub-table-filter-control-color`               | `var(--hub-table-container-color, var(--hub-sys-text-body, #212529))`     | Text color of a filter control             |
-| `--hub-table-filter-control-placeholder-color`   | `var(--hub-sys-text-muted, #6c757d)`                                         | Placeholder and range-label color          |
-| `--hub-table-filter-control-border-color`        | `var(--hub-table-filter-control-active-border-color, var(--hub-table-filter-button-active-border-color, var(--hub-sys-color-success, #198754)))`                                              | Border color of a filter control           |
-| `--hub-table-filter-control-border-width`        | `var(--hub-table-border-width)`                                              | Border width of a filter control           |
-| `--hub-table-filter-control-border-radius`       | `var(--hub-ref-radius-sm, 0.25rem)`                                          | Border radius of a filter control          |
-| `--hub-table-filter-control-padding-x`           | `var(--hub-ref-space-2, 0.5rem)`                                             | Horizontal padding inside a filter control |
-| `--hub-table-filter-control-padding-y`           | `var(--hub-ref-space-1, 0.25rem)`                                            | Vertical padding inside a filter control   |
-| `--hub-table-filter-control-font-size`           | `var(--hub-ref-font-size-sm, 0.875rem)`                                      | Font size of a filter control              |
-| `--hub-table-filter-control-focus-border-color`  | `var(--hub-table-accent)`                                                    | Border color while focused                 |
-| `--hub-table-filter-control-focus-shadow`        | `0 0 0 0.2rem color-mix(in oklch, var(--hub-table-accent) 25%, transparent)` | Focus ring                                 |
-| `--hub-table-filter-control-active-bg`           | `var(--hub-table-filter-button-active-bg)`                                   | Background when the filter holds a value   |
-| `--hub-table-filter-control-active-border-color` | `var(--hub-table-filter-button-active-border-color)`                         | Border color when the filter holds a value |
+| Variable                                         | Default                                                                                                                                                            | Description                                |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------ |
+| `--hub-table-filter-row-bg`                      | `var(--hub-table-head-bg)`                                                                                                                                         | Background of the filter row               |
+| `--hub-table-filter-cell-padding-x`              | `var(--hub-table-head-padding-x)`                                                                                                                                  | Horizontal padding of a filter cell        |
+| `--hub-table-filter-cell-padding-y`              | `var(--hub-table-head-padding-y)`                                                                                                                                  | Vertical padding of a filter cell          |
+| `--hub-table-filter-control-bg`                  | `var(--hub-table-filter-control-active-bg, var(--hub-table-filter-button-active-bg, color-mix(in oklch, var(--hub-sys-color-success, #198754) 10%, transparent)))` | Background of a filter control             |
+| `--hub-table-filter-control-color`               | `var(--hub-table-container-color, var(--hub-sys-text-body, #212529))`                                                                                              | Text color of a filter control             |
+| `--hub-table-filter-control-placeholder-color`   | `var(--hub-sys-text-muted, #6c757d)`                                                                                                                               | Placeholder and range-label color          |
+| `--hub-table-filter-control-border-color`        | `var(--hub-table-filter-control-active-border-color, var(--hub-table-filter-button-active-border-color, var(--hub-sys-color-success, #198754)))`                   | Border color of a filter control           |
+| `--hub-table-filter-control-border-width`        | `var(--hub-table-border-width)`                                                                                                                                    | Border width of a filter control           |
+| `--hub-table-filter-control-border-radius`       | `var(--hub-ref-radius-sm, 0.25rem)`                                                                                                                                | Border radius of a filter control          |
+| `--hub-table-filter-control-padding-x`           | `var(--hub-ref-space-2, 0.5rem)`                                                                                                                                   | Horizontal padding inside a filter control |
+| `--hub-table-filter-control-padding-y`           | `var(--hub-ref-space-1, 0.25rem)`                                                                                                                                  | Vertical padding inside a filter control   |
+| `--hub-table-filter-control-font-size`           | `var(--hub-ref-font-size-sm, 0.875rem)`                                                                                                                            | Font size of a filter control              |
+| `--hub-table-filter-control-focus-border-color`  | `var(--hub-table-accent)`                                                                                                                                          | Border color while focused                 |
+| `--hub-table-filter-control-focus-shadow`        | `0 0 0 0.2rem color-mix(in oklch, var(--hub-table-accent) 25%, transparent)`                                                                                       | Focus ring                                 |
+| `--hub-table-filter-control-active-bg`           | `var(--hub-table-filter-button-active-bg)`                                                                                                                         | Background when the filter holds a value   |
+| `--hub-table-filter-control-active-border-color` | `var(--hub-table-filter-button-active-border-color)`                                                                                                               | Border color when the filter holds a value |
 
 ### Clear Filters Button
 
 | Variable                                        | Default                                                                      | Description                                    |
 | ----------------------------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------- |
 | `--hub-table-delete-filters-bg`                 | `var(--hub-table-container-bg, var(--hub-sys-surface-page, #fff))`           | Background of the button                       |
-| `--hub-table-delete-filters-color`              | `var(--hub-table-container-color, var(--hub-sys-text-body, #212529))`     | Text and icon color                            |
+| `--hub-table-delete-filters-color`              | `var(--hub-table-container-color, var(--hub-sys-text-body, #212529))`        | Text and icon color                            |
 | `--hub-table-delete-filters-border-color`       | `var(--hub-table-border-color)`                                              | Border color                                   |
 | `--hub-table-delete-filters-border-width`       | `var(--hub-table-border-width)`                                              | Border width                                   |
 | `--hub-table-delete-filters-border-radius`      | `var(--hub-table-border-radius)`                                             | Border radius                                  |
@@ -567,31 +573,31 @@ including the two-ended range field. A cell whose filter currently holds a value
 
 ### Icons
 
-| Variable                              | Default          | Description                                                                                                                                                                                           |
-| ------------------------------------- | ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `--hub-table-icon-color`              | `currentColor`   | Color of table icons (sort, filter, etc.)                                                                                                                                                             |
-| `--hub-table-icon-size`               | `var(--hub-table-search-clear-icon-size, 0.75em)`            | Base size of table icons                                                                                                                                                                              |
-| `--hub-table-icon-sort`               | `url("…")` (SVG) | Glyph for the sortable (unsorted) indicator                                                                                                                                                           |
-| `--hub-table-icon-sort-up`            | `url("…")` (SVG) | Glyph for the ascending sort indicator                                                                                                                                                                |
-| `--hub-table-icon-sort-down`          | `url("…")` (SVG) | Glyph for the descending sort indicator                                                                                                                                                               |
-| `--hub-table-icon-caret-up`           | `url("…")` (SVG) | Row-expander caret glyph (expanded)                                                                                                                                                                   |
-| `--hub-table-icon-caret-down`         | `url("…")` (SVG) | Row-expander caret glyph (collapsed)                                                                                                                                                                  |
-| `--hub-table-icon-search`             | `url("…")` (SVG) | Table search icon (SVG, overridable via mask-image)                                                                                                                                                   |
-| `--hub-table-icon-filter`             | `url("…")` (SVG) | Table filter icon (SVG, overridable via mask-image)                                                                                                                                                   |
-| `--hub-table-icon-eraser`             | `url("…")` (SVG) | Table eraser icon (SVG, overridable via mask-image)                                                                                                                                                   |
-| `--hub-table-icon-close`              | `url("…")` (SVG) | Close/dismiss glyph used by the search box's clear affordance                                                                                                                                         |
-| `--hub-table-icon-info`               | `url("…")` (SVG) | Table info icon (SVG, overridable via mask-image)                                                                                                                                                     |
-| `--hub-table-icon-chevron-up`         | `url("…")` (SVG) | Declared for `.hub-table__icon--chevron-up`. Nothing in this package paints that class, and the rule is scoped to the table's own view, so overriding this variable changes nothing on screen         |
-| `--hub-table-icon-chevron-down`       | `url("…")` (SVG) | Declared for `.hub-table__icon--chevron-down`. Nothing in this package paints that class, and the rule is scoped to the table's own view, so overriding this variable changes nothing on screen       |
-| `--hub-table-icon-chevron-left`       | `url("…")` (SVG) | Declared for `.hub-table__icon--chevron-left`. Nothing in this package paints that class, and the rule is scoped to the table's own view, so overriding this variable changes nothing on screen       |
-| `--hub-table-icon-chevron-right`      | `url("…")` (SVG) | Declared for `.hub-table__icon--chevron-right`. Nothing in this package paints that class, and the rule is scoped to the table's own view, so overriding this variable changes nothing on screen      |
-| `--hub-table-icon-angle-left`         | `url("…")` (SVG) | Declared for `.hub-table__icon--angle-left`. Nothing in this package paints that class, and the rule is scoped to the table's own view, so overriding this variable changes nothing on screen         |
-| `--hub-table-icon-angle-right`        | `url("…")` (SVG) | Declared for `.hub-table__icon--angle-right`. Nothing in this package paints that class, and the rule is scoped to the table's own view, so overriding this variable changes nothing on screen        |
-| `--hub-table-icon-angle-double-left`  | `url("…")` (SVG) | Declared for `.hub-table__icon--angle-double-left`. Nothing in this package paints that class, and the rule is scoped to the table's own view, so overriding this variable changes nothing on screen  |
-| `--hub-table-icon-angle-double-right` | `url("…")` (SVG) | Declared for `.hub-table__icon--angle-double-right`. Nothing in this package paints that class, and the rule is scoped to the table's own view, so overriding this variable changes nothing on screen |
-| `--hub-table-icon-ellipsis-v`         | `url("…")` (SVG) | Declared for `.hub-table__icon--ellipsis-v`; nothing paints that class since 22.18.0 — theme `--hub-table-dropdown-icon-ellipsis-v` instead                                                           |
-| `--hub-table-icon-trash`              | `url("…")` (SVG) | Declared for `.hub-table__icon--trash`; nothing paints that class since 22.18.0 — theme `--hub-filter-icon-trash` instead                                                                             |
-| `--hub-table-icon-plus`               | `url("…")` (SVG) | Declared for `.hub-table__icon--plus`; nothing paints that class since 22.18.0 — theme `--hub-filter-icon-plus` instead                                                                               |
+| Variable                              | Default                                           | Description                                                                                                                                                                                           |
+| ------------------------------------- | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--hub-table-icon-color`              | `currentColor`                                    | Color of table icons (sort, filter, etc.)                                                                                                                                                             |
+| `--hub-table-icon-size`               | `var(--hub-table-search-clear-icon-size, 0.75em)` | Base size of table icons                                                                                                                                                                              |
+| `--hub-table-icon-sort`               | `url("…")` (SVG)                                  | Glyph for the sortable (unsorted) indicator                                                                                                                                                           |
+| `--hub-table-icon-sort-up`            | `url("…")` (SVG)                                  | Glyph for the ascending sort indicator                                                                                                                                                                |
+| `--hub-table-icon-sort-down`          | `url("…")` (SVG)                                  | Glyph for the descending sort indicator                                                                                                                                                               |
+| `--hub-table-icon-caret-up`           | `url("…")` (SVG)                                  | Row-expander caret glyph (expanded)                                                                                                                                                                   |
+| `--hub-table-icon-caret-down`         | `url("…")` (SVG)                                  | Row-expander caret glyph (collapsed)                                                                                                                                                                  |
+| `--hub-table-icon-search`             | `url("…")` (SVG)                                  | Table search icon (SVG, overridable via mask-image)                                                                                                                                                   |
+| `--hub-table-icon-filter`             | `url("…")` (SVG)                                  | Table filter icon (SVG, overridable via mask-image)                                                                                                                                                   |
+| `--hub-table-icon-eraser`             | `url("…")` (SVG)                                  | Table eraser icon (SVG, overridable via mask-image)                                                                                                                                                   |
+| `--hub-table-icon-close`              | `url("…")` (SVG)                                  | Close/dismiss glyph used by the search box's clear affordance                                                                                                                                         |
+| `--hub-table-icon-info`               | `url("…")` (SVG)                                  | Table info icon (SVG, overridable via mask-image)                                                                                                                                                     |
+| `--hub-table-icon-chevron-up`         | `url("…")` (SVG)                                  | Declared for `.hub-table__icon--chevron-up`. Nothing in this package paints that class, and the rule is scoped to the table's own view, so overriding this variable changes nothing on screen         |
+| `--hub-table-icon-chevron-down`       | `url("…")` (SVG)                                  | Declared for `.hub-table__icon--chevron-down`. Nothing in this package paints that class, and the rule is scoped to the table's own view, so overriding this variable changes nothing on screen       |
+| `--hub-table-icon-chevron-left`       | `url("…")` (SVG)                                  | Declared for `.hub-table__icon--chevron-left`. Nothing in this package paints that class, and the rule is scoped to the table's own view, so overriding this variable changes nothing on screen       |
+| `--hub-table-icon-chevron-right`      | `url("…")` (SVG)                                  | Declared for `.hub-table__icon--chevron-right`. Nothing in this package paints that class, and the rule is scoped to the table's own view, so overriding this variable changes nothing on screen      |
+| `--hub-table-icon-angle-left`         | `url("…")` (SVG)                                  | Declared for `.hub-table__icon--angle-left`. Nothing in this package paints that class, and the rule is scoped to the table's own view, so overriding this variable changes nothing on screen         |
+| `--hub-table-icon-angle-right`        | `url("…")` (SVG)                                  | Declared for `.hub-table__icon--angle-right`. Nothing in this package paints that class, and the rule is scoped to the table's own view, so overriding this variable changes nothing on screen        |
+| `--hub-table-icon-angle-double-left`  | `url("…")` (SVG)                                  | Declared for `.hub-table__icon--angle-double-left`. Nothing in this package paints that class, and the rule is scoped to the table's own view, so overriding this variable changes nothing on screen  |
+| `--hub-table-icon-angle-double-right` | `url("…")` (SVG)                                  | Declared for `.hub-table__icon--angle-double-right`. Nothing in this package paints that class, and the rule is scoped to the table's own view, so overriding this variable changes nothing on screen |
+| `--hub-table-icon-ellipsis-v`         | `url("…")` (SVG)                                  | Declared for `.hub-table__icon--ellipsis-v`; nothing paints that class since 22.18.0 — theme `--hub-table-dropdown-icon-ellipsis-v` instead                                                           |
+| `--hub-table-icon-trash`              | `url("…")` (SVG)                                  | Declared for `.hub-table__icon--trash`; nothing paints that class since 22.18.0 — theme `--hub-filter-icon-trash` instead                                                                             |
+| `--hub-table-icon-plus`               | `url("…")` (SVG)                                  | Declared for `.hub-table__icon--plus`; nothing paints that class since 22.18.0 — theme `--hub-filter-icon-plus` instead                                                                               |
 
 ### Responsive Breakpoints
 

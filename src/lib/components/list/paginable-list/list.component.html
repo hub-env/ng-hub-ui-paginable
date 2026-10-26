@@ -171,7 +171,7 @@
 								(change)="onGroupSelectionChange(formGroup)"
 								(click)="$event.stopPropagation()"
 							/>
-						} @else if (singleSelectable() && !item.children?.length) {
+						} @else if (singleSelectable() && !items[index][bindChildren()]?.length) {
 							<input
 								class="hub-list__radio"
 								type="radio"
@@ -197,7 +197,7 @@
 							>
 							</ng-container>
 						</div>
-						@if (item[bindChildren()]?.length) {
+						@if (items[index][bindChildren()]?.length) {
 							<div class="hub-list__actions">
 								<button
 									class="hub-list__chevron"
@@ -219,7 +219,7 @@
 							</div>
 						}
 					</div>
-					@if (item[bindChildren()]?.length && !item.collapsed) {
+					@if (drawsChildren(items[index]) && !item.collapsed) {
 						<ng-container
 							[ngTemplateOutlet]="containerTpt"
 							[ngTemplateOutletContext]="{

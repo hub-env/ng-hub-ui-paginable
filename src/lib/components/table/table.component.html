@@ -141,8 +141,24 @@
 		[class.hub-table__striped-columns-even]="striped === 'columns-even'"
 		[class.hub-table__selectable]="selectable()"
 		[class.hub-table__scrollable]="options().scrollable"
+		[class.hub-table__element--fixed-layout]="fixedLayout()"
 		[ngClass]="options().variant ? 'hub-table__' + options().variant : null"
 	>
+		@if (fixedLayout()) {
+			<colgroup>
+				@if (selectable()) {
+					<col class="hub-table__col--utility" />
+				}
+				@for (header of fixedHeaders(); track header.property) {
+					@if (!(isColumnHidden(header) | async)) {
+						<col [style.width]="columnWidth(header)" />
+					}
+				}
+				@if (templateExpandingRows().length) {
+					<col class="hub-table__col--utility" />
+				}
+			</colgroup>
+		}
 		<thead class="hub-table__head" [formGroup]="filtersFG">
 			<tr class="hub-table__head-row">
 				@if (selectable()) {
@@ -242,6 +258,27 @@
 									</div>
 								}
 							</div>
+							@if (isResizable(header)) {
+								<span
+									class="hub-table__resize-handle"
+									role="separator"
+									aria-orientation="vertical"
+									tabindex="0"
+									[attr.aria-label]="'RESIZE_COLUMN' | translate: { column: columnName(header) } | ucfirst"
+									[attr.aria-valuenow]="handleValue(header)"
+									[attr.aria-valuemin]="minWidthOf(header)"
+									[attr.aria-valuemax]="maxWidthOf(header)"
+									[class.hub-table__resize-handle--active]="isDragging(header)"
+									(pointerdown)="onResizeStart(header, $event)"
+									(pointermove)="onResizeMove($event)"
+									(pointerup)="onResizeEnd($event)"
+									(pointercancel)="onResizeEnd($event)"
+									(lostpointercapture)="onResizeEnd($event)"
+									(click)="$event.stopPropagation()"
+									(focus)="onHandleFocus(header, $event)"
+									(keydown)="onResizeKeydown(header, $event)"
+								></span>
+							}
 						</th>
 					}
 				}

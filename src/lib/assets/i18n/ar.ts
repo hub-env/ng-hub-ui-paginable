@@ -57,6 +57,7 @@ export const locale = {
 		CLEAR: 'مسح',
 		CLEAR_SEARCH: 'مسح البحث',
 		SORT_BY: 'الترتيب حسب {{ column }}',
+		RESIZE_COLUMN: 'تغيير عرض {{ column }}',
 		FILTER_BY: 'التصفية حسب {{ column }}',
 		SELECT_ALL_ROWS: 'تحديد كل الصفوف',
 		SELECT_ROW: 'تحديد الصف',

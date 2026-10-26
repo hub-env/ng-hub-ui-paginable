@@ -197,6 +197,20 @@
 			padding-top: 0;
 			padding-bottom: 0;
 			border-radius: 0;
+
+			// The slot an empty collection opens during a drag grows into place rather than popping.
+			transition:
+				min-height var(--hub-list-drag-duration, 200ms) var(--hub-list-drag-easing, cubic-bezier(0.2, 0, 0, 1)),
+				margin-top var(--hub-list-drag-duration, 200ms) var(--hub-list-drag-easing, cubic-bezier(0.2, 0, 0, 1));
+
+			// The empty collection a sortable parent keeps as a drop target takes no room at rest.
+			&:empty {
+				margin-top: 0;
+			}
+
+			@media (prefers-reduced-motion: reduce) {
+				transition: none;
+			}
 		}
 	}
 
@@ -568,6 +582,19 @@
 			--hub-list-placeholder-border-radius,
 			var(--hub-list-item-border-radius, var(--hub-ref-radius-sm, 0.25rem))
 		);
+		// The rows around it slide (see `#slideRows`); the slot itself fades in where they part.
+		animation: hub-list-placeholder-in var(--hub-list-drag-duration, 200ms)
+			var(--hub-list-drag-easing, cubic-bezier(0.2, 0, 0, 1));
+
+		@media (prefers-reduced-motion: reduce) {
+			animation-name: hub-list-placeholder-fade;
+		}
+	}
+
+	// While a drag is under way, an empty nested collection opens to a slot the pointer can reach.
+	:host(.hub-list--dragging) &__items &__items:empty {
+		min-height: var(--hub-list-placeholder-min-height, 2.5rem);
+		margin-top: var(--hub-list-children-gap, var(--hub-list-item-padding-y, var(--hub-ref-space-2, 0.5rem)));
 	}
 
 	// In the cards grid the placeholder fills its grid cell.
@@ -627,4 +654,18 @@ $hub-list-variants: primary, secondary, success, danger, warning, info, neutral,
 	align-items: center;
 	gap: var(--hub-ref-space-2, 0.5rem);
 	color: var(--hub-sys-color-danger, #dc3545);
+}
+
+@keyframes hub-list-placeholder-in {
+	from {
+		opacity: 0;
+		transform: scale(0.98);
+	}
+}
+
+// Reduced motion keeps the fade, which tells where the row will land, and drops the movement.
+@keyframes hub-list-placeholder-fade {
+	from {
+		opacity: 0;
+	}
 }

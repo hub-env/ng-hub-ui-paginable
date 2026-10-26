@@ -12,6 +12,7 @@ import {
 	inject,
 	input,
 	model,
+	output,
 	signal,
 	viewChildren
 } from '@angular/core';
@@ -54,7 +55,7 @@ import { HubStickyColumnsDirective } from '../../directives/paginable-sticky-col
 import { SelectionTypes } from '../../enums/selection-types';
 import { PaginableActionButton, TableRowEvent } from '../../interfaces';
 import { PaginableTableDropdown } from '../../interfaces/paginable-table-dropdown';
-import { PaginableTableHeader } from '../../interfaces/paginable-table-header';
+import { PaginableColumnResizeEvent, PaginableTableHeader } from '../../interfaces/paginable-table-header';
 import { PaginableTableOptions } from '../../interfaces/paginable-table-options';
 import { PaginableTableOrdination } from '../../interfaces/paginable-table-ordination';
 import { PaginationState } from '../../interfaces/pagination-state';
@@ -73,6 +74,9 @@ import { HubPaginableActionsDirective } from '../../actions/actions.directive';
 import { HubPaginableTableRangeInputComponent } from '../paginable-table-range-input/paginable-table-range-input.component';
 import { HubPaginatorComponent } from '../paginator/paginator.component';
 import { HubTableTooltipDirective } from '../../table-tooltip';
+
+/** Smallest width a column can be resized to when it declares no `minWidth`. */
+const DEFAULT_MIN_COLUMN_WIDTH = 48;
 
 /**
  * A highly configurable and feature-rich table component for Angular applications.
@@ -290,6 +294,183 @@ export class HubTableComponent<T = any> {
 
 		return fixedHeaders;
 	});
+
+	/**
+	 * Lets the user resize columns by dragging a handle on the header cell's inline-end edge or
+	 * with the keyboard. A column can opt out (or in) through `PaginableTableHeader.resizable`.
+	 */
+	readonly resizableColumns = input(this.#defaults.resizableColumns ?? false, { transform: booleanAttribute });
+
+	/** Emits once per finished resize gesture (pointer release) and once per keyboard step, never while dragging. */
+	readonly columnResize = output<PaginableColumnResizeEvent>();
+
+	/**
+	 * Fixed layout is what makes declared widths binding: with the automatic algorithm the browser
+	 * grows a column to fit its content and ignores them.
+	 */
+	protected readonly fixedLayout = computed(
+		() => this.resizableColumns() || this.fixedHeaders().some((header) => header.width != null)
+	);
+
+	/** Width being dragged right now. Kept out of `headers` until release so one gesture is one change. */
+	readonly #dragWidth = signal<{ property: string; width: number } | null>(null);
+
+	/** Last measured width of a column that has no numeric `width` yet, so the handle can report a value. */
+	readonly #measuredWidth = signal<{ property: string; width: number } | null>(null);
+
+	/** In-flight pointer gesture; plain field because nothing renders from it. */
+	#drag: { header: PaginableTableHeader; pointerId: number; startX: number; startWidth: number } | null = null;
+
+	/** Whether the header cell gets a resize handle. */
+	isResizable(header: PaginableTableHeader): boolean {
+		return !header.onlyButtons && (header.resizable ?? this.resizableColumns());
+	}
+
+	/** Lower bound of a column's width in pixels. */
+	protected minWidthOf(header: PaginableTableHeader): number {
+		return header.minWidth ?? DEFAULT_MIN_COLUMN_WIDTH;
+	}
+
+	/** Upper bound of a column's width in pixels, or `null` when unbounded. */
+	protected maxWidthOf(header: PaginableTableHeader): number | null {
+		return header.maxWidth ?? null;
+	}
+
+	/** Clamps a width to the column's bounds. */
+	#clamp(header: PaginableTableHeader, width: number): number {
+		return Math.min(this.maxWidthOf(header) ?? Infinity, Math.max(this.minWidthOf(header), Math.round(width)));
+	}
+
+	/**
+	 * CSS width for the column's `<col>`. A number is pixels and is clamped to its bounds so a
+	 * declared width cannot start outside them; a string is passed through as any CSS length.
+	 */
+	protected columnWidth(header: PaginableTableHeader): string | null {
+		const dragging = this.#dragWidth();
+		if (dragging?.property === header.property) {
+			return `${dragging.width}px`;
+		}
+		if (typeof header.width === 'number') {
+			return `${this.#clamp(header, header.width)}px`;
+		}
+		return header.width ?? null;
+	}
+
+	protected isDragging(header: PaginableTableHeader): boolean {
+		return this.#dragWidth()?.property === header.property;
+	}
+
+	/** Current width in pixels for `aria-valuenow`, or `null` when it is not known yet. */
+	protected handleValue(header: PaginableTableHeader): number | null {
+		const dragging = this.#dragWidth();
+		if (dragging?.property === header.property) {
+			return dragging.width;
+		}
+		if (typeof header.width === 'number') {
+			return header.width;
+		}
+		const measured = this.#measuredWidth();
+		return measured?.property === header.property ? measured.width : null;
+	}
+
+	/** Measures the header cell that holds the handle. */
+	#cellWidth(handle: EventTarget | null): number {
+		return (handle as HTMLElement).closest('th')!.getBoundingClientRect().width;
+	}
+
+	/** Lets a handle without a numeric `width` report its current size to assistive technology. */
+	protected onHandleFocus(header: PaginableTableHeader, event: FocusEvent): void {
+		this.#measuredWidth.set({ property: header.property, width: Math.round(this.#cellWidth(event.currentTarget)) });
+	}
+
+	protected onResizeStart(header: PaginableTableHeader, event: PointerEvent): void {
+		if (event.button !== 0) {
+			return;
+		}
+		event.preventDefault();
+		event.stopPropagation();
+		const handle = event.currentTarget as HTMLElement;
+		handle.setPointerCapture(event.pointerId);
+		const startWidth = this.#cellWidth(handle);
+		this.#drag = { header, pointerId: event.pointerId, startX: event.clientX, startWidth };
+		this.#dragWidth.set({ property: header.property, width: Math.round(startWidth) });
+	}
+
+	protected onResizeMove(event: PointerEvent): void {
+		const drag = this.#drag;
+		if (!drag || drag.pointerId !== event.pointerId) {
+			return;
+		}
+		const delta = (event.clientX - drag.startX) * (this.isRtl() ? -1 : 1);
+		this.#dragWidth.set({ property: drag.header.property, width: this.#clamp(drag.header, drag.startWidth + delta) });
+	}
+
+	protected onResizeEnd(event: PointerEvent): void {
+		const drag = this.#drag;
+		if (!drag || drag.pointerId !== event.pointerId) {
+			return;
+		}
+		const width = this.#dragWidth()?.width ?? Math.round(drag.startWidth);
+		this.#drag = null;
+		this.#dragWidth.set(null);
+		// A cancelled gesture (focus lost, touch interrupted) is abandoned rather than committed.
+		if (event.type === 'pointerup') {
+			this.#commitWidth(drag.header, Math.round(drag.startWidth), width);
+		}
+	}
+
+	protected onResizeKeydown(header: PaginableTableHeader, event: KeyboardEvent): void {
+		const step = event.shiftKey ? 50 : 10;
+		const toEnd = this.isRtl() ? -1 : 1;
+		// The model is written synchronously but the cell repaints later, so a held key reads the model first.
+		const live = this.headers().find((entry) => typeof entry !== 'string' && entry.property === header.property);
+		const liveWidth = typeof live === 'object' ? live.width : undefined;
+		const current =
+			typeof liveWidth === 'number' ? this.#clamp(header, liveWidth) : Math.round(this.#cellWidth(event.currentTarget));
+		let next: number;
+		switch (event.key) {
+			case 'ArrowRight':
+				next = current + step * toEnd;
+				break;
+			case 'ArrowLeft':
+				next = current - step * toEnd;
+				break;
+			case 'Home':
+				next = this.minWidthOf(header);
+				break;
+			case 'End':
+				next = this.maxWidthOf(header) ?? current;
+				break;
+			default:
+				return;
+		}
+		event.preventDefault();
+		event.stopPropagation();
+		next = this.#clamp(header, next);
+		this.#commitWidth(header, current, next);
+	}
+
+	/**
+	 * Writes the width into the `headers` model (the definition stays the single source of truth)
+	 * and announces it. A header given as a string is normalised the way `fixedHeaders` does it.
+	 */
+	#commitWidth(header: PaginableTableHeader, previousWidth: number, width: number): void {
+		if (width === previousWidth) {
+			return;
+		}
+		let updated!: PaginableTableHeader;
+		this.headers.update((headers) =>
+			headers.map((entry) => {
+				const current: PaginableTableHeader = typeof entry === 'string' ? { title: entry, property: entry } : entry;
+				if (current.property !== header.property) {
+					return entry;
+				}
+				return (updated = { ...current, width });
+			})
+		);
+		this.#measuredWidth.set(null);
+		this.columnResize.emit({ property: header.property, width, previousWidth, header: updated });
+	}
 
 	/** Computed total number of columns including selection and expansion columns */
 	headersCount = computed(() => {

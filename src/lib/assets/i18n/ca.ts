@@ -57,6 +57,7 @@ export const locale = {
 		CLEAR: 'neteja',
 		CLEAR_SEARCH: 'Neteja la cerca',
 		SORT_BY: 'Ordena per {{ column }}',
+		RESIZE_COLUMN: "Canvia l'amplada de {{ column }}",
 		FILTER_BY: 'Filtra per {{ column }}',
 		SELECT_ALL_ROWS: 'Selecciona totes les files',
 		SELECT_ROW: 'Selecciona la fila',

@@ -85,6 +85,11 @@ export class HubStickyColumnsDirective {
 
 		const cells = Array.from(headRow.children) as HTMLElement[];
 
+		// A resized column changes the offsets of the sticky ones after it without changing the table's size.
+		for (const cell of cells) {
+			this._resizeObserver?.observe(cell);
+		}
+
 		// Start side — accumulate widths left → right.
 		let leftOffset = 0;
 		for (const cell of cells) {

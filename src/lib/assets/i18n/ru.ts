@@ -57,6 +57,7 @@ export const locale = {
 		CLEAR: 'очистить',
 		CLEAR_SEARCH: 'Очистить поиск',
 		SORT_BY: 'Сортировать по {{ column }}',
+		RESIZE_COLUMN: 'Изменить ширину столбца {{ column }}',
 		FILTER_BY: 'Фильтровать по {{ column }}',
 		SELECT_ALL_ROWS: 'Выбрать все строки',
 		SELECT_ROW: 'Выбрать строку',
