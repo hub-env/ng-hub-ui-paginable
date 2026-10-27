@@ -29,6 +29,7 @@ import {
 	debouncedSignal,
 	generateUniqueId,
 	GetPipe,
+	HUB_FIELD_FEEDBACK,
 	HUB_TRANSLATION_PREFIX,
 	IsObservablePipe,
 	resolveHubAccent,
@@ -144,6 +145,16 @@ const DEFAULT_MIN_COLUMN_WIDTH = 48;
 	],
 	providers: [
 		{ provide: HUB_TRANSLATION_PREFIX, useValue: 'HUBUI.PAGINABLE' },
+		// Flush fields read as a sheet, and a message under the control would make its row taller
+		// than the rest. In `providers`, not `viewProviders`, so the fields a consumer projects
+		// through `cellTpt` see it too.
+		{
+			provide: HUB_FIELD_FEEDBACK,
+			useFactory: () => {
+				const table = inject(HubTableComponent);
+				return computed(() => (table.flushFields() ? 'tooltip' : 'bottom'));
+			}
+		},
 		{
 			provide: NG_VALUE_ACCESSOR,
 			useExisting: forwardRef(() => HubTableComponent),

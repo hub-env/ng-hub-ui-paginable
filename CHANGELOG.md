@@ -1,5 +1,16 @@
 # Changelog
 
+## [22.32.0] - 2026-10-27
+
+### Changed
+
+- **Fields in a `flushFields` table show their validation message in a tooltip.** A message
+  written under the control made its row taller and pushed every row below it. In that mode the
+  table now provides `HUB_FIELD_FEEDBACK` with `'tooltip'`, so a field that fails validation is
+  ringed in red and its message opens on hover, and every row keeps the same height. The boxed
+  table keeps the message under the field, as a form does. The fields follow it from
+  `ng-hub-ui-forms` 22.44.0; the token needs `ng-hub-ui-utils` 22.21.0.
+
 ## [22.31.0] - 2026-10-26
 
 ### Added
